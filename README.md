@@ -1,3 +1,3 @@
 # FlavorOfTheMonth
 
-Figure out the best arena team compositions.
+Figure out the best World of Warcraft arena team compositions.
