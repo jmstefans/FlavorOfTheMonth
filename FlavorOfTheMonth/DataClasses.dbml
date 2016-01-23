@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="fotm" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=KINGKONG-PC\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="fotmConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Leaderboard" Member="Leaderboards">
+    <Type Name="Leaderboard">
+      <Column Name="LeaderboardID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Ranking" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Rating" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="RealmID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="RealmName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="RealmSlug" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="RaceID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ClassID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SpecID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactionID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GenderID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SeasonWins" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SeasonLosses" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WeeklyWins" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WeeklyLosses" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedStatus" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
+      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

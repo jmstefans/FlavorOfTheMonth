@@ -1,0 +1,9 @@
+﻿Need to get a list of the leaderboards in US 3s.
+Iterate through the list and check everyone's current 3s rating marking the time and rating.
+	Save that information in the database.
+
+Around 9000 requests per day.
+
+Basic plan:
+	100 calls per second.
+	36,000 calls per hour.
