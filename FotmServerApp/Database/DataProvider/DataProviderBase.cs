@@ -4,13 +4,13 @@ using System.Data;
 namespace FotmServerApp.Database.DataProvider
 {
     /// <summary>
-    /// Base class for a data access layer (DAL).
+    /// Base class for a data provider.
     /// </summary>
     public abstract class DataProviderBase 
     {
         #region Members
 
-        private string _strConnectionString;
+        private string _connectionString;
 
         #endregion
 
@@ -20,13 +20,13 @@ namespace FotmServerApp.Database.DataProvider
         {
             get
             {
-                if (_strConnectionString == string.Empty || _strConnectionString.Length == 0)
+                if (_connectionString == string.Empty || _connectionString.Length == 0)
                     throw new ArgumentException("Invalid database connection string.");
 
-                return _strConnectionString;
+                return _connectionString;
             }
             set
-            { _strConnectionString = value; }
+            { _connectionString = value; }
         }
 
         #endregion
