@@ -30,8 +30,7 @@
                        Grid.Row="0"
                        Margin="0,2,0,0"
                        AutomaticStateManagement="True"
-                       IsQuickAccessToolBarVisible="False"
-                       >
+                       IsQuickAccessToolBarVisible="False">
 
             <!-- DATA TAB -->
             <fluent:RibbonTabItem Header="Data"
@@ -52,7 +51,6 @@
                 </fluent:RibbonGroupBox>
 
             </fluent:RibbonTabItem>
-
 
             <!-- EDIT TAB -->
             <fluent:RibbonTabItem Header="Tasks"

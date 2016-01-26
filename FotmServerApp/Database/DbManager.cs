@@ -18,9 +18,23 @@ namespace FotmServerApp.Database
         public static DbManager Instance => _dbManager ?? (_dbManager = new DbManager());
 
         private DbManager() { }
-        
+
         #endregion
 
+        #region Create
 
+        #endregion
+
+        #region Read
+
+        #endregion
+
+        #region Update
+
+        #endregion
+
+        #region Delete
+
+        #endregion
     }
 }
