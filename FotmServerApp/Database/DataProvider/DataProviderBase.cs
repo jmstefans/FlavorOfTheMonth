@@ -6,12 +6,11 @@ namespace FotmServerApp.Database.DataProvider
     /// <summary>
     /// Base class for a data access layer (DAL).
     /// </summary>
-    public abstract class DataProviderBase
+    public abstract class DataProviderBase 
     {
         #region Members
 
         private string _strConnectionString;
-        private IDbConnection _connection;
 
         #endregion
 
@@ -45,28 +44,7 @@ namespace FotmServerApp.Database.DataProvider
 
         public abstract IDbConnection GetDataProviderConnection();
 
-        public abstract IDbDataAdapter GetDataProviderDataAdapter();
-
         #endregion
 
-        #region Database Transaction
-
-        public string OpenConnection()
-        {
-            string response;
-            try
-            {
-                _connection = GetDataProviderConnection();
-                response = _connection.GetType().Name + " Open Successfully";
-            }
-            catch
-            {
-                _connection.Close();
-                response = "Unable to Open " + _connection.GetType().Name;
-            }
-            return response;
-        }
-
-        #endregion
     }
 }

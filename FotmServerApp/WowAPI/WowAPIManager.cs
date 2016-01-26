@@ -11,7 +11,7 @@ namespace FotmServerApp.WowAPI
     {
         #region API KEY
 
-        private const string API_KEY = "";
+        private const string API_KEY = "wxkatqct3862fp52eqcbwuqr3judxzdu";
         
         #endregion
 

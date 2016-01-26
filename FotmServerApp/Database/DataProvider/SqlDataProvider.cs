@@ -13,10 +13,5 @@ namespace FotmServerApp.Database.DataProvider
         {
             throw new NotImplementedException();
         }
-
-        public override IDbDataAdapter GetDataProviderDataAdapter()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

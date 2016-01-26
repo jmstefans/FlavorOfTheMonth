@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace FotmServerApp.Base
 {
+    /// <summary>
+    /// Abstract class that implements PropertyChanged for data binding.
+    /// </summary>
     public abstract class ObservableObjectBase
     {
         public event PropertyChangedEventHandler PropertyChanged;

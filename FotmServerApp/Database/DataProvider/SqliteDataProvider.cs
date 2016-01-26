@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.SQLite;
 
 namespace FotmServerApp.Database.DataProvider
 {
@@ -14,12 +15,7 @@ namespace FotmServerApp.Database.DataProvider
 
         public override IDbConnection GetDataProviderConnection()
         {
-            throw new NotImplementedException();
-        }
-
-        public override IDbDataAdapter GetDataProviderDataAdapter()
-        {
-            throw new NotImplementedException();
+            return new SQLiteConnection(ConnectionString);
         }
     }
 }
