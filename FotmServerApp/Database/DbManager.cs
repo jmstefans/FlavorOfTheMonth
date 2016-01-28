@@ -1,7 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using Dapper;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.Database.Util;
+using WowDotNetAPI.Models;
 
 namespace FotmServerApp.Database
 {
@@ -10,14 +17,16 @@ namespace FotmServerApp.Database
     /// </summary>
     public class DbManager : IDisposable
     {
-        #region Singleton De/Constructor & Instance
+        #region Singleton Constructor & Instance
 
         private static DbManager _dbManager;
 
         public static DbManager Instance => _dbManager ?? (_dbManager = new DbManager());
 
-        private DbManager() { }
-        
+        private DbManager()
+        {
+        }
+
         #endregion
 
         #region Members
@@ -37,7 +46,7 @@ namespace FotmServerApp.Database
                     throw new ArgumentException("DB connection cannot be null.");
 
                 if (_dbConnection.State != ConnectionState.Open)
-                    _dbConnection.Open(); 
+                    _dbConnection.Open();
 
                 return _dbConnection;
             }
@@ -66,6 +75,34 @@ namespace FotmServerApp.Database
 
         #region Create
 
+        public void InsertObjects<T>(IEnumerable<T> objects) where T : new()
+        {
+            var type = typeof(T);
+
+            using (var trans = DbConnection.BeginTransaction())
+            {
+                try
+                {
+                    var cols = GetColumnNames<T>();
+                    var colPar = GetColumnParameters(cols);
+
+                    foreach (var pvp in objects)
+                    {
+                        var query =
+                       $"insert into [{type.Name}] (Id, {string.Join(",", cols)}) values (null, {string.Join(",", colPar)});";
+                        DbConnection.Execute(query, pvp);
+                    }
+
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    Console.WriteLine("Failed: " + e);
+                }
+            }
+        }
+
         #endregion
 
         #region Read
@@ -82,6 +119,34 @@ namespace FotmServerApp.Database
 
         #endregion
 
+        #region Helpers 
+
+        private string[] GetColumnNames<T>() where T : new()
+        {
+            var properties = typeof(T).GetProperties();
+            var columns = new string[properties.Length];
+
+            for (var i = 0; i < properties.Length; i++)
+            {
+                columns[i] = ConvertToColumnName(properties[i].Name);
+            }
+
+            return columns;
+        }
+
+        private string[] GetColumnParameters(string[] columnNames)
+        {
+            return columnNames.Select(c => $"@{c}").ToArray();
+        }
+
+        private string ConvertToColumnName(string propertyName)
+        {
+            var txtInfo = new CultureInfo("en-US", false).TextInfo;
+            return txtInfo.ToTitleCase(propertyName);
+        }
+
+        #endregion
+
         #region IDisposable
 
         public void Dispose()
@@ -90,5 +155,6 @@ namespace FotmServerApp.Database
         }
 
         #endregion
+
     }
 }

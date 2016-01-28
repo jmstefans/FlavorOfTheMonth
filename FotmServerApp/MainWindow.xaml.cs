@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FotmServerApp.Database;
+using FotmServerApp.Database.DataProvider;
+using FotmServerApp.WowAPI;
 
 namespace FotmServerApp
 {
@@ -23,6 +26,12 @@ namespace FotmServerApp
         public MainWindow()
         {
             InitializeComponent();
+            //var test = @"C:\Users\andre\FotmTest.db";
+            //DbManager.Instance.SetDataProvider(DataProviderFactory.DataProviderType.Sqlite, test);
+            //var stuff = WowAPIManager.GetPvpStats();
+            //DbManager.Instance.InsertObjects(stuff);
+
+            Closing += (o, s) => DbManager.Instance.Dispose();
         }
     }
 }

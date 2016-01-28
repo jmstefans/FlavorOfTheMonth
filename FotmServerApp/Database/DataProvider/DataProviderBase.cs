@@ -33,9 +33,9 @@ namespace FotmServerApp.Database.DataProvider
 
         #region Constructor
 
-        protected DataProviderBase(string connectionString)
+        protected DataProviderBase(string dataSource)
         {
-            ConnectionString = connectionString;
+            ConnectionString = GetFormattedConnectionString(dataSource);
         }
 
         #endregion
@@ -43,6 +43,8 @@ namespace FotmServerApp.Database.DataProvider
         #region Public Methods
 
         public abstract IDbConnection GetDataProviderConnection();
+
+        public abstract string GetFormattedConnectionString(string dataSource);
 
         #endregion
 

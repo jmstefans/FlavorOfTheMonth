@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
+using FotmServerApp.Database.Util;
 
 namespace FotmServerApp.Database.DataProvider
 {
@@ -16,6 +17,11 @@ namespace FotmServerApp.Database.DataProvider
         public override IDbConnection GetDataProviderConnection()
         {
             return new SQLiteConnection(ConnectionString);
+        }
+
+        public override string GetFormattedConnectionString(string dataSource)
+        {
+            return ConnectionStringBuilderUtil.CreateSqliteConnectionString(dataSource);
         }
     }
 }
