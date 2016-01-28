@@ -1,1 +1,0 @@
-C:\Users\andre\Documents\GitHub\FlavorOfTheMonth\FotmServerApp\bin\Debug\FotmServerApp.exe.config
