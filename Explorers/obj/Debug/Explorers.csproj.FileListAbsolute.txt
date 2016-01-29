@@ -1,0 +1,10 @@
+C:\_Programming\C#\_Libz\WowDotNetAPI-master\Explorers\bin\Debug\WowDotNetAPI.dll
+C:\_Programming\C#\_Libz\WowDotNetAPI-master\Explorers\bin\Debug\WowDotNetAPI.pdb
+C:\_Programming\C#\_Libz\WowDotNetAPI-master\Explorers\obj\Debug\Explorers.csprojResolveAssemblyReference.cache
+C:\_Programming\C#\_Libz\WowDotNetAPI-master\Explorers\obj\Debug\WowDotNetAPI.dll
+C:\_Programming\C#\_Libz\WowDotNetAPI-master\Explorers\obj\Debug\WowDotNetAPI.pdb
+C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.dll
+C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.pdb
+C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\Explorers.csprojResolveAssemblyReference.cache
+C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.dll
+C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.pdb
