@@ -140,6 +140,7 @@
     <Compile Include="Database\Util\ConnectionStringBuilderUtil.cs" />
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
     <Compile Include="JobScheduling\Jobs\LeaderboardQueryJob.cs" />
+    <Compile Include="MainViewModel.cs" />
     <Compile Include="WowAPI\WowAPIManager.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

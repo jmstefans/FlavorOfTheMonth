@@ -10,7 +10,7 @@ namespace FotmServerApp.Database.DataProvider
     /// </summary>
     public class SqliteDataProvider : DataProviderBase
     {
-        public SqliteDataProvider(string connectionString) : base(connectionString)
+        public SqliteDataProvider(params string[] connectionProperties) : base(connectionProperties)
         {
         }
 
@@ -19,9 +19,11 @@ namespace FotmServerApp.Database.DataProvider
             return new SQLiteConnection(ConnectionString);
         }
 
-        public override string GetFormattedConnectionString(string dataSource)
+        public override string GetFormattedConnectionString(params string[] dataSource)
         {
-            return ConnectionStringBuilderUtil.CreateSqliteConnectionString(dataSource);
+            if (dataSource.Length > 1 || dataSource.Length <= 0)
+                throw new ArgumentException("dataSource is invalid");
+            return ConnectionStringBuilderUtil.CreateSqliteConnectionString(dataSource[0]);
         }
     }
 }

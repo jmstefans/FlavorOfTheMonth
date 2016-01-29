@@ -62,9 +62,9 @@ namespace FotmServerApp.Database
         /// <param name="dataProviderType">The type of data provider <see cref="DataProviderFactory.DataProviderType"/> being set.</param>
         /// <param name="connectionString">Corresponding connection string for the data provider. 
         ///                                For connection string util <see cref="ConnectionStringBuilderUtil"/></param>
-        public void SetDataProvider(DataProviderFactory.DataProviderType dataProviderType, string connectionString)
+        public void SetDataProvider(DataProviderFactory.DataProviderType dataProviderType, params string[] connectionProperties)
         {
-            _dataProvider = DataProviderFactory.GetDataProvider(dataProviderType, connectionString);
+            _dataProvider = DataProviderFactory.GetDataProvider(dataProviderType, connectionProperties);
             _dbConnection?.Dispose();
             _dbConnection = _dataProvider.GetDataProviderConnection();
         }
@@ -89,8 +89,8 @@ namespace FotmServerApp.Database
                     foreach (var pvp in objects)
                     {
                         var query =
-                       $"insert into [{type.Name}] (Id, {string.Join(",", cols)}) values (null, {string.Join(",", colPar)});";
-                        DbConnection.Execute(query, pvp);
+                       $"insert into [{type.Name}] ({string.Join(",", cols)}) values ({string.Join(",", colPar)});";
+                        DbConnection.Execute(query, pvp, trans);
                     }
 
                     trans.Commit();
