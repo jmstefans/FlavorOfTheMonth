@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Entity.Infrastructure;
+using FotmServerApp.Database.Util;
 
 namespace FotmServerApp.Database.DataProvider
 {
     public class SqlDataProvider : DataProviderBase
     {
-        public SqlDataProvider(string connectionString) : base(connectionString)
+        public SqlDataProvider(params string[] connectionProperties) : base(connectionProperties)
         {
         }
 
         public override IDbConnection GetDataProviderConnection()
         {
-            throw new NotImplementedException();
+            return new SqlConnectionFactory().CreateConnection(ConnectionString);
         }
 
-        public override string GetFormattedConnectionString(string dataSource)
+        public override string GetFormattedConnectionString(params string[] connectionProperties)
         {
-            throw new NotImplementedException();
+            if (connectionProperties.Length != 2) 
+                throw new ArgumentException("Connection string requires server name and database name");
+
+            return ConnectionStringBuilderUtil.CreateSqlServerConnectionString(connectionProperties[0], connectionProperties[1]);
         }
     }
 }
