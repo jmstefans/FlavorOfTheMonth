@@ -25,19 +25,19 @@ namespace WowDotNetAPI.Models
         public string RealmSlug { get; set; }
 
         [DataMember(Name = "raceId")]
-        private int RaceId { get; set; }
+        public int RaceId { get; set; }
 
         [DataMember(Name = "classId")]
-        private int ClassId { get; set; }
+        public int ClassId { get; set; }
 
         [DataMember(Name = "specId")]
-        private int SpecId { get; set; }
+        public int SpecId { get; set; }
 
         [DataMember(Name = "factionId")]
         public int FactionId { get; set; }
 
         [DataMember(Name = "genderId")]
-        private int GenderId { get; set; }
+        public int GenderId { get; set; }
 
         [DataMember(Name = "seasonWins")]
         public int SeasonWins { get; set; }
@@ -51,9 +51,9 @@ namespace WowDotNetAPI.Models
         [DataMember(Name = "weeklyLosses")]
         public int WeeklyLosses { get; set; }
 
-        public CharacterClass Class { get { return (CharacterClass)Enum.Parse(typeof(CharacterClass), Enum.GetName(typeof(CharacterClass), ClassId).Replace(' ', '_')); } }
-        public CharacterRace Race { get { return (CharacterRace)Enum.Parse(typeof(CharacterRace), Enum.GetName(typeof(CharacterRace), RaceId).Replace(' ', '_')); } }
-        public CharacterGender Gender { get { return (CharacterGender)Enum.Parse(typeof(CharacterGender), Enum.GetName(typeof(CharacterGender), GenderId).Replace(' ', '_')); } }
-        public CharacterSpec Spec { get { return (CharacterSpec)Enum.Parse(typeof(CharacterSpec), Enum.GetName(typeof(CharacterSpec), SpecId).Replace(' ', '_')); } }
+        public string Class => (string)Enum.Parse(typeof(CharacterClass), Enum.GetName(typeof(CharacterClass), ClassId).Replace(' ', '_'));
+        public string Race => (string)Enum.Parse(typeof(CharacterRace), Enum.GetName(typeof(CharacterRace), RaceId).Replace(' ', '_'));
+        public string Gender => (string)Enum.Parse(typeof(CharacterGender), Enum.GetName(typeof(CharacterGender), GenderId).Replace(' ', '_'));
+        public string Spec => (string)Enum.Parse(typeof(CharacterSpec), Enum.GetName(typeof(CharacterSpec), SpecId).Replace(' ', '_'));
     }
 }
