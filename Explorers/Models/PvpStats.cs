@@ -37,7 +37,7 @@ namespace WowDotNetAPI.Models
         public int FactionId { get; set; }
 
         [DataMember(Name = "genderId")]
-        public int GenderId { get; set; }
+        private int GenderId { get; set; }
 
         [DataMember(Name = "seasonWins")]
         public int SeasonWins { get; set; }
@@ -51,9 +51,9 @@ namespace WowDotNetAPI.Models
         [DataMember(Name = "weeklyLosses")]
         public int WeeklyLosses { get; set; }
 
-        public string Class => (string)Enum.Parse(typeof(CharacterClass), Enum.GetName(typeof(CharacterClass), ClassId).Replace(' ', '_'));
-        public string Race => (string)Enum.Parse(typeof(CharacterRace), Enum.GetName(typeof(CharacterRace), RaceId).Replace(' ', '_'));
-        public string Gender => (string)Enum.Parse(typeof(CharacterGender), Enum.GetName(typeof(CharacterGender), GenderId).Replace(' ', '_'));
-        public string Spec => (string)Enum.Parse(typeof(CharacterSpec), Enum.GetName(typeof(CharacterSpec), SpecId).Replace(' ', '_'));
+        public string Class => Enum.GetName(typeof(CharacterClass), ClassId).Replace(' ', '_');
+        public string Race => Enum.GetName(typeof(CharacterRace), RaceId).Replace(' ', '_');
+        public string Gender => Enum.GetName(typeof(CharacterGender), GenderId).Replace(' ', '_');
+        public string Spec => Enum.GetName(typeof(CharacterSpec), SpecId).Replace(' ', '_');
     }
 }
