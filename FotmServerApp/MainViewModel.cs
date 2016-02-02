@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FotmServerApp.Base;
+﻿using FotmServerApp.Base;
 using FotmServerApp.Database;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.WowAPI;
@@ -15,8 +10,8 @@ namespace FotmServerApp
         #region Members
 
         // Connection info
-        private const string SERVER = "NOYES";
-        private const string DB_NAME = "FotmDb";
+        private const string SERVER = ".";
+        private const string DB_NAME = "fotm";
 
         // Db
         private readonly DbManager _dbManager = DbManager.Instance;

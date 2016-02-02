@@ -1,15 +1,18 @@
 USE [fotm]
 GO
 
-/****** Object:  Table [dbo].[PvpStats]    Script Date: 2/01/2016 10:00:00 AM ******/
+/****** Object:  Table [dbo].[PvpStats]    Script Date: 2/1/2016 4:28:48 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
+SET ANSI_PADDING ON
+GO
+
 CREATE TABLE [dbo].[PvpStats](
-	[PvpStatsID] [bigint] NOT NULL IDENTITY (1, 1),
+	[PvpStatsID] [bigint] IDENTITY(1,1) NOT NULL,
 	[Ranking] [nvarchar](50) NULL,
 	[Rating] [nvarchar](50) NULL,
 	[Name] [nvarchar](100) NULL,
@@ -25,9 +28,13 @@ CREATE TABLE [dbo].[PvpStats](
 	[SeasonLosses] [int] NULL,
 	[WeeklyWins] [int] NULL,
 	[WeeklyLosses] [int] NULL,
+	[Class] [nvarchar](50) NULL,
+	[Race] [nvarchar](50) NULL,
+	[Gender] [nvarchar](50) NULL,
+	[Spec] [nvarchar](50) NULL,
 	[ModifiedDate] [datetime] NULL,
-	[ModifiedStatus] [char] NULL,
-	[ModifiedUserID] [bigint] NULL
+	[ModifiedStatus] [char](1) NULL,
+	[ModifiedUserID] [bigint] NULL,
  CONSTRAINT [PK_PvpStats] PRIMARY KEY CLUSTERED 
 (
 	[PvpStatsID] ASC
@@ -35,3 +42,7 @@ CREATE TABLE [dbo].[PvpStats](
 ) ON [PRIMARY]
 
 GO
+
+SET ANSI_PADDING OFF
+GO
+
