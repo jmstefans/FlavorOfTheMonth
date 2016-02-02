@@ -7,6 +7,7 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:fluent="urn:fluent-ribbon"
+        xmlns:views="clr-namespace:FotmServerApp.UI.Views"
         mc:Ignorable="d"
         Title="FOTM SERVER APP" 
         TitleCaps="False"
@@ -93,25 +94,42 @@
                 <xcad:LayoutPanel Orientation="Horizontal" >
 
                     <!-- TOOL WINDOW -->
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="400"
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="300"
                                                     IsMaximized="False">
                         <xcad:LayoutAnchorablePane >
                             
-                            <xcad:LayoutAnchorable ContentId="Test"
-                                                   Title="Test">
+                            <xcad:LayoutAnchorable ContentId="Scheduler"
+                                                   Title="Scheduler">
+                                <views:NewJobView/>
                             </xcad:LayoutAnchorable>
                             
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>
 
                     <!-- MAIN CONTENT/TAB CONTROL -->
-                    <xcad:LayoutDocumentPaneGroup >
-                        <xcad:LayoutDocumentPane >
-                            <xcad:LayoutDocument Title="Scheduled Tasks">
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="3*"
+                                                    IsMaximized="False">
+                        <xcad:LayoutAnchorablePane >
 
-                            </xcad:LayoutDocument>
-                        </xcad:LayoutDocumentPane>
-                    </xcad:LayoutDocumentPaneGroup>
+                            <xcad:LayoutAnchorable ContentId="Analysis"
+                                                   Title="Analysis">
+                                <views:AnalysisView/>
+                            </xcad:LayoutAnchorable>
+
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="300"
+                                                    IsMaximized="False">
+                        <xcad:LayoutAnchorablePane >
+
+                            <xcad:LayoutAnchorable ContentId="Database"
+                                                   Title="Database">
+                                <views:DatabaseView/>
+                            </xcad:LayoutAnchorable>
+
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
 
                 </xcad:LayoutPanel>
 

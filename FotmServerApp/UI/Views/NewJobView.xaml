@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="FotmServerApp.UI.Views.NewJobView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FotmServerApp.UI.Views"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <StackPanel Grid.IsSharedSizeScope="True">
+
+        <!-- General -->
+        <Expander Header="General"
+                  IsExpanded="True">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="A"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="20"/>
+                </Grid.RowDefinitions>
+
+                <!-- Name -->
+                <TextBlock Text="Job Name:"
+                           VerticalAlignment="Center"/>
+                <TextBox   Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="5,0,0,0"/>
+
+                <!-- Description -->
+                <TextBlock Text="Description (optional):"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="0,5,0,0"/>
+                <TextBox 
+                           Grid.Row="1"
+                           Grid.RowSpan="2"
+                           Grid.Column="1"
+                           Margin="5,5,0,0"/>
+            </Grid>
+        </Expander>
+
+        <!-- Date Range -->
+        <Expander Header="Time"
+                  IsExpanded="True"
+                  Margin="0,5,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="A"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Start -->
+                <TextBlock Text="Start Date:"
+                           VerticalAlignment="Center"/>
+                <DatePicker 
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="5,0,0,0"/>
+
+                <!-- End -->
+                <TextBlock Text="End Date:"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="0,5,0,0"/>
+                <DatePicker 
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="5,5,0,0"/>
+
+                <!-- Interval -->
+                <TextBlock Text="Interval (minutes):"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="0,5,0,0"/>
+                <controls:NumericUpDown  
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           Margin="5,5,0,0"
+                           Minimum="0"
+                           Interval="1"/>
+            </Grid>
+        </Expander>
+
+        <!-- Action -->
+        <Expander Header="Action"
+                  IsExpanded="True"
+                  Margin="0,5,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="A"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Data -->
+                <TextBlock Text="Data to Pull:"
+                           VerticalAlignment="Center"/>
+                <ComboBox 
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="5,0,0,0"/>
+            </Grid>
+        </Expander>
+
+
+    </StackPanel>
+
+
+</UserControl>
