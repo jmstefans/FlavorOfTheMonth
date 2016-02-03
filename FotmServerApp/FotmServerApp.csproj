@@ -141,6 +141,7 @@
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
     <Compile Include="JobScheduling\Jobs\LeaderboardQueryJob.cs" />
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="Models\RatingChangeObservation.cs" />
     <Compile Include="UI\Views\ActiveJobsView.xaml.cs">
       <DependentUpon>ActiveJobsView.xaml</DependentUpon>
     </Compile>

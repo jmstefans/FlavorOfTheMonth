@@ -1,7 +1,7 @@
 USE [fotm]
 GO
 
-/****** Object:  Table [dbo].[PvpStats]    Script Date: 2/1/2016 4:28:48 PM ******/
+/****** Object:  Table [dbo].[PvpStats]    Script Date: 2/2/2016 4:35:31 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -35,6 +35,7 @@ CREATE TABLE [dbo].[PvpStats](
 	[ModifiedDate] [datetime] NULL,
 	[ModifiedStatus] [char](1) NULL,
 	[ModifiedUserID] [bigint] NULL,
+	[CharacterID] [bigint] NULL,
  CONSTRAINT [PK_PvpStats] PRIMARY KEY CLUSTERED 
 (
 	[PvpStatsID] ASC

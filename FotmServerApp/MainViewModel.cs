@@ -1,7 +1,10 @@
-﻿using FotmServerApp.Base;
+﻿using System.Collections.Generic;
+using System.Threading;
+using FotmServerApp.Base;
 using FotmServerApp.Database;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.WowAPI;
+using WowDotNetAPI.Models;
 
 namespace FotmServerApp
 {
@@ -42,8 +45,19 @@ namespace FotmServerApp
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
 
-            var stuff = WowAPIManager.GetPvpStats();
-            _dbManager.InsertObjects(stuff);
+            //var stuff = WowAPIManager.GetPvpStats();
+            //_dbManager.InsertObjects(stuff);
+
+            var stuff2 = WowAPIManager.GetPvpStats();
+            IEnumerable<PvpStats> pvpstats = _dbManager.InsertRatingChanges(stuff2);
+
+            // do some clusterfucking
+
+
+            Thread.Sleep(120 * 1000);
+
+            var stuff3 = WowAPIManager.GetPvpStats();
+            _dbManager.InsertRatingChanges(stuff3);
         }
 
         #endregion

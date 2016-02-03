@@ -37,7 +37,7 @@ namespace WowDotNetAPI.Models
         public int FactionId { get; set; }
 
         [DataMember(Name = "genderId")]
-        private int GenderId { get; set; }
+        public int GenderId { get; set; }
 
         [DataMember(Name = "seasonWins")]
         public int SeasonWins { get; set; }

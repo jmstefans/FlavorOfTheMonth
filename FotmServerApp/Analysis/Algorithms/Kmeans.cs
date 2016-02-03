@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using FotmServerApp.Models;
 
 namespace FotmServerApp.Analysis.Algorithms
 {
@@ -8,7 +10,14 @@ namespace FotmServerApp.Analysis.Algorithms
     /// </summary>
     public class Kmeans
     {
-        public void Main()
+        public void Main(List<RatingChangeObservation> aList)
+        {
+            double[][] rawData = new double[aList.Count][];
+
+        }
+
+        // Demo of the Kmeans algorithm with sample data.
+        private void Demo()
         {
             Debug.Write("Begin k-means demo");
 

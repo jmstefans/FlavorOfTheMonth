@@ -110,7 +110,7 @@ namespace FotmServerApp.Database
         /// Inserts a new row into the RatingChange table with the rating difference and time of the change.
         /// We will cluster on the RatingChange table to look for teams.
         /// </summary>
-        public void InsertRatingChanges(IEnumerable<PvpStats> objects)
+        public IEnumerable<PvpStats> InsertRatingChanges(IEnumerable<PvpStats> objects)
         {
             using (var trans = DbConnection.BeginTransaction())
             {
@@ -119,22 +119,22 @@ namespace FotmServerApp.Database
                     foreach (var pvp in objects)
                     {
                         // Check to see if character is already in database
-                        SqlCommand cmd = new SqlCommand($"select count(*) from Character where name like '{pvp.Name}' and server like '{pvp.RealmName}'");
-                        bool isInDB = (int)cmd.ExecuteScalar() == 1;
+                        bool isInDB = DbConnection.Query<int>(
+                            $"select count(*) from Character where name like '{pvp.Name}' and server like '" + FormatRealmName(pvp.RealmName) + "'", null, trans).First() == 1;
 
                         // If character is not in database
                         if (!isInDB)
                         {
                             // Add character to Character table
-                            SqlCommand cmd2 = new SqlCommand($"insert into Character values ({pvp.Name}, {pvp.RealmName}, '{DateTime.Now}', 'I', 0)");
-                            cmd2.ExecuteNonQuery();
+                            string sql = $"INSERT INTO Character values ('{pvp.Name}', '" + FormatRealmName(pvp.RealmName) + $"', '{DateTime.Now}', 'I', 0); SELECT CAST(SCOPE_IDENTITY() as int)";
+                            var id = DbConnection.Query<int>(sql, null, trans).Single();
 
                             // get the id from query above and insert with pvp stats table
 
                             // Add character to PvpStats table
                             var cols = GetColumnNames<PvpStats>();
                             var colPar = GetColumnParameters(cols);
-                            var query = $"insert into PvpStats values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0);";
+                            var query = $"insert into PvpStats values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0, {id});";
                             DbConnection.Execute(query, pvp, trans);
 
                             // Don't need to add to RatingChange table just yet since we don't have a difference of rating yet
@@ -142,19 +142,35 @@ namespace FotmServerApp.Database
                         else // If character is in database
                         {
                             // Get character's id
-                            uint characterID = (uint)new SqlCommand($"select top 1 characterid from character where name like '{pvp.Name}' and server like '{pvp.RealmName}'").ExecuteScalar();
+                            uint characterID = (uint)
+                                DbConnection.Query<int>(
+                                    $"select top 1 characterid from character where name like '{pvp.Name}' and server like '" + FormatRealmName(pvp.RealmName) + "'",
+                                    null, trans).First();
+                            
+                            // Get rating difference
+                            int ratingDiff = pvp.Rating - (int) DbConnection.Query<int>(
+                                $"select top 1 rating from pvpstats where characterid = {characterID} order by modifieddate desc",
+                                null, trans).First();
 
-                            // Update that character's PvpStats row with current values to keep it current
-                            SqlCommand cmd3 = new SqlCommand($"update pvpstats set Rating = {pvp.Rating}, ModifiedDate = '{DateTime.Now}', ModifiedStatus = 'U' where ");
+                            // If there is no difference we're done, otherwise if there is a difference in rating between what we just pulled from the WoW servers and 
+                            // our rating in the database.
+                            if (ratingDiff != 0)
+                            {
+                                // Update that character's PvpStats row with current values to keep it current
+                                var querrrry =
+                                    $"update pvpstats set Rating = {pvp.Rating}, ModifiedDate = '{DateTime.Now}', ModifiedStatus = 'U' where characterid = {characterID}";
+                                DbConnection.Execute(querrrry
+                                    ,
+                                    null, trans);
 
-                            // Insert a row into the RatingChange table indicating the difference and current time
-
+                                // Insert a row into the RatingChange table indicating the difference and current time
+                                var querrry =
+                                    $"insert into ratingchange values ({characterID}, {ratingDiff}, '{DateTime.Now}', 'I', 0)";
+                                DbConnection.Execute(querrry
+                                    ,
+                                    null, trans);
+                            }
                         }
-
-
-                        // var query =
-                        //$"insert into [{type.Name}] ({string.Join(",", cols)}, ModifiedDate, ModifiedStatus, ModifiedUserID) values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0);";
-                        // DbConnection.Execute(query, pvp, trans);
                     }
 
                     trans.Commit();
@@ -165,6 +181,14 @@ namespace FotmServerApp.Database
                     Console.WriteLine("Failed: " + e);
                 }
             }
+            return objects;
+        }
+
+        // Returns a new version of the passed in realm name with an extra apostrophe next to the old one.
+        // For example "Kel'Thuzad" becomes "Kel''Thuzad".
+        private string FormatRealmName(string aRealm)
+        {
+            return aRealm.Replace("\'", "\'\'");
         }
 
         #endregion Create

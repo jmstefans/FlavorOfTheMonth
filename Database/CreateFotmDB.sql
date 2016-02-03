@@ -1,13 +1,13 @@
 USE [master]
 GO
 
-/****** Object:  Database [fotm]    Script Date: 2/1/2016 4:29:30 PM ******/
+/****** Object:  Database [fotm]    Script Date: 2/2/2016 4:35:54 PM ******/
 CREATE DATABASE [fotm]
  CONTAINMENT = NONE
  ON  PRIMARY 
 ( NAME = N'fotm', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\fotm.mdf' , SIZE = 4096KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
  LOG ON 
-( NAME = N'fotm_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\fotm_log.ldf' , SIZE = 5184KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+( NAME = N'fotm_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\DATA\fotm_log.ldf' , SIZE = 6912KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
 GO
 
 ALTER DATABASE [fotm] SET COMPATIBILITY_LEVEL = 110
