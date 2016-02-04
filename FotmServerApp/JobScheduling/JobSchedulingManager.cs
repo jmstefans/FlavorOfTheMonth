@@ -1,5 +1,6 @@
 ﻿using System;
 using FotmServerApp.JobScheduling.Jobs;
+using FotmServerApp.Models.Base;
 using Quartz;
 using Quartz.Impl;
 
@@ -8,18 +9,8 @@ namespace FotmServerApp.JobScheduling
     /// <summary>
     /// Class for creating/managing scheduled tasks.
     /// </summary>
-    public class JobSchedulingManager : IDisposable
+    public class JobSchedulingManager : ManagerBase<JobSchedulingManager>, IDisposable
     {
-        #region Singleton Constructor
-
-        private static JobSchedulingManager _instance;
-
-        public static JobSchedulingManager Instance => _instance ?? (_instance = new JobSchedulingManager());
-
-        private JobSchedulingManager() { }
-
-        #endregion
-
         #region Properties
 
         private IScheduler Scheduler

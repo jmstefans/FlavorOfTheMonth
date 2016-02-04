@@ -7,6 +7,7 @@ using Dapper;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.Database.Util;
 using FotmServerApp.Models;
+using FotmServerApp.Models.Base;
 using WowDotNetAPI.Models;
 
 namespace FotmServerApp.Database
@@ -14,20 +15,8 @@ namespace FotmServerApp.Database
     /// <summary>
     /// Persistent DB class for reading and writing to the database. 
     /// </summary>
-    public class DbManager : IDisposable
+    public class DbManager : ManagerBase<DbManager>, IDisposable
     {
-        #region Singleton Constructor & Instance
-
-        private static DbManager _dbManager;
-
-        public static DbManager Instance => _dbManager ?? (_dbManager = new DbManager());
-
-        private DbManager()
-        {
-        }
-
-        #endregion
-
         #region Members
 
         private DataProviderBase _dataProvider;
@@ -204,7 +193,7 @@ namespace FotmServerApp.Database
         public PvpStats GetPvpStatsByCharacterId(int characterId)
         {
             var query = "select * from PvpStats where CharacterID=@Id;";
-            return DbConnection.Query<PvpStats>(query, new {Id = characterId}).First();
+            return DbConnection.Query<PvpStats>(query, new { Id = characterId }).First();
         }
 
         #endregion

@@ -21,9 +21,8 @@ namespace FotmServerApp
         private const string DB_NAME = "fotm";
 
         // Managers
-        private readonly DbManager _dbManager = DbManager.Instance;
-        private JobSchedulingManager _jobManager = JobSchedulingManager.Instance;
-
+        private readonly DbManager _dbManager = DbManager.Default;
+        private JobSchedulingManager _jobManager = JobSchedulingManager.Default;
 
         #endregion
 
