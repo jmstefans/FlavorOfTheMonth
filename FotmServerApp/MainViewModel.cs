@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using FotmServerApp.Base;
 using FotmServerApp.Database;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.JobScheduling;
 using FotmServerApp.JobScheduling.Jobs;
+using FotmServerApp.Models.Base;
 using FotmServerApp.WowAPI;
 using Quartz;
 using WowDotNetAPI.Models;

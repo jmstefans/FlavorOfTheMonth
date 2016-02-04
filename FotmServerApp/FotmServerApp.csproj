@@ -131,8 +131,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analysis\Algorithms\Kmeans.cs" />
-    <Compile Include="Base\DbEntityBase.cs" />
-    <Compile Include="Base\ObservableObjectBase.cs" />
+    <Compile Include="Models\Base\DbEntityBase.cs" />
+    <Compile Include="Models\Base\ObservableObjectBase.cs" />
     <Compile Include="Database\DataProvider\DataProviderBase.cs" />
     <Compile Include="Database\DataProvider\DataProviderFactory.cs" />
     <Compile Include="Database\DataProvider\SqlDataProvider.cs" />

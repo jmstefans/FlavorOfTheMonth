@@ -14,7 +14,7 @@ GO
 CREATE TABLE [dbo].[RatingChange](
 	[RatingChangeID] [bigint] IDENTITY(1,1) NOT NULL,
 	[CharacterID] [bigint] NOT NULL,
-	[RatingChange] [int] NOT NULL,
+	[RatingChangeValue] [int] NOT NULL,
 	[ModifiedDate] [datetime] NOT NULL,
 	[ModifiedStatus] [char](1) NOT NULL,
 	[ModifiedUserID] [bigint] NOT NULL,
