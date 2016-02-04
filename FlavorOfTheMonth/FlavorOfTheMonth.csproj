@@ -257,6 +257,8 @@
     </Content>
     <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\Icons\ClassAndSpecIcons.jpg" />
+    <Content Include="Images\Icons\ClassIcons.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
