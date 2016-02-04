@@ -10,16 +10,28 @@ namespace FotmServerApp.Analysis.Algorithms
     /// </summary>
     public class Kmeans
     {
-        public void Main(List<RatingChangeObservation> aList)
+        public void Main(List<RatingChange> aList)
         {
             double[][] rawData = new double[aList.Count][];
-
         }
 
-        // Demo of the Kmeans algorithm with sample data.
-        private void Demo()
+        public static int[] ClusterRatingChanges(List<RatingChange> ratingChanges, int numberOfClusters, out double[][] rawData)
         {
-            Debug.Write("Begin k-means demo");
+            rawData = new double[ratingChanges.Count][];
+            for (var i = 0; i < ratingChanges.Count; i++)
+            {
+                var change = ratingChanges[i];
+                rawData[i] = new[] { change.RatingChangeValue,  change.ModifiedDate.ToOADate() };
+            }
+
+            return Cluster(rawData, numberOfClusters);
+        }
+
+
+        // Demo of the Kmeans algorithm with sample data.
+        public static void Demo()
+        {
+            Console.Write("Begin k-means demo");
 
             double[][] rawData = new double[20][];
             rawData[0] = new double[] { 65.0, 220.0 };
@@ -43,25 +55,25 @@ namespace FotmServerApp.Analysis.Algorithms
             rawData[18] = new double[] { 68.0, 210.0 };
             rawData[19] = new double[] { 61.0, 130.0 };
 
-            Debug.Write("Raw unclustered data:");
-            Debug.Write("    Height Weight");
-            Debug.Write("-------------------");
+            Console.Write("Raw unclustered data:");
+            Console.Write("    Height Weight");
+            Console.Write("-------------------");
             ShowData(rawData, 1, true, true);
 
             int numClusters = 3;
-            Debug.Write("Setting numClusters to " + numClusters);
+            Console.Write("Setting numClusters to " + numClusters);
 
             int[] clustering = Cluster(rawData, numClusters);
 
-            Debug.Write("K-means clustering complete");
+            Console.Write("K-means clustering complete");
 
-            Debug.Write("Final clustering in internal form:");
+            Console.Write("Final clustering in internal form:");
             ShowVector(clustering, true);
 
-            Debug.Write("Raw data by cluster:");
+            Console.Write("Raw data by cluster:");
             ShowClustered(rawData, clustering, numClusters, 1);
 
-            Debug.Write("End k-means clustering demo");
+            Console.Write("End k-means clustering demo");
         }
 
         public static int[] Cluster(double[][] rawData, int numClusters)
@@ -70,7 +82,7 @@ namespace FotmServerApp.Analysis.Algorithms
             bool changed = true; bool success = true;
             int[] clustering = InitClustering(data.Length, numClusters, 0);
             double[][] means = Allocate(numClusters, data[0].Length);
-            int maxCount = data.Length * 10;
+            int maxCount = data.Length * 100000;
             int ct = 0;
             while (changed == true && success == true && ct < maxCount)
             {
@@ -224,22 +236,22 @@ namespace FotmServerApp.Analysis.Algorithms
         {
             for (int i = 0; i < data.Length; ++i)
             {
-                if (indices) Debug.Write(i.ToString().PadLeft(3) + " ");
+                if (indices) Console.Write(i.ToString().PadLeft(3) + " ");
                 for (int j = 0; j < data[i].Length; ++j)
                 {
-                    if (data[i][j] >= 0.0) Debug.Write(" ");
-                    Debug.Write(data[i][j].ToString("F" + decimals) + " ");
+                    if (data[i][j] >= 0.0) Console.Write(" ");
+                    Console.Write(data[i][j].ToString("F" + decimals) + " ");
                 }
-                Debug.Write("");
+                Console.Write("");
             }
-            if (newLine) Debug.Write("");
+            if (newLine) Console.Write("");
         }
 
         static void ShowVector(int[] vector, bool newLine)
         {
             for (int i = 0; i < vector.Length; ++i)
-                Debug.Write(vector[i] + " ");
-            if (newLine) Debug.Write("\n");
+                Console.Write(vector[i] + " ");
+            if (newLine) Console.Write("\n");
         }
 
         static void ShowClustered(double[][] data, int[] clustering,
@@ -247,20 +259,20 @@ namespace FotmServerApp.Analysis.Algorithms
         {
             for (int k = 0; k < numClusters; ++k)
             {
-                Debug.Write("===================");
+                Console.Write("===================");
                 for (int i = 0; i < data.Length; ++i)
                 {
                     int clusterID = clustering[i];
                     if (clusterID != k) continue;
-                    Debug.Write(i.ToString().PadLeft(3) + " ");
+                    Console.Write(i.ToString().PadLeft(3) + " ");
                     for (int j = 0; j < data[i].Length; ++j)
                     {
-                        if (data[i][j] >= 0.0) Debug.Write(" ");
-                        Debug.Write(data[i][j].ToString("F" + decimals) + " ");
+                        if (data[i][j] >= 0.0) Console.Write(" ");
+                        Console.Write(data[i][j].ToString("F" + decimals) + " ");
                     }
-                    Debug.Write("");
+                    Console.Write("");
                 }
-                Debug.Write("===================");
+                Console.Write("===================");
             } // k
         }
     }

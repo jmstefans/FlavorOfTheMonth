@@ -21,7 +21,7 @@
         /// <returns></returns>
         public static string CreateSqlServerConnectionString(string server, string database)
         {
-            return $"Server={server};Database={database};Trusted_Connection=true;";
+            return $"Server={server};Database={database};Trusted_Connection=true;MultipleActiveResultSets=True;";
         }
     }
 }

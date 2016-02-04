@@ -131,6 +131,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analysis\Algorithms\Kmeans.cs" />
+    <Compile Include="Base\DbEntityBase.cs" />
     <Compile Include="Base\ObservableObjectBase.cs" />
     <Compile Include="Database\DataProvider\DataProviderBase.cs" />
     <Compile Include="Database\DataProvider\DataProviderFactory.cs" />
@@ -139,9 +140,10 @@
     <Compile Include="Database\DbManager.cs" />
     <Compile Include="Database\Util\ConnectionStringBuilderUtil.cs" />
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
-    <Compile Include="JobScheduling\Jobs\LeaderboardQueryJob.cs" />
+    <Compile Include="JobScheduling\Jobs\KmeansClusteringJob.cs" />
+    <Compile Include="JobScheduling\Jobs\RatingChangesJob.cs" />
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="Models\RatingChangeObservation.cs" />
+    <Compile Include="Models\RatingChange.cs" />
     <Compile Include="UI\Views\ActiveJobsView.xaml.cs">
       <DependentUpon>ActiveJobsView.xaml</DependentUpon>
     </Compile>

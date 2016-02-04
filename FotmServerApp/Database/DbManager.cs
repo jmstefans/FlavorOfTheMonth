@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Dapper;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.Database.Util;
+using FotmServerApp.Models;
 using WowDotNetAPI.Models;
 
 namespace FotmServerApp.Database
@@ -110,7 +108,7 @@ namespace FotmServerApp.Database
         /// Inserts a new row into the RatingChange table with the rating difference and time of the change.
         /// We will cluster on the RatingChange table to look for teams.
         /// </summary>
-        public IEnumerable<PvpStats> InsertRatingChanges(IEnumerable<PvpStats> objects)
+        public void InsertRatingChanges(IEnumerable<PvpStats> objects)
         {
             using (var trans = DbConnection.BeginTransaction())
             {
@@ -146,9 +144,9 @@ namespace FotmServerApp.Database
                                 DbConnection.Query<int>(
                                     $"select top 1 characterid from character where name like '{pvp.Name}' and server like '" + FormatRealmName(pvp.RealmName) + "'",
                                     null, trans).First();
-                            
+
                             // Get rating difference
-                            int ratingDiff = pvp.Rating - (int) DbConnection.Query<int>(
+                            int ratingDiff = pvp.Rating - (int)DbConnection.Query<int>(
                                 $"select top 1 rating from pvpstats where characterid = {characterID} order by modifieddate desc",
                                 null, trans).First();
 
@@ -159,16 +157,12 @@ namespace FotmServerApp.Database
                                 // Update that character's PvpStats row with current values to keep it current
                                 var querrrry =
                                     $"update pvpstats set Rating = {pvp.Rating}, ModifiedDate = '{DateTime.Now}', ModifiedStatus = 'U' where characterid = {characterID}";
-                                DbConnection.Execute(querrrry
-                                    ,
-                                    null, trans);
+                                DbConnection.Execute(querrrry, null, trans);
 
                                 // Insert a row into the RatingChange table indicating the difference and current time
                                 var querrry =
                                     $"insert into ratingchange values ({characterID}, {ratingDiff}, '{DateTime.Now}', 'I', 0)";
-                                DbConnection.Execute(querrry
-                                    ,
-                                    null, trans);
+                                DbConnection.Execute(querrry, null, trans);
                             }
                         }
                     }
@@ -181,7 +175,7 @@ namespace FotmServerApp.Database
                     Console.WriteLine("Failed: " + e);
                 }
             }
-            return objects;
+            //return objects;
         }
 
         // Returns a new version of the passed in realm name with an extra apostrophe next to the old one.
@@ -194,6 +188,24 @@ namespace FotmServerApp.Database
         #endregion Create
 
         #region Read
+
+        /// <summary>
+        /// Gets a list of RatingChange objects between the provided dates. 
+        /// </summary>
+        /// <param name="startDate">Beginning date.</param>
+        /// <param name="endDate">Ending date.</param>
+        /// <returns>List of RatingChange objects.</returns>
+        public List<RatingChange> GetRatingChanges(DateTime startDate, DateTime endDate)
+        {
+            var query = "select * from RatingChange where ModifiedDate >= @StartDate and ModifiedDate <= @EndDate";
+            return DbConnection.Query<RatingChange>(query, new { StartDate = startDate, EndDate = endDate }).ToList();
+        }
+
+        public PvpStats GetPvpStatsByCharacterId(int characterId)
+        {
+            var query = "select * from PvpStats where CharacterID=@Id;";
+            return DbConnection.Query<PvpStats>(query, new {Id = characterId}).First();
+        }
 
         #endregion
 
