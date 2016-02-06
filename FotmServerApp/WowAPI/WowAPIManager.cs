@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FotmServerApp.Models.Base;
 using WowDotNetAPI;
 using WowDotNetAPI.Models;
 
@@ -7,17 +8,17 @@ namespace FotmServerApp.WowAPI
     /// <summary>
     /// Class for retrieving data from the WoW REST API. 
     /// </summary>
-    public class WowAPIManager
+    public class WowAPIManager : ManagerBase<WowAPIManager>
     {
         #region API KEY
 
-        private const string API_KEY = "wxkatqct3862fp52eqcbwuqr3judxzdu";
+        private const string API_KEY = "";
         
         #endregion
 
         #region Leaderboards
 
-        public static IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
+        public IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
                                                         Locale locale = Locale.en_US,
                                                         Bracket bracket = Bracket._3v3)
         {
