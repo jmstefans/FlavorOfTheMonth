@@ -137,7 +137,7 @@ namespace FotmServerApp.Analysis.Algorithms
             {
                 var memberCount = team.Members.Count;
                 if (memberCount == 0)
-                    continue; // avoid divide by zero
+                    continue; // avoid divide by zero- todo: originally was returning false here, test if necessary
 
                 var sum = team.Members.Sum(m => m.RatingChangeValue);
                 team.Mean = (double)sum / memberCount;
