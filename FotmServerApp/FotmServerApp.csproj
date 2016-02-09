@@ -131,12 +131,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analysis\Algorithms\Kmeans.cs" />
+    <Compile Include="Analysis\Algorithms\LeaderboardKmeans.cs" />
     <Compile Include="JobScheduling\Jobs\KmeansClusteringJob.cs" />
     <Compile Include="JobScheduling\Jobs\RatingChangeJob.cs" />
     <Compile Include="Models\Base\DbEntityBase.cs" />
     <Compile Include="Models\Base\ManagerBase.cs" />
     <Compile Include="Models\Base\ObservableObjectBase.cs" />
-    <Compile Include="Database\DataProvider\DataProviderBase.cs" />
+    <Compile Include="Models\Base\DataProviderBase.cs" />
     <Compile Include="Database\DataProvider\DataProviderFactory.cs" />
     <Compile Include="Database\DataProvider\SqlDataProvider.cs" />
     <Compile Include="Database\DataProvider\SqliteDataProvider.cs" />
@@ -222,9 +223,6 @@
     <Folder Include="UI\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\SqlScripts\CommonQueries.sql" />
-    <Content Include="Database\SqlScripts\CreateFotmDB.sql" />
-    <Content Include="Database\SqlScripts\CreateLeaderboardTable.sql" />
     <Resource Include="UI\Images\check.ico" />
     <Resource Include="UI\Images\delete.ico" />
     <Resource Include="UI\Images\eject.ico" />

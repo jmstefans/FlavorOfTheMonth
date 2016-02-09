@@ -190,7 +190,12 @@ namespace FotmServerApp.Database
             return DbConnection.Query<RatingChange>(query, new { StartDate = startDate, EndDate = endDate }).ToList();
         }
 
-        public PvpStats GetPvpStatsByCharacterId(int characterId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="characterId"></param>
+        /// <returns></returns>
+        public PvpStats GetPvpStats(int characterId)
         {
             var query = "select * from PvpStats where CharacterID=@Id;";
             return DbConnection.Query<PvpStats>(query, new { Id = characterId }).First();

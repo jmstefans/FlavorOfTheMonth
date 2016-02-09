@@ -1,4 +1,5 @@
 ﻿using System;
+using FotmServerApp.Models.Base;
 
 namespace FotmServerApp.Database.DataProvider
 {

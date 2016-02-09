@@ -135,8 +135,8 @@ namespace FotmServerApp.Analysis.Algorithms
             int[] clusterCounts = new int[numClusters];
             for (int i = 0; i < data.Length; ++i)
             {
-                int cluster = clustering[i];
-                ++clusterCounts[cluster];
+                int cluster = clustering[i];// what cluster index does this node belong to
+                ++clusterCounts[cluster]; // that cluster has +1 
             }
 
             for (int k = 0; k < numClusters; ++k)

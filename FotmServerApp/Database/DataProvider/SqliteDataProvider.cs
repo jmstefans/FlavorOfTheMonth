@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 using FotmServerApp.Database.Util;
+using FotmServerApp.Models.Base;
 
 namespace FotmServerApp.Database.DataProvider
 {
