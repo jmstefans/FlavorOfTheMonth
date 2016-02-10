@@ -28,7 +28,7 @@ namespace FotmServerApp.JobScheduling.Jobs
             var allyWinners = new List<LeaderboardKmeans.Member>();
             foreach (var stat in stats)
             {
-                if (stat.ClassId == 1) continue;
+                if (stat.FactionId == 1) continue;
 
                 var baseStat = _baseLineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) && 
                                                                   b.RealmSlug.Equals(stat.RealmSlug));
@@ -44,7 +44,8 @@ namespace FotmServerApp.JobScheduling.Jobs
                 {
                     Name = stat.Name,
                     RatingChangeValue = ratingChange,
-                    RealmName = stat.RealmName
+                    RealmName = stat.RealmName,
+                    Spec = stat.Spec
                 });
             }
 
@@ -52,10 +53,13 @@ namespace FotmServerApp.JobScheduling.Jobs
             _baseLineStats = stats;
 
             var teams = new List<LeaderboardKmeans.Team>();
-            if (allyWinners.Count > 3)// at least 1 cluster
+            if (allyWinners.Count > 3) // at least 1 cluster
+            {
                 teams = LeaderboardKmeans.ClusterTeams(allyWinners, 3);
 
-            // TODO: insert teams into DB
+                // TODO: insert teams into DB
+
+            }
         }
 
         private static ITrigger _defaultTrigger;

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FotmServerApp.Models;
-using Quartz.Impl.AdoJobStore;
 
 namespace FotmServerApp.Analysis.Algorithms
 {
@@ -29,6 +25,11 @@ namespace FotmServerApp.Analysis.Algorithms
             /// TODO
             /// </summary>
             public int RatingChangeValue { get; set; }
+
+            /// <summary>
+            /// Class specialization (Rogue's assasination/combat/subtlety)
+            /// </summary>
+            public string Spec { get; set; }
         }
 
         public class Team
@@ -62,7 +63,7 @@ namespace FotmServerApp.Analysis.Algorithms
             // round up the number of teams to avoid too few
             var numberOfTeams = members.Count/ teamSize;
             if (numberOfTeams*teamSize != members.Count)
-                numberOfTeams += 1;
+                return null; //this line used to be    numberOfTeams += 1;    but that caused in ArrayOutOfBoundsEx in InitializeTeams()
             var clusteredTeams = InitializeTeams(members, numberOfTeams, teamSize);
 
             var currentIteration = 0;
@@ -79,32 +80,27 @@ namespace FotmServerApp.Analysis.Algorithms
             return clusteredTeams;
         }
 
-        private static List<Team> InitializeTeams(List<Member> members, int numberOfTeams, int teamSize, int seed = 0)
+        /// <summary>
+        /// Initializes the list of teams by sequentially adding all of the members to a team.
+        /// </summary>
+        /// <param name="members"></param>
+        /// <param name="numberOfTeams"></param>
+        /// <param name="teamSize"></param>
+        /// <returns></returns>
+        private static List<Team> InitializeTeams(List<Member> members, int numberOfTeams, int teamSize)
         {
-            var random = new Random(seed);
             var teams = new List<Team>();
 
             /* Initializing each cluster */
             for (var i = 0; i < numberOfTeams; i++)
             {
                 var team = new Team();
-                team.Members.Add(members[i]);
+                for (var j = 0; j < teamSize; j++)
+                {
+                    team.Members.Add(members[i*teamSize + j]);
+                }
                 teams.Add(team);
             }
-
-            /* Randomly assigning rating changes */
-            foreach (var team in teams)
-            {
-                var randomIndex = random.Next(0, numberOfTeams);
-                var member = members[randomIndex];
-
-                if (team.Members.Any(m => m.Name.Equals(member.Name) && m.RealmName.Equals(member.RealmName)))
-                    continue; // already added
-
-                
-                team.Members.Add(member);
-            }
-
 
             /* Initialize the team's means */
             //for (var i = 0; i < numberOfTeams; i++)
@@ -115,7 +111,7 @@ namespace FotmServerApp.Analysis.Algorithms
             return teams;
         }
 
-        private static void RemoveFromPreviousTeam(List<Team> teams, Member memberToRemove)
+        private static void RemoveMemberFromTeam(List<Team> teams, Member memberToRemove)
         {
             foreach (var team in teams)
             {
@@ -133,17 +129,22 @@ namespace FotmServerApp.Analysis.Algorithms
 
         private static bool UpdateTeamMeans(List<Team> teams)
         {
-            foreach (var team in teams)
+            try
             {
-                var memberCount = team.Members.Count;
-                if (memberCount == 0)
-                    continue; // avoid divide by zero- todo: originally was returning false here, test if necessary
-
-                var sum = team.Members.Sum(m => m.RatingChangeValue);
-                team.Mean = (double)sum / memberCount;
+                foreach (var team in teams)
+                {
+                    var memberCount = team.Members.Count;
+                    if (memberCount <= 0)
+                        continue; // avoid divide by zero- todo: originally was returning false here, test if necessary
+                    var sum = team.Members.Sum(m => m.RatingChangeValue);
+                    team.Mean = (double)sum / memberCount;
+                }
+                return true;
             }
-
-            return true;
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private static bool UpdateClustering(List<Team> teams, List<Member> members)
@@ -159,7 +160,7 @@ namespace FotmServerApp.Analysis.Algorithms
                     continue;
                 
                 // Remove from previous team
-                RemoveFromPreviousTeam(teams, member);
+                RemoveMemberFromTeam(teams, member);
                 team.Members.Add(member); // Note - this won't handle teams with members > cluster size
                 changed = true;
             }

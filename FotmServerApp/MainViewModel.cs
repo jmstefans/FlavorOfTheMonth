@@ -57,7 +57,7 @@ namespace FotmServerApp
             {
                 job.Execute(null);
 
-                Thread.Sleep(30000);
+                //Thread.Sleep(30000);
             }
 
 
