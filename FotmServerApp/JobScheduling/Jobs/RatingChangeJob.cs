@@ -12,6 +12,7 @@ namespace FotmServerApp.JobScheduling.Jobs
     public class RatingChangeJob : IJob
     {
         #region Variables/Properties
+
         private static bool _setBaseLine = true;
         private static List<PvpStats> _baseLineStats = new List<PvpStats>();
 
@@ -27,17 +28,34 @@ namespace FotmServerApp.JobScheduling.Jobs
                         .StartNow()
                         .WithSimpleSchedule(
                             s => s
-                                .WithIntervalInSeconds(30)
+                                .WithInterval(TimeSpan.FromMilliseconds(1))
                                 .RepeatForever())
                                 .Build();
                 return _defaultTrigger;
             }
         }
+
         #endregion
 
+
+        /// <summary>
+        /// Gets the job arguments used by the RatingChangeJob execution. 
+        /// Call this before running the job.
+        /// </summary>
+        /// <param name="bracket"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> GetRatingChangeJobArguments(Bracket bracket)
+        {
+            return new Dictionary<string, object> { { BRACKET_KEY, bracket } };
+        }
+        private const string BRACKET_KEY = "bracketKey";
+
+        /// <summary>
+        /// Executes the job.
+        /// </summary>
+        /// <param name="context"></param>
         public void Execute(IJobExecutionContext context)
         {
-            // CLUSTER TEST!    
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
             if (_setBaseLine) // only do once on initial execute
             {
@@ -46,38 +64,88 @@ namespace FotmServerApp.JobScheduling.Jobs
                 return;
             }
 
-            var allyWinners = new List<LeaderboardKmeans.TeamMember>();
+            var allyWinners = new List<TeamMember>();
+            var allyLosers = new List<TeamMember>(); // faction = 0
+            var hordeWinners = new List<TeamMember>();
+            var hordeLosers = new List<TeamMember>(); // factionId = 1
+
+            // sort by faction and into winners and losers
             foreach (var stat in stats)
             {
-                if (stat.FactionId == 1) continue; 
-
-                var baseStat = _baseLineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) && 
+                var baseStat = _baseLineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
                                                                   b.RealmSlug.Equals(stat.RealmSlug));
-                if (baseStat == null) 
+                if (baseStat == null)
                     continue; // player isn't in the baseline, nothing to compare against
 
                 var ratingChange = stat.Rating - baseStat.Rating;
-                if (ratingChange <= 0) continue; 
+                if (ratingChange == 0) continue; // no rating change, ignore
 
-                allyWinners.Add(new LeaderboardKmeans.TeamMember
+                var teamMember = new TeamMember
                 {
                     Name = stat.Name,
                     RatingChangeValue = ratingChange,
                     RealmName = stat.RealmName,
                     Spec = stat.Spec
-                });
+                };
+
+                var isAlly = stat.FactionId == 0;
+                var wonGame = ratingChange > 0;
+
+                if (isAlly)
+                {
+                    if (wonGame)
+                        allyWinners.Add(teamMember);
+                    else
+                        allyLosers.Add(teamMember);
+                }
+                else // horde
+                {
+                    if (wonGame)
+                        hordeWinners.Add(teamMember);
+                    else
+                        hordeLosers.Add(teamMember);
+                }
             }
 
+            // current stats are baseline for next pass
             _baseLineStats.Clear();
             _baseLineStats = stats;
 
-            var teams = new List<LeaderboardKmeans.Team>();
-            if (allyWinners.Count > 3) // at least 1 cluster - TODO: update to size of team 
+            // ensure that each group has enough players to fill at least 1 team
+            var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
+            var teamCount = GetTeamCount(bracket);
+
+            if (allyWinners.Count >= teamCount)
+                ExecuteClustering(allyWinners, teamCount);
+
+            if (allyLosers.Count >= teamCount)
+                ExecuteClustering(allyLosers, teamCount);
+
+            if (hordeWinners.Count >= teamCount)
+                ExecuteClustering(hordeWinners, teamCount);
+
+            if (hordeLosers.Count >= teamCount)
+                ExecuteClustering(hordeLosers, teamCount);
+        }
+
+        private void ExecuteClustering(List<TeamMember> membersToCluster, int teamCount)
+        {
+            var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamCount);
+            // TODO: add to another thread queue and insert into db
+        }
+
+        private int GetTeamCount(Bracket bracket)
+        {
+            switch (bracket)
             {
-                teams = LeaderboardKmeans.ClusterTeams(allyWinners, 3);
-
-                // TODO: insert teams into DB
-
+                case Bracket._2v2:
+                    return 2;
+                case Bracket._3v3:
+                    return 3;
+                case Bracket._5v5:
+                    return 5;
+                default:
+                    throw new ArgumentOutOfRangeException("bracket");
             }
         }
     }

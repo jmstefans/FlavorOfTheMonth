@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FotmServerApp.Models;
 
 namespace FotmServerApp.Analysis.Algorithms
 {
@@ -9,49 +10,7 @@ namespace FotmServerApp.Analysis.Algorithms
     /// </summary>
     public class LeaderboardKmeans
     {
-        public class TeamMember
-        {
-            /// <summary>
-            /// Member character name.
-            /// </summary>
-            public string Name { get; set; }
-            
-            /// <summary>
-            /// Member realm name.
-            /// </summary>
-            public string RealmName { get; set; }
-            
-            /// <summary>
-            /// Member rating change between two time points.
-            /// </summary>
-            public int RatingChangeValue { get; set; }
-
-            /// <summary>
-            /// Class specialization (Rogue's assasination/combat/subtlety)
-            /// </summary>
-            public string Spec { get; set; }
-        }
-
-        public class Team
-        {
-            /// <summary>
-            /// The mean of the team's rating change values.
-            /// </summary>
-            public double Mean { get; set; }
-
-            /// <summary>
-            /// List of members belonging to this team.
-            /// </summary>
-            public List<TeamMember> Members { get; set; }
-
-            /// <summary>
-            /// You know what the fuck this does.
-            /// </summary>
-            public Team()
-            {
-                Members = new List<TeamMember>();
-            }
-        }
+       
 
         /// <summary>
         /// Clusters the members into teams of provided team size.
