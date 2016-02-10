@@ -6,3 +6,7 @@ How to implement https/ssl on an MVC site:
 	http://tech.trailmax.info/2014/02/implemnting-https-everywhere-in-asp-net-mvc-application/
 
 We can use https://asafaweb.com/ to schedule scans against our website for basic vulnerabilities.
+
+Used this article to help figure out how to hook up the SimpleMembership that came with this project:
+	http://www.codeguru.com/csharp/.net/net_asp/mvc/using-simplemembership-in-asp.net-mvc-4.htm
+	I still want to add in the three Modified columns to each of the tables.
