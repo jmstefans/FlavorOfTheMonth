@@ -1,9 +1,8 @@
-﻿Need to get a list of the leaderboards in US 3s.
-Iterate through the list and check everyone's current 3s rating marking the time and rating.
-	Save that information in the database.
+﻿API Call Limitations:
+	10 calls per second
+	5000 calls per minute
 
-Around 9000 requests per day.
+How to implement https/ssl on an MVC site: 
+	http://tech.trailmax.info/2014/02/implemnting-https-everywhere-in-asp-net-mvc-application/
 
-Basic plan:
-	100 calls per second.
-	36,000 calls per hour.
+We can use https://asafaweb.com/ to schedule scans against our website for basic vulnerabilities.

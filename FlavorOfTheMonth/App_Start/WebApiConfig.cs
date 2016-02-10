@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace FlavorOfTheMonth
 {
@@ -14,6 +11,13 @@ namespace FlavorOfTheMonth
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // make all web-api requests to be sent over https
+            // WARNING: This approach couples WebApi to System.Web libraries 
+            //          and you won’t be able to use this code in self-hosed
+            //          WebApi applications. If this is a problem then check
+            //          out http://www.strathweb.com/2013/01/adding-request-islocal-to-asp-net-web-api/
+            config.MessageHandlers.Add(new EnforceHttpsHandler());
         }
     }
 }
