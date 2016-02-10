@@ -48,8 +48,7 @@ namespace FotmServerApp.Database
         /// Sets the active data provider.
         /// </summary>
         /// <param name="dataProviderType">The type of data provider <see cref="DataProviderFactory.DataProviderType"/> being set.</param>
-        /// <param name="connectionString">Corresponding connection string for the data provider. 
-        ///                                For connection string util <see cref="ConnectionStringBuilderUtil"/></param>
+        /// <param name="connectionProperties"></param>
         public void SetDataProvider(DataProviderFactory.DataProviderType dataProviderType, params string[] connectionProperties)
         {
             _dataProvider = DataProviderFactory.GetDataProvider(dataProviderType, connectionProperties);
@@ -63,7 +62,12 @@ namespace FotmServerApp.Database
 
         #region Create
 
-        public void InsertObjects<T>(IEnumerable<T> objects) where T : new()
+        /// <summary>
+        /// Inserts an enumerable collection of DbEntityBase objects into DB. 
+        /// </summary>
+        /// <typeparam name="T">The DbEntity to insert <see cref="DbEntityBase"/></typeparam>
+        /// <param name="objects">DbEntityBase objects to insert into DB.</param>
+        public void InsertObjects<T>(IEnumerable<T> objects) where T : DbEntityBase, new()
         {
             var type = typeof(T);
 
@@ -77,7 +81,9 @@ namespace FotmServerApp.Database
                     foreach (var pvp in objects)
                     {
                         var query =
-                       $"insert into [{type.Name}] ({string.Join(",", cols)}, ModifiedDate, ModifiedStatus, ModifiedUserID) values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0);";
+                       $"insert into [{type.Name}] ({string.Join(",", cols)}, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+                       $"values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0);";
+
                         DbConnection.Execute(query, pvp, trans);
                     }
 
@@ -191,10 +197,10 @@ namespace FotmServerApp.Database
         }
 
         /// <summary>
-        /// 
+        /// Gets the PvpStats for given character.
         /// </summary>
-        /// <param name="characterId"></param>
-        /// <returns></returns>
+        /// <param name="characterId">Character record ID.</param>
+        /// <returns>PvpStats of that character if found.</returns>
         public PvpStats GetPvpStats(int characterId)
         {
             var query = "select * from PvpStats where CharacterID=@Id;";
@@ -219,10 +225,11 @@ namespace FotmServerApp.Database
         {
             var properties = typeof(T).GetProperties();
             var columns = new string[properties.Length];
+            var txtInfo = new CultureInfo("en-US", false).TextInfo;
 
             for (var i = 0; i < properties.Length; i++)
             {
-                columns[i] = ConvertToColumnName(properties[i].Name);
+                columns[i] = txtInfo.ToTitleCase(properties[i].Name);
             }
 
             return columns;
@@ -231,12 +238,6 @@ namespace FotmServerApp.Database
         private string[] GetColumnParameters(string[] columnNames)
         {
             return columnNames.Select(c => $"@{c}").ToArray();
-        }
-
-        private string ConvertToColumnName(string propertyName)
-        {
-            var txtInfo = new CultureInfo("en-US", false).TextInfo;
-            return txtInfo.ToTitleCase(propertyName);
         }
 
         #endregion

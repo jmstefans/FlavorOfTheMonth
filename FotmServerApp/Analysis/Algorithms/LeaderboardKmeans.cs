@@ -9,7 +9,7 @@ namespace FotmServerApp.Analysis.Algorithms
     /// </summary>
     public class LeaderboardKmeans
     {
-        public class Member
+        public class TeamMember
         {
             /// <summary>
             /// Member character name.
@@ -42,14 +42,14 @@ namespace FotmServerApp.Analysis.Algorithms
             /// <summary>
             /// List of members belonging to this team.
             /// </summary>
-            public List<Member> Members { get; set; }
+            public List<TeamMember> Members { get; set; }
 
             /// <summary>
             /// You know what the fuck this does.
             /// </summary>
             public Team()
             {
-                Members = new List<Member>();
+                Members = new List<TeamMember>();
             }
         }
 
@@ -60,7 +60,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <param name="teamSize">The requested team size.</param>
         /// <param name="maximumIterations">The maximum number of iterations to perform before converging.</param>
         /// <returns>A list of clustered teams.</returns>
-        public static List<Team> ClusterTeams(List<Member> members,
+        public static List<Team> ClusterTeams(List<TeamMember> members,
                                               int teamSize,
                                               int maximumIterations = 100)
         {
@@ -90,7 +90,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <summary>
         /// Initializes the list of teams by sequentially adding all of the members to a team.
         /// </summary>
-        private static List<Team> InitializeTeams(List<Member> members, int numberOfTeams, int teamSize)
+        private static List<Team> InitializeTeams(List<TeamMember> members, int numberOfTeams, int teamSize)
         {
             var teams = new List<Team>();
 
@@ -140,7 +140,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <summary>
         /// For each member provided, adds it to the closest team.
         /// </summary>
-        private static bool UpdateClustering(List<Team> teams, List<Member> members)
+        private static bool UpdateClustering(List<Team> teams, List<TeamMember> members)
         {
             var changed = false;
 
@@ -164,7 +164,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <summary>
         /// Finds the team with a mean closest to the member's rating change value.
         /// </summary>
-        private static Team FindClosestTeam(List<Team> teams, Member member)
+        private static Team FindClosestTeam(List<Team> teams, TeamMember teamMember)
         {
             Team closestTeam = null;
             var closestDistance = double.MaxValue;
@@ -173,7 +173,7 @@ namespace FotmServerApp.Analysis.Algorithms
             {
                 /* Note - just using basic distance b/w two numbers here
                           this will need an update to account for multiple properties */
-                var currentDistance = Math.Abs(team.Mean - member.RatingChangeValue);
+                var currentDistance = Math.Abs(team.Mean - teamMember.RatingChangeValue);
                 if (currentDistance < closestDistance)
                 {
                     closestTeam = team;
@@ -187,15 +187,15 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <summary>
         /// Removes the member from all teams.
         /// </summary>
-        private static void RemoveMemberFromTeam(List<Team> teams, Member memberToRemove)
+        private static void RemoveMemberFromTeam(List<Team> teams, TeamMember teamMemberToRemove)
         {
             foreach (var team in teams)
             {
                 for (var i = 0; i < team.Members.Count; i++)
                 {
                     var member = team.Members[i];
-                    if (member.Name.Equals(memberToRemove.Name) &&
-                        member.RealmName.Equals(memberToRemove.RealmName))
+                    if (member.Name.Equals(teamMemberToRemove.Name) &&
+                        member.RealmName.Equals(teamMemberToRemove.RealmName))
                     {
                         team.Members.RemoveAt(i);
                     }
