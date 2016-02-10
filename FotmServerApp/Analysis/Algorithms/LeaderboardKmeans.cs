@@ -59,7 +59,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <param name="members">The members to cluster.</param>
         /// <param name="teamSize">The requested team size.</param>
         /// <param name="maximumIterations">The maximum number of iterations to perform before converging.</param>
-        /// <returns></returns>
+        /// <returns>A list of clustered teams.</returns>
         public static List<Team> ClusterTeams(List<Member> members,
                                               int teamSize,
                                               int maximumIterations = 100)
