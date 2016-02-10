@@ -12,17 +12,17 @@ namespace FotmServerApp.Analysis.Algorithms
         public class Member
         {
             /// <summary>
-            /// TODO
+            /// Member character name.
             /// </summary>
             public string Name { get; set; }
             
             /// <summary>
-            /// TODO
+            /// Member realm name.
             /// </summary>
             public string RealmName { get; set; }
             
             /// <summary>
-            /// TODO
+            /// Member rating change between two time points.
             /// </summary>
             public int RatingChangeValue { get; set; }
 
@@ -35,17 +35,17 @@ namespace FotmServerApp.Analysis.Algorithms
         public class Team
         {
             /// <summary>
-            /// TODO
+            /// The mean of the team's rating change values.
             /// </summary>
             public double Mean { get; set; }
 
             /// <summary>
-            /// TODO
+            /// List of members belonging to this team.
             /// </summary>
             public List<Member> Members { get; set; }
 
             /// <summary>
-            /// TODO
+            /// You know what the fuck this does.
             /// </summary>
             public Team()
             {
@@ -53,6 +53,13 @@ namespace FotmServerApp.Analysis.Algorithms
             }
         }
 
+        /// <summary>
+        /// Clusters the members into teams of provided team size.
+        /// </summary>
+        /// <param name="members">The members to cluster.</param>
+        /// <param name="teamSize">The requested team size.</param>
+        /// <param name="maximumIterations">The maximum number of iterations to perform before converging.</param>
+        /// <returns></returns>
         public static List<Team> ClusterTeams(List<Member> members,
                                               int teamSize,
                                               int maximumIterations = 100)
@@ -64,8 +71,8 @@ namespace FotmServerApp.Analysis.Algorithms
             var numberOfTeams = members.Count/ teamSize;
             if (numberOfTeams*teamSize != members.Count)
                 return null; //this line used to be    numberOfTeams += 1;    but that caused in ArrayOutOfBoundsEx in InitializeTeams()
-            var clusteredTeams = InitializeTeams(members, numberOfTeams, teamSize);
 
+            var clusteredTeams = InitializeTeams(members, numberOfTeams, teamSize);
             var currentIteration = 0;
             var maxIterations = members.Count * maximumIterations;
 
@@ -83,10 +90,6 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <summary>
         /// Initializes the list of teams by sequentially adding all of the members to a team.
         /// </summary>
-        /// <param name="members"></param>
-        /// <param name="numberOfTeams"></param>
-        /// <param name="teamSize"></param>
-        /// <returns></returns>
         private static List<Team> InitializeTeams(List<Member> members, int numberOfTeams, int teamSize)
         {
             var teams = new List<Team>();
@@ -111,22 +114,9 @@ namespace FotmServerApp.Analysis.Algorithms
             return teams;
         }
 
-        private static void RemoveMemberFromTeam(List<Team> teams, Member memberToRemove)
-        {
-            foreach (var team in teams)
-            {
-                for (var i = 0; i < team.Members.Count; i++)
-                {
-                    var member = team.Members[i];
-                    if (member.Name.Equals(memberToRemove.Name) &&
-                        member.RealmName.Equals(memberToRemove.RealmName))
-                    {
-                        team.Members.RemoveAt(i);
-                    }
-                }
-            }
-        }
-
+        /// <summary>
+        /// Recalculates the mean of each team.
+        /// </summary>
         private static bool UpdateTeamMeans(List<Team> teams)
         {
             try
@@ -147,6 +137,9 @@ namespace FotmServerApp.Analysis.Algorithms
             }
         }
 
+        /// <summary>
+        /// For each member provided, adds it to the closest team.
+        /// </summary>
         private static bool UpdateClustering(List<Team> teams, List<Member> members)
         {
             var changed = false;
@@ -168,6 +161,9 @@ namespace FotmServerApp.Analysis.Algorithms
             return changed;
         }
 
+        /// <summary>
+        /// Finds the team with a mean closest to the member's rating change value.
+        /// </summary>
         private static Team FindClosestTeam(List<Team> teams, Member member)
         {
             Team closestTeam = null;
@@ -186,6 +182,25 @@ namespace FotmServerApp.Analysis.Algorithms
             }
 
             return closestTeam;
+        }
+
+        /// <summary>
+        /// Removes the member from all teams.
+        /// </summary>
+        private static void RemoveMemberFromTeam(List<Team> teams, Member memberToRemove)
+        {
+            foreach (var team in teams)
+            {
+                for (var i = 0; i < team.Members.Count; i++)
+                {
+                    var member = team.Members[i];
+                    if (member.Name.Equals(memberToRemove.Name) &&
+                        member.RealmName.Equals(memberToRemove.RealmName))
+                    {
+                        team.Members.RemoveAt(i);
+                    }
+                }
+            }
         }
     }
 }
