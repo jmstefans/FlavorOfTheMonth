@@ -15,15 +15,17 @@ namespace FlavorOfTheMonth.Controllers
         {
             ViewBag.Message = "We use a clustering algorithm to analyze the changes in ratings from the players on the leaderboards."
                 + " Based on these differences we can guess who is playing with who and display the data to you.";
-
+            ViewBag.Message += "Feel free to contact us at fotmclub7@gmail.com";
             return View();
         }
 
+        /*
         public ActionResult Contact()
         {
             ViewBag.Message = "Feel free to contact us at fotmclub7@gmail.com";
 
             return View();
         }
+        */
     }
 }

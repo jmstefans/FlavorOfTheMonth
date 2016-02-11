@@ -125,6 +125,11 @@ footer {
     height: 100px;
 }
 
+.logo {
+    max-width: 30%;
+    margin-bottom: 10px;
+}
+
 
 /* site title
 ----------------------------------------------------------*/
