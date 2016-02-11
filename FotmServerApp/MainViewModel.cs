@@ -40,7 +40,7 @@ namespace FotmServerApp
 
         public void InitializeCommandBindings(Window window)
         {
-            
+
         }
 
         public void CleanUp()
@@ -56,19 +56,6 @@ namespace FotmServerApp
         private void Initialize()
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
-
-            //var job = new RatingChangeJob();
-            var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
-            _jobManager.ScheduleJob<RatingChangeJob>(RatingChangeJob.DefaultTrigger, 
-                                                    "ratingChangeJob", 
-                                                    "ratingChangeGroup", jobArgs);
-
-            //while (true)
-            //{
-            //    job.Execute();
-
-            //    //Thread.Sleep(30000);
-            //}
         }
 
         #endregion
