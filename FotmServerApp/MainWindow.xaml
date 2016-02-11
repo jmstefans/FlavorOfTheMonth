@@ -37,13 +37,14 @@
             <fluent:RibbonTabItem Header="Data"
                                   IsSeparatorVisible="True">
 
-                <fluent:RibbonGroupBox Header="Temp">
-                    <fluent:Button Header="Load Data"
-                                   Icon="UI/Images/folder.ico"
-                                   LargeIcon="UI/Images/folder.ico"/>
+                <fluent:RibbonGroupBox Header="Debug">
+                    <fluent:Button Header="Open Output"
+                                   Icon="UI/Images/debug.ico"
+                                   LargeIcon="UI/Images/debug.ico"
+                                   Click="DebugOpen_OnClick"/>
                 </fluent:RibbonGroupBox>
 
-                <fluent:RibbonGroupBox Header="Temp">
+                <fluent:RibbonGroupBox Header="Database">
 
                 </fluent:RibbonGroupBox>
 
@@ -83,7 +84,8 @@
         <!-- AVALON DOCKING MANAGER -->
         <xcad:DockingManager Grid.Row="1"
                              FontSize="14"
-                             AllowMixedOrientation="True">
+                             AllowMixedOrientation="True"
+                             x:Name="DockingManager">
 
             <xcad:DockingManager.Theme>
                 <xcad:MetroTheme/>
@@ -121,7 +123,7 @@
 
                     <xcad:LayoutAnchorablePaneGroup DockWidth="300"
                                                     IsMaximized="False">
-                        <xcad:LayoutAnchorablePane >
+                        <xcad:LayoutAnchorablePane x:Name="RightPaneGroup">
 
                             <xcad:LayoutAnchorable ContentId="Database"
                                                    Title="Database">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using FotmServerApp.Analysis.Algorithms;
@@ -14,9 +15,11 @@ namespace FotmServerApp.JobScheduling.Jobs
         #region Variables/Properties
 
         private static bool _setBaseLine = true;
-        private static List<PvpStats> _baseLineStats = new List<PvpStats>();
+        private static ConcurrentBag<PvpStats> _baseLineStats = new ConcurrentBag<PvpStats>();
 
-        private static ITrigger _defaultTrigger;
+        /// <summary>
+        /// Can be used as the default trigger for this job.
+        /// </summary>
         public static ITrigger DefaultTrigger
         {
             get
@@ -34,6 +37,7 @@ namespace FotmServerApp.JobScheduling.Jobs
                 return _defaultTrigger;
             }
         }
+        private static ITrigger _defaultTrigger;
 
         #endregion
 
@@ -59,7 +63,7 @@ namespace FotmServerApp.JobScheduling.Jobs
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
             if (_setBaseLine) // only do once on initial execute
             {
-                _baseLineStats = stats;
+                _baseLineStats = new ConcurrentBag<PvpStats>(stats);
                 _setBaseLine = false;
                 return;
             }
@@ -108,24 +112,23 @@ namespace FotmServerApp.JobScheduling.Jobs
             }
 
             // current stats are baseline for next pass
-            _baseLineStats.Clear();
-            _baseLineStats = stats;
+            _baseLineStats = new ConcurrentBag<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
             var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
-            var teamCount = GetTeamCount(bracket);
+            var teamSize = GetTeamSize(bracket);
 
-            if (allyWinners.Count >= teamCount)
-                ExecuteClustering(allyWinners, teamCount);
+            if (allyWinners.Count >= teamSize)
+                ExecuteClustering(allyWinners, teamSize);
 
-            if (allyLosers.Count >= teamCount)
-                ExecuteClustering(allyLosers, teamCount);
+            if (allyLosers.Count >= teamSize)
+                ExecuteClustering(allyLosers, teamSize);
 
-            if (hordeWinners.Count >= teamCount)
-                ExecuteClustering(hordeWinners, teamCount);
+            if (hordeWinners.Count >= teamSize)
+                ExecuteClustering(hordeWinners, teamSize);
 
-            if (hordeLosers.Count >= teamCount)
-                ExecuteClustering(hordeLosers, teamCount);
+            if (hordeLosers.Count >= teamSize)
+                ExecuteClustering(hordeLosers, teamSize);
         }
 
         private void ExecuteClustering(List<TeamMember> membersToCluster, int teamCount)
@@ -134,7 +137,7 @@ namespace FotmServerApp.JobScheduling.Jobs
             // TODO: add to another thread queue and insert into db
         }
 
-        private int GetTeamCount(Bracket bracket)
+        private int GetTeamSize(Bracket bracket)
         {
             switch (bracket)
             {

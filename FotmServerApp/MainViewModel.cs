@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows;
 using FotmServerApp.Database;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.JobScheduling;
@@ -37,6 +38,11 @@ namespace FotmServerApp
 
         #region Public Methods
 
+        public void InitializeCommandBindings(Window window)
+        {
+
+        }
+
         public void CleanUp()
         {
             _dbManager.Dispose();
@@ -50,19 +56,6 @@ namespace FotmServerApp
         private void Initialize()
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
-
-            //var job = new RatingChangeJob();
-            var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
-            _jobManager.ScheduleJob<RatingChangeJob>(RatingChangeJob.DefaultTrigger, 
-                                                    "ratingChangeJob", 
-                                                    "ratingChangeGroup", jobArgs);
-
-            //while (true)
-            //{
-            //    job.Execute();
-
-            //    //Thread.Sleep(30000);
-            //}
         }
 
         #endregion

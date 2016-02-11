@@ -4,6 +4,7 @@ using FotmServerApp.JobScheduling.Jobs;
 using FotmServerApp.Models.Base;
 using Quartz;
 using Quartz.Impl;
+using WowDotNetAPI.Models;
 
 namespace FotmServerApp.JobScheduling
 {
@@ -33,8 +34,16 @@ namespace FotmServerApp.JobScheduling
 
         #region Public
 
-        public void ScheduleJob<T>(ITrigger trigger, string key, string group, 
-                                   IDictionary<string, object> jobArguments = null) where T : IJob 
+        /// <summary>
+        /// Creates and schedules an IJob to run.
+        /// </summary>
+        /// <typeparam name="T">Type of IJob to schedule.</typeparam>
+        /// <param name="trigger">The trigger to apply.</param>
+        /// <param name="key">The job key.</param>
+        /// <param name="group">The job group key.</param>
+        /// <param name="jobArguments">Arguments (if any) needed for the job.</param>
+        public void ScheduleJob<T>(ITrigger trigger, string key, string group,
+                                   IDictionary<string, object> jobArguments = null) where T : IJob
         {
             var jobDetail = JobBuilder.Create<T>()
                                       .WithIdentity(key, group);
@@ -43,10 +52,29 @@ namespace FotmServerApp.JobScheduling
             {
                 jobDetail.SetJobData(new JobDataMap(jobArguments));
             }
-        
+
             Scheduler.ScheduleJob(jobDetail.Build(), trigger);
         }
-        
+
+        /// <summary>
+        /// Creates and schedules the RatingChangeJob that pulls pvp stats data, 
+        /// performs clustering, then writes team results to the database.
+        /// </summary>
+        /// <param name="jobKey">The unique key for this job.</param>
+        /// <param name="groupKey">The unique key for this group of jobs.</param>
+        /// <param name="bracket">The bracket to pull.</param>
+        /// <param name="trigger">The trigger for the job to execute. If null, default will be applied.</param>
+        public void ScheduleRatingChangeJob(string jobKey = "ratingChangeJob",
+                                            string groupKey = "ratingChangeGroup",
+                                            Bracket bracket = Bracket._3v3,
+                                            ITrigger trigger  = null)
+        {
+            if (trigger == null)
+                trigger = RatingChangeJob.DefaultTrigger;
+            var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
+            ScheduleJob<RatingChangeJob>(trigger, jobKey, groupKey, jobArgs);
+        }
+
         #endregion
 
         #region IDisposable
