@@ -129,6 +129,9 @@ footer {
     margin-bottom: 10px;
 }
 
+.inlineBlock {
+    display: inline-block;
+}
 
 /* site title
 ----------------------------------------------------------*/
