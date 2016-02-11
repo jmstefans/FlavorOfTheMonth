@@ -1,13 +1,12 @@
 ﻿html {
-    background-color: #e2e2e2;
+    background-color: #2F2F2F;
     margin: 0;
     padding: 0;
 }
 
 body {
-    background-color: #fff;
-    border-top: solid 10px #000;
-    color: #333;
+    background-color: #1D1D1D !important;
+    color: #999 !important;
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     margin: 0;
@@ -99,7 +98,7 @@ h5, h6 {
 }
 
 #body {
-    background-color: #efeeef;
+    background-color: #252525;
     clear: both;
     padding-bottom: 35px;
 }
@@ -120,7 +119,7 @@ header .content-wrapper {
 
 footer {
     clear: both;
-    background-color: #e2e2e2;
+    background-color: #2F2F2F;
     font-size: .8em;
     height: 100px;
 }
@@ -205,7 +204,7 @@ ul#menu {
         }
 
         ul#menu li a:hover {
-            color: #333;
+            color: #E2DEDE;
             text-decoration: none;
         }
 
@@ -214,7 +213,7 @@ ul#menu {
 ----------------------------------------------------------*/
 /* featured */
 .featured {
-    background-color: #fff;
+    background-color: #1D1D1D;
 }
 
     .featured .content-wrapper {
