@@ -51,22 +51,18 @@ namespace FotmServerApp
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
 
-            var job = new RatingChangeJob();
+            //var job = new RatingChangeJob();
+            var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
+            _jobManager.ScheduleJob<RatingChangeJob>(RatingChangeJob.DefaultTrigger, 
+                                                    "ratingChangeJob", 
+                                                    "ratingChangeGroup", jobArgs);
 
-            while (true)
-            {
-                job.Execute(null);
+            //while (true)
+            //{
+            //    job.Execute();
 
-                //Thread.Sleep(30000);
-            }
-
-
-            //_jobManager.ScheduleJob<RatingChangeJob>(RatingChangeJob.DefaultTrigger, "RatingChangesJob", "RatingChangesGroup");
-
-            // do some clusterfucking
-            //var clusterJob = new KmeansClusteringJob(DateTime.Now, DateTime.MaxValue);
-            //clusterJob.Execute(null);
-            //_jobManager.ScheduleJob<KmeansClusteringJob>(clusterJob.DefaultTrigger, "KmeansClusteringJob", "KmeansClusteringGroup");
+            //    //Thread.Sleep(30000);
+            //}
         }
 
         #endregion

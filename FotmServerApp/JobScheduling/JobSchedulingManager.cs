@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FotmServerApp.JobScheduling.Jobs;
 using FotmServerApp.Models.Base;
 using Quartz;
@@ -32,13 +33,18 @@ namespace FotmServerApp.JobScheduling
 
         #region Public
 
-        public void ScheduleJob<T>(ITrigger trigger, string key, string group = "") where T : IJob 
+        public void ScheduleJob<T>(ITrigger trigger, string key, string group, 
+                                   IDictionary<string, object> jobArguments = null) where T : IJob 
         {
             var jobDetail = JobBuilder.Create<T>()
-                                      .WithIdentity(key, group)
-                                      .Build();
+                                      .WithIdentity(key, group);
+
+            if (jobArguments != null)
+            {
+                jobDetail.SetJobData(new JobDataMap(jobArguments));
+            }
         
-            Scheduler.ScheduleJob(jobDetail, trigger);
+            Scheduler.ScheduleJob(jobDetail.Build(), trigger);
         }
         
         #endregion
