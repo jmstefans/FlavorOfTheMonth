@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows;
 using FotmServerApp.Database;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.JobScheduling;
@@ -36,6 +37,11 @@ namespace FotmServerApp
         #endregion
 
         #region Public Methods
+
+        public void InitializeCommandBindings(Window window)
+        {
+            
+        }
 
         public void CleanUp()
         {
