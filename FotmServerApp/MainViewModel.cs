@@ -56,6 +56,7 @@ namespace FotmServerApp
         private void Initialize()
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
+            _jobManager.ScheduleRatingChangeJob();
         }
 
         #endregion

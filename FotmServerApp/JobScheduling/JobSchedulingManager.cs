@@ -71,6 +71,7 @@ namespace FotmServerApp.JobScheduling
         {
             if (trigger == null)
                 trigger = RatingChangeJob.DefaultTrigger;
+
             var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
             ScheduleJob<RatingChangeJob>(trigger, jobKey, groupKey, jobArgs);
         }

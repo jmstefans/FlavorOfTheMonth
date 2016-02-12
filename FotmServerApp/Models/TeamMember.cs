@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FotmServerApp.Models.Base;
 
 namespace FotmServerApp.Models
 {
-    public class TeamMember
+    public class TeamMember :DbEntityBase
     {
+        /// <summary>
+        /// Unique team member Id.
+        /// </summary>
+        public Guid TeamMemberID { get; set; }
+        
         /// <summary>
         /// Member character name.
         /// </summary>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using FotmServerApp.Database.DataProvider;
 using FotmServerApp.Database.Util;
@@ -63,6 +65,16 @@ namespace FotmServerApp.Database
         #region Create
 
         /// <summary>
+        /// Asynchronously inserts an enumerable collection of DbEntityBase objects into DB. 
+        /// </summary>
+        /// <typeparam name="T">The DbEntity to insert <see cref="DbEntityBase"/></typeparam>
+        /// <param name="objects">DbEntityBase objects to insert into DB.</param>
+        public async void InsertObjectsAsync<T>(IEnumerable<T> objects) where T : DbEntityBase, new()
+        {
+            await Task.Run(() => InsertObjects(objects));
+        }
+
+        /// <summary>
         /// Inserts an enumerable collection of DbEntityBase objects into DB. 
         /// </summary>
         /// <typeparam name="T">The DbEntity to insert <see cref="DbEntityBase"/></typeparam>
@@ -78,13 +90,13 @@ namespace FotmServerApp.Database
                     var cols = GetColumnNames<T>();
                     var colPar = GetColumnParameters(cols);
 
-                    foreach (var pvp in objects)
+                    foreach (var obj in objects)
                     {
                         var query =
                        $"insert into [{type.Name}] ({string.Join(",", cols)}, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
-                       $"values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0);";
+                       $"values ({string.Join(",", colPar)}, '{new SqlDateTime(DateTime.Now)}', 'I', 0);";
 
-                        DbConnection.Execute(query, pvp, trans);
+                        DbConnection.Execute(query, obj, trans);
                     }
 
                     trans.Commit();
@@ -93,6 +105,33 @@ namespace FotmServerApp.Database
                 {
                     trans.Rollback();
                     Console.WriteLine("Failed: " + e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Inserts a list of teams into the DB. 
+        /// Note - use this method not the generic insert for teams.
+        /// </summary>
+        /// <param name="teams">Teams to insert.</param>
+        public void InsertTeams(IEnumerable<Team> teams)
+        {
+            var query = "insert into [Team] (TeamID, Mean, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+                        $"values (@TeamID, @Mean, '{new SqlDateTime(DateTime.Now)}', 'I', 0);";
+            using (var trans = DbConnection.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var team in teams)
+                    {
+                        DbConnection.Execute(query, new { team.TeamID, team.Mean }, trans);
+                    }
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    Console.WriteLine("Team insert failed: " + e);
                 }
             }
         }
@@ -223,16 +262,27 @@ namespace FotmServerApp.Database
 
         private string[] GetColumnNames<T>() where T : new()
         {
-            var properties = typeof(T).GetProperties();
-            var columns = new string[properties.Length];
+            var type = typeof(T);
+            var properties = type.GetProperties();
+            var columns = new List<string>();
             var txtInfo = new CultureInfo("en-US", false).TextInfo;
+            //var attrType = typeof(DbEntityBase.DbInsertProperty);
 
             for (var i = 0; i < properties.Length; i++)
             {
-                columns[i] = txtInfo.ToTitleCase(properties[i].Name);
+                var col = txtInfo.ToTitleCase(properties[i].Name);
+
+                //if (Attribute.IsDefined(properties[i], attrType))
+                //{
+                //    var insertProperty = (DbEntityBase.DbInsertProperty)Attribute.GetCustomAttribute(properties[i], attrType);
+                //    if (!insertProperty.IsApplicable)
+                //        continue;
+                //}
+
+                columns.Add(col);
             }
 
-            return columns;
+            return columns.ToArray();
         }
 
         private string[] GetColumnParameters(string[] columnNames)

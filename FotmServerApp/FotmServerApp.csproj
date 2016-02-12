@@ -148,6 +148,7 @@
     <Compile Include="Models\RatingChange.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\TeamMember.cs" />
+    <Compile Include="Models\TeamMemberMapping.cs" />
     <Compile Include="UI\Views\ActiveJobsView.xaml.cs">
       <DependentUpon>ActiveJobsView.xaml</DependentUpon>
     </Compile>

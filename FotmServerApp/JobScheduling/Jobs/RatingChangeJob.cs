@@ -2,7 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FotmServerApp.Analysis.Algorithms;
+using FotmServerApp.Database;
 using FotmServerApp.Models;
 using FotmServerApp.WowAPI;
 using Quartz;
@@ -12,10 +14,15 @@ namespace FotmServerApp.JobScheduling.Jobs
 {
     public class RatingChangeJob : IJob
     {
-        #region Variables/Properties
+        #region Variables
 
+        // Used to define the baseline stats
         private static bool _setBaseLine = true;
         private static ConcurrentBag<PvpStats> _baseLineStats = new ConcurrentBag<PvpStats>();
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Can be used as the default trigger for this job.
@@ -41,6 +48,7 @@ namespace FotmServerApp.JobScheduling.Jobs
 
         #endregion
 
+        #region Public Methods
 
         /// <summary>
         /// Gets the job arguments used by the RatingChangeJob execution. 
@@ -55,9 +63,9 @@ namespace FotmServerApp.JobScheduling.Jobs
         private const string BRACKET_KEY = "bracketKey";
 
         /// <summary>
-        /// Executes the job.
+        /// Executes the job, this is handled by the Scheduler in Quartz.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">Context passed in by Scheduler.</param>
         public void Execute(IJobExecutionContext context)
         {
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
@@ -119,22 +127,70 @@ namespace FotmServerApp.JobScheduling.Jobs
             var teamSize = GetTeamSize(bracket);
 
             if (allyWinners.Count >= teamSize)
-                ExecuteClustering(allyWinners, teamSize);
+                ClusterAndInsertDb(allyWinners, teamSize);
 
             if (allyLosers.Count >= teamSize)
-                ExecuteClustering(allyLosers, teamSize);
+                ClusterAndInsertDb(allyLosers, teamSize);
 
             if (hordeWinners.Count >= teamSize)
-                ExecuteClustering(hordeWinners, teamSize);
+                ClusterAndInsertDb(hordeWinners, teamSize);
 
             if (hordeLosers.Count >= teamSize)
-                ExecuteClustering(hordeLosers, teamSize);
+                ClusterAndInsertDb(hordeLosers, teamSize);
         }
 
-        private void ExecuteClustering(List<TeamMember> membersToCluster, int teamCount)
+        #endregion
+
+        #region Private Methods
+
+        private ConcurrentQueue<List<Team>> _teamsQueue = new ConcurrentQueue<List<Team>>();
+
+        private DbManager _dbManager = DbManager.Default;
+
+        private async void ClusterAndInsertDbAsync(List<TeamMember> membersToCluster, int teamSize)
         {
-            var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamCount);
-            // TODO: add to another thread queue and insert into db
+            await Task.Run(() => ClusterAndInsertDb(membersToCluster, teamSize));
+        }
+
+        private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize)
+        {
+            var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
+            if (teams == null) return; // TODO: team
+
+            // have to generate team guids first
+            foreach (var team in teams)
+            {
+                team.TeamID = Guid.NewGuid();
+            }
+
+            // then insert them into db before handling team members
+            _dbManager.InsertTeams(teams);
+
+            // create the mappings to associate the TeamMember and Team
+            var teamMappings = new List<TeamMemberMapping>();
+
+            foreach (var team in teams)
+            {
+                foreach (var member in team.Members)
+                {
+                    // create guid for member
+                    member.TeamMemberID = Guid.NewGuid();
+
+                    // create teammapping guid, and apply team id and teammemberid
+                    teamMappings.Add(new TeamMemberMapping
+                    {
+                        TeamMemberMappingID = Guid.NewGuid(), 
+                        TeamID = team.TeamID, 
+                        TeamMemberId = member.TeamMemberID
+                    });
+                }
+
+                // now can insert all members
+                _dbManager.InsertObjects(team.Members);
+            }
+            
+            // finally all team mappings can be inserted
+            _dbManager.InsertObjects(teamMappings);
         }
 
         private int GetTeamSize(Bracket bracket)
@@ -151,5 +207,7 @@ namespace FotmServerApp.JobScheduling.Jobs
                     throw new ArgumentOutOfRangeException("bracket");
             }
         }
+    
+        #endregion
     }
 }

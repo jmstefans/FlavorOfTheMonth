@@ -21,7 +21,7 @@ namespace FotmServerApp.Analysis.Algorithms
             for (var i = 0; i < ratingChanges.Count; i++)
             {
                 var change = ratingChanges[i];
-                rawData[i] = new[] { change.RatingChangeValue,  change.ModifiedDate.ToOADate() };
+                //rawData[i] = new[] { change.RatingChangeValue,  change.ModifiedDate.ToOADate() };
             }
 
             return Cluster(rawData, numberOfClusters);
