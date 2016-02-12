@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FlavorOfTheMonth.Models.HomeModel
+@{
     ViewBag.Title = "Home";
 }
 @section featured {
@@ -14,89 +15,75 @@
         </div>
     </section>
 }
+
+@*Regions*@
 <section>
-    <h3>Region</h3>
-    <button type="button" class="btn btn-primary">US</button>
-    <button type="button" class="btn btn-primary">EU</button>
-    <button type="button" class="btn btn-primary">KR</button>
-    <button type="button" class="btn btn-primary">TW</button>
-    <button type="button" class="btn btn-primary">CN</button>
-    <button type="button" class="btn btn-primary">SEA</button>
+    <h3 id="hdrRegion">Regions</h3>
+    <div class="btn-group" role="group" aria-label="hdrRegion" data-toggle="buttons">
+        <label class="btn btn-primary active">
+            <input type="radio" name="options" id="iUS" autocomplete="off" checked>US
+        </label>
+        <label class="btn btn-primary">
+            <input type="radio" name="options" id="iEU" autocomplete="off">EU
+        </label>
+        <label class="btn btn-primary">
+            <input type="radio" name="options" id="iKR" autocomplete="off">KR
+        </label>
+        <label class="btn btn-primary">
+            <input type="radio" name="options" id="iTW" autocomplete="off">TW
+        </label>
+        <label class="btn btn-primary">
+            <input type="radio" name="options" id="iCN" autocomplete="off">CN
+        </label>
+        <label class="btn btn-primary">
+            <input type="radio" name="options" id="iSEA" autocomplete="off">SEA
+        </label>
+    </div>
 </section>
 
+@*Brackets*@
 <section>
-    <h3>Bracket</h3>
-    <button type="button" class="btn btn-primary">2v2</button>
-    <button type="button" class="btn btn-primary">3v3</button>
-    <button type="button" class="btn btn-primary">5v5</button>
-    <button type="button" class="btn btn-primary">RBG</button>
+    <h3 id="hdrBracket">Brackets</h3>
+    <div class="btn-group" role="group" aria-label="hdrBracket" data-toggle="buttons">
+        <label class="btn btn-primary active" onclick="refresh(2)">
+            <input type="radio" name="options" id="i2v2" autocomplete="off" checked>2v2
+        </label>
+        <label class="btn btn-primary" onclick="refresh(3)">
+            <input type="radio" name="options" id="i3v3" autocomplete="off">3v3
+        </label>
+        <label class="btn btn-primary" onclick="refresh(5)">
+            <input type="radio" name="options" id="i5v5" autocomplete="off">5v5
+        </label>
+        <label class="btn btn-primary" onclick="refresh(15)">
+            <input type="radio" name="options" id="iRBG" autocomplete="off">RBG
+        </label>
+    </div>
 </section>
 
+@*Filters*@
 <section>
-    <div class="dropdown inlineBlock">
-        <button class="btn btn-default dropdown-toggle" type="button" id="ddClass1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select a class...
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="ddClass1">
-            <li><a href="#">Death Knight</a></li>
-            <li><a href="#">Druid</a></li>
-            <li><a href="#">Hunter</a></li>
-            <li><a href="#">Mage</a></li>
-            <li><a href="#">Monk</a></li>
-            <li><a href="#">Paladin</a></li>
-            <li><a href="#">Priest</a></li>
-            <li><a href="#">Rogue</a></li>
-            <li><a href="#">Shaman</a></li>
-            <li><a href="#">Warlock</a></li>
-            <li><a href="#">Warrior</a></li>
-            @*<li role="separator" class="divider"></li>*@
-        </ul>
-    </div>
-    <div class="dropdown inlineBlock">
-        <button class="btn btn-default dropdown-toggle" type="button" id="ddClass2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select a class...
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="ddClass2">
-            <li><a href="#">Death Knight</a></li>
-            <li><a href="#">Druid</a></li>
-            <li><a href="#">Hunter</a></li>
-            <li><a href="#">Mage</a></li>
-            <li><a href="#">Monk</a></li>
-            <li><a href="#">Paladin</a></li>
-            <li><a href="#">Priest</a></li>
-            <li><a href="#">Rogue</a></li>
-            <li><a href="#">Shaman</a></li>
-            <li><a href="#">Warlock</a></li>
-            <li><a href="#">Warrior</a></li>
-        </ul>
-    </div>
-    <div class="dropdown inlineBlock">
-        <button class="btn btn-default dropdown-toggle" type="button" id="ddClass3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select a class...
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="ddClass3">
-            <li><a href="#">Death Knight</a></li>
-            <li><a href="#">Druid</a></li>
-            <li><a href="#">Hunter</a></li>
-            <li><a href="#">Mage</a></li>
-            <li><a href="#">Monk</a></li>
-            <li><a href="#">Paladin</a></li>
-            <li><a href="#">Priest</a></li>
-            <li><a href="#">Rogue</a></li>
-            <li><a href="#">Shaman</a></li>
-            <li><a href="#">Warlock</a></li>
-            <li><a href="#">Warrior</a></li>
-        </ul>
-    </div>
+    <h3>Filters</h3>
+    @for (var i = 0; i < (int)(Model.CurBracket); i++)
+    {
+        <div class="dropdown inlineBlock">
+            <button class="btn btn-default dropdown-toggle" type="button" id="@("ddClass"+i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Select a class...
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="ddClass@i">
+                @foreach (var wowClass in Model.ClassModel.ClassesList)
+                {
+                    <li><a href="#">@wowClass</a></li>
+                }
+            </ul>
+        </div>
+    }
 </section>
 
 <section>
     <div class="dropdown inlineBlock">
         <button class="btn btn-default dropdown-toggle" type="button" id="ddSpec1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select a class...
+            Select a spec...
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="ddSpec1">
@@ -107,7 +94,7 @@
     </div>
     <div class="dropdown inlineBlock">
         <button class="btn btn-default dropdown-toggle" type="button" id="ddSpec2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select a class...
+            Select a spec...
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="ddSpec2">
@@ -119,7 +106,7 @@
     </div>
     <div class="dropdown inlineBlock">
         <button class="btn btn-default dropdown-toggle" type="button" id="ddSpec3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Select a class...
+            Select a spec...
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="ddSpec3">
@@ -132,5 +119,15 @@
 
 @*Teams*@
 <section>
-
+    <h3>Teams</h3>
 </section>
+
+@*Scripts*@
+<script>
+    function refresh() {
+        // Ajax to get new server data if a new region or bracket was picked.
+
+        // Client-side updates like amount of class dropdowns to display.
+        alert('test');
+    }
+</script>
