@@ -264,12 +264,12 @@ namespace FlavorOfTheMonth.Controllers
                 // Insert a new user into the database
                 using (UsersContext db = new UsersContext())
                 {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+                    Models.UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                        db.UserProfiles.Add(new Models.UserProfile { UserName = model.UserName });
                         db.SaveChanges();
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);

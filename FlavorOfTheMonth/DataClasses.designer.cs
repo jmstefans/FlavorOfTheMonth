@@ -30,13 +30,34 @@ namespace FlavorOfTheMonth
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertLeaderboard(Leaderboard instance);
-    partial void UpdateLeaderboard(Leaderboard instance);
-    partial void DeleteLeaderboard(Leaderboard instance);
+    partial void InsertCharacter(Character instance);
+    partial void UpdateCharacter(Character instance);
+    partial void DeleteCharacter(Character instance);
+    partial void Insertwebpages_UsersInRole(webpages_UsersInRole instance);
+    partial void Updatewebpages_UsersInRole(webpages_UsersInRole instance);
+    partial void Deletewebpages_UsersInRole(webpages_UsersInRole instance);
+    partial void InsertPvpStat(PvpStat instance);
+    partial void UpdatePvpStat(PvpStat instance);
+    partial void DeletePvpStat(PvpStat instance);
+    partial void InsertRatingChange(RatingChange instance);
+    partial void UpdateRatingChange(RatingChange instance);
+    partial void DeleteRatingChange(RatingChange instance);
+    partial void InsertUserProfile(UserProfile instance);
+    partial void UpdateUserProfile(UserProfile instance);
+    partial void DeleteUserProfile(UserProfile instance);
+    partial void Insertwebpages_Membership(webpages_Membership instance);
+    partial void Updatewebpages_Membership(webpages_Membership instance);
+    partial void Deletewebpages_Membership(webpages_Membership instance);
+    partial void Insertwebpages_OAuthMembership(webpages_OAuthMembership instance);
+    partial void Updatewebpages_OAuthMembership(webpages_OAuthMembership instance);
+    partial void Deletewebpages_OAuthMembership(webpages_OAuthMembership instance);
+    partial void Insertwebpages_Role(webpages_Role instance);
+    partial void Updatewebpages_Role(webpages_Role instance);
+    partial void Deletewebpages_Role(webpages_Role instance);
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["fotmConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["fotmConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -65,22 +86,428 @@ namespace FlavorOfTheMonth
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Leaderboard> Leaderboards
+		public System.Data.Linq.Table<Character> Characters
 		{
 			get
 			{
-				return this.GetTable<Leaderboard>();
+				return this.GetTable<Character>();
+			}
+		}
+		
+		public System.Data.Linq.Table<webpages_UsersInRole> webpages_UsersInRoles
+		{
+			get
+			{
+				return this.GetTable<webpages_UsersInRole>();
+			}
+		}
+		
+		public System.Data.Linq.Table<PvpStat> PvpStats
+		{
+			get
+			{
+				return this.GetTable<PvpStat>();
+			}
+		}
+		
+		public System.Data.Linq.Table<RatingChange> RatingChanges
+		{
+			get
+			{
+				return this.GetTable<RatingChange>();
+			}
+		}
+		
+		public System.Data.Linq.Table<UserProfile> UserProfiles
+		{
+			get
+			{
+				return this.GetTable<UserProfile>();
+			}
+		}
+		
+		public System.Data.Linq.Table<webpages_Membership> webpages_Memberships
+		{
+			get
+			{
+				return this.GetTable<webpages_Membership>();
+			}
+		}
+		
+		public System.Data.Linq.Table<webpages_OAuthMembership> webpages_OAuthMemberships
+		{
+			get
+			{
+				return this.GetTable<webpages_OAuthMembership>();
+			}
+		}
+		
+		public System.Data.Linq.Table<webpages_Role> webpages_Roles
+		{
+			get
+			{
+				return this.GetTable<webpages_Role>();
 			}
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Leaderboard")]
-	public partial class Leaderboard : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Character")]
+	public partial class Character : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private long _LeaderboardID;
+		private long _CharacterID;
+		
+		private string _Name;
+		
+		private string _Server;
+		
+		private System.DateTime _ModifiedDate;
+		
+		private char _ModifiedStatus;
+		
+		private long _ModifiedUserID;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCharacterIDChanging(long value);
+    partial void OnCharacterIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnServerChanging(string value);
+    partial void OnServerChanged();
+    partial void OnModifiedDateChanging(System.DateTime value);
+    partial void OnModifiedDateChanged();
+    partial void OnModifiedStatusChanging(char value);
+    partial void OnModifiedStatusChanged();
+    partial void OnModifiedUserIDChanging(long value);
+    partial void OnModifiedUserIDChanged();
+    #endregion
+		
+		public Character()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CharacterID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long CharacterID
+		{
+			get
+			{
+				return this._CharacterID;
+			}
+			set
+			{
+				if ((this._CharacterID != value))
+				{
+					this.OnCharacterIDChanging(value);
+					this.SendPropertyChanging();
+					this._CharacterID = value;
+					this.SendPropertyChanged("CharacterID");
+					this.OnCharacterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Server
+		{
+			get
+			{
+				return this._Server;
+			}
+			set
+			{
+				if ((this._Server != value))
+				{
+					this.OnServerChanging(value);
+					this.SendPropertyChanging();
+					this._Server = value;
+					this.SendPropertyChanged("Server");
+					this.OnServerChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="Char(1) NOT NULL")]
+		public char ModifiedStatus
+		{
+			get
+			{
+				return this._ModifiedStatus;
+			}
+			set
+			{
+				if ((this._ModifiedStatus != value))
+				{
+					this.OnModifiedStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedStatus = value;
+					this.SendPropertyChanged("ModifiedStatus");
+					this.OnModifiedStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
+		public long ModifiedUserID
+		{
+			get
+			{
+				return this._ModifiedUserID;
+			}
+			set
+			{
+				if ((this._ModifiedUserID != value))
+				{
+					this.OnModifiedUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedUserID = value;
+					this.SendPropertyChanged("ModifiedUserID");
+					this.OnModifiedUserIDChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.webpages_UsersInRoles")]
+	public partial class webpages_UsersInRole : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _UserId;
+		
+		private int _RoleId;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+		private EntityRef<webpages_Role> _webpages_Role;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanged();
+    partial void OnRoleIdChanging(int value);
+    partial void OnRoleIdChanged();
+    #endregion
+		
+		public webpages_UsersInRole()
+		{
+			this._UserProfile = default(EntityRef<UserProfile>);
+			this._webpages_Role = default(EntityRef<webpages_Role>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RoleId
+		{
+			get
+			{
+				return this._RoleId;
+			}
+			set
+			{
+				if ((this._RoleId != value))
+				{
+					if (this._webpages_Role.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleIdChanging(value);
+					this.SendPropertyChanging();
+					this._RoleId = value;
+					this.SendPropertyChanged("RoleId");
+					this.OnRoleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_webpages_UsersInRole", Storage="_UserProfile", ThisKey="UserId", OtherKey="UserId", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.webpages_UsersInRoles.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.webpages_UsersInRoles.Add(this);
+						this._UserId = value.UserId;
+					}
+					else
+					{
+						this._UserId = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="webpages_Role_webpages_UsersInRole", Storage="_webpages_Role", ThisKey="RoleId", OtherKey="RoleId", IsForeignKey=true)]
+		public webpages_Role webpages_Role
+		{
+			get
+			{
+				return this._webpages_Role.Entity;
+			}
+			set
+			{
+				webpages_Role previousValue = this._webpages_Role.Entity;
+				if (((previousValue != value) 
+							|| (this._webpages_Role.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._webpages_Role.Entity = null;
+						previousValue.webpages_UsersInRoles.Remove(this);
+					}
+					this._webpages_Role.Entity = value;
+					if ((value != null))
+					{
+						value.webpages_UsersInRoles.Add(this);
+						this._RoleId = value.RoleId;
+					}
+					else
+					{
+						this._RoleId = default(int);
+					}
+					this.SendPropertyChanged("webpages_Role");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PvpStats")]
+	public partial class PvpStat : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _PvpStatsID;
 		
 		private string _Ranking;
 		
@@ -112,18 +539,28 @@ namespace FlavorOfTheMonth
 		
 		private System.Nullable<int> _WeeklyLosses;
 		
+		private string _Class;
+		
+		private string _Race;
+		
+		private string _Gender;
+		
+		private string _Spec;
+		
 		private System.Nullable<System.DateTime> _ModifiedDate;
 		
 		private System.Nullable<char> _ModifiedStatus;
 		
 		private System.Nullable<long> _ModifiedUserID;
 		
+		private System.Nullable<long> _CharacterID;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnLeaderboardIDChanging(long value);
-    partial void OnLeaderboardIDChanged();
+    partial void OnPvpStatsIDChanging(long value);
+    partial void OnPvpStatsIDChanged();
     partial void OnRankingChanging(string value);
     partial void OnRankingChanged();
     partial void OnRatingChanging(string value);
@@ -154,35 +591,45 @@ namespace FlavorOfTheMonth
     partial void OnWeeklyWinsChanged();
     partial void OnWeeklyLossesChanging(System.Nullable<int> value);
     partial void OnWeeklyLossesChanged();
+    partial void OnClassChanging(string value);
+    partial void OnClassChanged();
+    partial void OnRaceChanging(string value);
+    partial void OnRaceChanged();
+    partial void OnGenderChanging(string value);
+    partial void OnGenderChanged();
+    partial void OnSpecChanging(string value);
+    partial void OnSpecChanged();
     partial void OnModifiedDateChanging(System.Nullable<System.DateTime> value);
     partial void OnModifiedDateChanged();
     partial void OnModifiedStatusChanging(System.Nullable<char> value);
     partial void OnModifiedStatusChanged();
     partial void OnModifiedUserIDChanging(System.Nullable<long> value);
     partial void OnModifiedUserIDChanged();
+    partial void OnCharacterIDChanging(System.Nullable<long> value);
+    partial void OnCharacterIDChanged();
     #endregion
 		
-		public Leaderboard()
+		public PvpStat()
 		{
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LeaderboardID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long LeaderboardID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PvpStatsID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long PvpStatsID
 		{
 			get
 			{
-				return this._LeaderboardID;
+				return this._PvpStatsID;
 			}
 			set
 			{
-				if ((this._LeaderboardID != value))
+				if ((this._PvpStatsID != value))
 				{
-					this.OnLeaderboardIDChanging(value);
+					this.OnPvpStatsIDChanging(value);
 					this.SendPropertyChanging();
-					this._LeaderboardID = value;
-					this.SendPropertyChanged("LeaderboardID");
-					this.OnLeaderboardIDChanged();
+					this._PvpStatsID = value;
+					this.SendPropertyChanged("PvpStatsID");
+					this.OnPvpStatsIDChanged();
 				}
 			}
 		}
@@ -487,6 +934,86 @@ namespace FlavorOfTheMonth
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Class", DbType="NVarChar(50)")]
+		public string Class
+		{
+			get
+			{
+				return this._Class;
+			}
+			set
+			{
+				if ((this._Class != value))
+				{
+					this.OnClassChanging(value);
+					this.SendPropertyChanging();
+					this._Class = value;
+					this.SendPropertyChanged("Class");
+					this.OnClassChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Race", DbType="NVarChar(50)")]
+		public string Race
+		{
+			get
+			{
+				return this._Race;
+			}
+			set
+			{
+				if ((this._Race != value))
+				{
+					this.OnRaceChanging(value);
+					this.SendPropertyChanging();
+					this._Race = value;
+					this.SendPropertyChanged("Race");
+					this.OnRaceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="NVarChar(50)")]
+		public string Gender
+		{
+			get
+			{
+				return this._Gender;
+			}
+			set
+			{
+				if ((this._Gender != value))
+				{
+					this.OnGenderChanging(value);
+					this.SendPropertyChanging();
+					this._Gender = value;
+					this.SendPropertyChanged("Gender");
+					this.OnGenderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Spec", DbType="NVarChar(50)")]
+		public string Spec
+		{
+			get
+			{
+				return this._Spec;
+			}
+			set
+			{
+				if ((this._Spec != value))
+				{
+					this.OnSpecChanging(value);
+					this.SendPropertyChanging();
+					this._Spec = value;
+					this.SendPropertyChanged("Spec");
+					this.OnSpecChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime")]
 		public System.Nullable<System.DateTime> ModifiedDate
 		{
@@ -547,6 +1074,26 @@ namespace FlavorOfTheMonth
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CharacterID", DbType="BigInt")]
+		public System.Nullable<long> CharacterID
+		{
+			get
+			{
+				return this._CharacterID;
+			}
+			set
+			{
+				if ((this._CharacterID != value))
+				{
+					this.OnCharacterIDChanging(value);
+					this.SendPropertyChanging();
+					this._CharacterID = value;
+					this.SendPropertyChanged("CharacterID");
+					this.OnCharacterIDChanged();
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -565,6 +1112,828 @@ namespace FlavorOfTheMonth
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RatingChange")]
+	public partial class RatingChange : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _RatingChangeID;
+		
+		private long _CharacterID;
+		
+		private int _RatingChange1;
+		
+		private System.DateTime _ModifiedDate;
+		
+		private char _ModifiedStatus;
+		
+		private long _ModifiedUserID;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRatingChangeIDChanging(long value);
+    partial void OnRatingChangeIDChanged();
+    partial void OnCharacterIDChanging(long value);
+    partial void OnCharacterIDChanged();
+    partial void OnRatingChange1Changing(int value);
+    partial void OnRatingChange1Changed();
+    partial void OnModifiedDateChanging(System.DateTime value);
+    partial void OnModifiedDateChanged();
+    partial void OnModifiedStatusChanging(char value);
+    partial void OnModifiedStatusChanged();
+    partial void OnModifiedUserIDChanging(long value);
+    partial void OnModifiedUserIDChanged();
+    #endregion
+		
+		public RatingChange()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RatingChangeID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long RatingChangeID
+		{
+			get
+			{
+				return this._RatingChangeID;
+			}
+			set
+			{
+				if ((this._RatingChangeID != value))
+				{
+					this.OnRatingChangeIDChanging(value);
+					this.SendPropertyChanging();
+					this._RatingChangeID = value;
+					this.SendPropertyChanged("RatingChangeID");
+					this.OnRatingChangeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CharacterID", DbType="BigInt NOT NULL")]
+		public long CharacterID
+		{
+			get
+			{
+				return this._CharacterID;
+			}
+			set
+			{
+				if ((this._CharacterID != value))
+				{
+					this.OnCharacterIDChanging(value);
+					this.SendPropertyChanging();
+					this._CharacterID = value;
+					this.SendPropertyChanged("CharacterID");
+					this.OnCharacterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="RatingChange", Storage="_RatingChange1", DbType="Int NOT NULL")]
+		public int RatingChange1
+		{
+			get
+			{
+				return this._RatingChange1;
+			}
+			set
+			{
+				if ((this._RatingChange1 != value))
+				{
+					this.OnRatingChange1Changing(value);
+					this.SendPropertyChanging();
+					this._RatingChange1 = value;
+					this.SendPropertyChanged("RatingChange1");
+					this.OnRatingChange1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="Char(1) NOT NULL")]
+		public char ModifiedStatus
+		{
+			get
+			{
+				return this._ModifiedStatus;
+			}
+			set
+			{
+				if ((this._ModifiedStatus != value))
+				{
+					this.OnModifiedStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedStatus = value;
+					this.SendPropertyChanged("ModifiedStatus");
+					this.OnModifiedStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
+		public long ModifiedUserID
+		{
+			get
+			{
+				return this._ModifiedUserID;
+			}
+			set
+			{
+				if ((this._ModifiedUserID != value))
+				{
+					this.OnModifiedUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedUserID = value;
+					this.SendPropertyChanged("ModifiedUserID");
+					this.OnModifiedUserIDChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserProfile")]
+	public partial class UserProfile : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _UserId;
+		
+		private string _UserName;
+		
+		private EntitySet<webpages_UsersInRole> _webpages_UsersInRoles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanged();
+    partial void OnUserNameChanging(string value);
+    partial void OnUserNameChanged();
+    #endregion
+		
+		public UserProfile()
+		{
+			this._webpages_UsersInRoles = new EntitySet<webpages_UsersInRole>(new Action<webpages_UsersInRole>(this.attach_webpages_UsersInRoles), new Action<webpages_UsersInRole>(this.detach_webpages_UsersInRoles));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(56) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this.OnUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._UserName = value;
+					this.SendPropertyChanged("UserName");
+					this.OnUserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_webpages_UsersInRole", Storage="_webpages_UsersInRoles", ThisKey="UserId", OtherKey="UserId")]
+		public EntitySet<webpages_UsersInRole> webpages_UsersInRoles
+		{
+			get
+			{
+				return this._webpages_UsersInRoles;
+			}
+			set
+			{
+				this._webpages_UsersInRoles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_webpages_UsersInRoles(webpages_UsersInRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_webpages_UsersInRoles(webpages_UsersInRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.webpages_Membership")]
+	public partial class webpages_Membership : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _UserId;
+		
+		private System.Nullable<System.DateTime> _CreateDate;
+		
+		private string _ConfirmationToken;
+		
+		private System.Nullable<bool> _IsConfirmed;
+		
+		private System.Nullable<System.DateTime> _LastPasswordFailureDate;
+		
+		private int _PasswordFailuresSinceLastSuccess;
+		
+		private string _Password;
+		
+		private System.Nullable<System.DateTime> _PasswordChangedDate;
+		
+		private string _PasswordSalt;
+		
+		private string _PasswordVerificationToken;
+		
+		private System.Nullable<System.DateTime> _PasswordVerificationTokenExpirationDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanged();
+    partial void OnCreateDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreateDateChanged();
+    partial void OnConfirmationTokenChanging(string value);
+    partial void OnConfirmationTokenChanged();
+    partial void OnIsConfirmedChanging(System.Nullable<bool> value);
+    partial void OnIsConfirmedChanged();
+    partial void OnLastPasswordFailureDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnLastPasswordFailureDateChanged();
+    partial void OnPasswordFailuresSinceLastSuccessChanging(int value);
+    partial void OnPasswordFailuresSinceLastSuccessChanged();
+    partial void OnPasswordChanging(string value);
+    partial void OnPasswordChanged();
+    partial void OnPasswordChangedDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnPasswordChangedDateChanged();
+    partial void OnPasswordSaltChanging(string value);
+    partial void OnPasswordSaltChanged();
+    partial void OnPasswordVerificationTokenChanging(string value);
+    partial void OnPasswordVerificationTokenChanged();
+    partial void OnPasswordVerificationTokenExpirationDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnPasswordVerificationTokenExpirationDateChanged();
+    #endregion
+		
+		public webpages_Membership()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfirmationToken", DbType="NVarChar(128)")]
+		public string ConfirmationToken
+		{
+			get
+			{
+				return this._ConfirmationToken;
+			}
+			set
+			{
+				if ((this._ConfirmationToken != value))
+				{
+					this.OnConfirmationTokenChanging(value);
+					this.SendPropertyChanging();
+					this._ConfirmationToken = value;
+					this.SendPropertyChanged("ConfirmationToken");
+					this.OnConfirmationTokenChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsConfirmed", DbType="Bit")]
+		public System.Nullable<bool> IsConfirmed
+		{
+			get
+			{
+				return this._IsConfirmed;
+			}
+			set
+			{
+				if ((this._IsConfirmed != value))
+				{
+					this.OnIsConfirmedChanging(value);
+					this.SendPropertyChanging();
+					this._IsConfirmed = value;
+					this.SendPropertyChanged("IsConfirmed");
+					this.OnIsConfirmedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastPasswordFailureDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> LastPasswordFailureDate
+		{
+			get
+			{
+				return this._LastPasswordFailureDate;
+			}
+			set
+			{
+				if ((this._LastPasswordFailureDate != value))
+				{
+					this.OnLastPasswordFailureDateChanging(value);
+					this.SendPropertyChanging();
+					this._LastPasswordFailureDate = value;
+					this.SendPropertyChanged("LastPasswordFailureDate");
+					this.OnLastPasswordFailureDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordFailuresSinceLastSuccess", DbType="Int NOT NULL")]
+		public int PasswordFailuresSinceLastSuccess
+		{
+			get
+			{
+				return this._PasswordFailuresSinceLastSuccess;
+			}
+			set
+			{
+				if ((this._PasswordFailuresSinceLastSuccess != value))
+				{
+					this.OnPasswordFailuresSinceLastSuccessChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordFailuresSinceLastSuccess = value;
+					this.SendPropertyChanged("PasswordFailuresSinceLastSuccess");
+					this.OnPasswordFailuresSinceLastSuccessChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string Password
+		{
+			get
+			{
+				return this._Password;
+			}
+			set
+			{
+				if ((this._Password != value))
+				{
+					this.OnPasswordChanging(value);
+					this.SendPropertyChanging();
+					this._Password = value;
+					this.SendPropertyChanged("Password");
+					this.OnPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordChangedDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> PasswordChangedDate
+		{
+			get
+			{
+				return this._PasswordChangedDate;
+			}
+			set
+			{
+				if ((this._PasswordChangedDate != value))
+				{
+					this.OnPasswordChangedDateChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordChangedDate = value;
+					this.SendPropertyChanged("PasswordChangedDate");
+					this.OnPasswordChangedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordSalt", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string PasswordSalt
+		{
+			get
+			{
+				return this._PasswordSalt;
+			}
+			set
+			{
+				if ((this._PasswordSalt != value))
+				{
+					this.OnPasswordSaltChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordSalt = value;
+					this.SendPropertyChanged("PasswordSalt");
+					this.OnPasswordSaltChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordVerificationToken", DbType="NVarChar(128)")]
+		public string PasswordVerificationToken
+		{
+			get
+			{
+				return this._PasswordVerificationToken;
+			}
+			set
+			{
+				if ((this._PasswordVerificationToken != value))
+				{
+					this.OnPasswordVerificationTokenChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordVerificationToken = value;
+					this.SendPropertyChanged("PasswordVerificationToken");
+					this.OnPasswordVerificationTokenChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordVerificationTokenExpirationDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> PasswordVerificationTokenExpirationDate
+		{
+			get
+			{
+				return this._PasswordVerificationTokenExpirationDate;
+			}
+			set
+			{
+				if ((this._PasswordVerificationTokenExpirationDate != value))
+				{
+					this.OnPasswordVerificationTokenExpirationDateChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordVerificationTokenExpirationDate = value;
+					this.SendPropertyChanged("PasswordVerificationTokenExpirationDate");
+					this.OnPasswordVerificationTokenExpirationDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.webpages_OAuthMembership")]
+	public partial class webpages_OAuthMembership : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _Provider;
+		
+		private string _ProviderUserId;
+		
+		private int _UserId;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnProviderChanging(string value);
+    partial void OnProviderChanged();
+    partial void OnProviderUserIdChanging(string value);
+    partial void OnProviderUserIdChanged();
+    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanged();
+    #endregion
+		
+		public webpages_OAuthMembership()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Provider", DbType="NVarChar(30) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string Provider
+		{
+			get
+			{
+				return this._Provider;
+			}
+			set
+			{
+				if ((this._Provider != value))
+				{
+					this.OnProviderChanging(value);
+					this.SendPropertyChanging();
+					this._Provider = value;
+					this.SendPropertyChanged("Provider");
+					this.OnProviderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProviderUserId", DbType="NVarChar(100) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string ProviderUserId
+		{
+			get
+			{
+				return this._ProviderUserId;
+			}
+			set
+			{
+				if ((this._ProviderUserId != value))
+				{
+					this.OnProviderUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._ProviderUserId = value;
+					this.SendPropertyChanged("ProviderUserId");
+					this.OnProviderUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
+		public int UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.webpages_Roles")]
+	public partial class webpages_Role : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RoleId;
+		
+		private string _RoleName;
+		
+		private EntitySet<webpages_UsersInRole> _webpages_UsersInRoles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRoleIdChanging(int value);
+    partial void OnRoleIdChanged();
+    partial void OnRoleNameChanging(string value);
+    partial void OnRoleNameChanged();
+    #endregion
+		
+		public webpages_Role()
+		{
+			this._webpages_UsersInRoles = new EntitySet<webpages_UsersInRole>(new Action<webpages_UsersInRole>(this.attach_webpages_UsersInRoles), new Action<webpages_UsersInRole>(this.detach_webpages_UsersInRoles));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int RoleId
+		{
+			get
+			{
+				return this._RoleId;
+			}
+			set
+			{
+				if ((this._RoleId != value))
+				{
+					this.OnRoleIdChanging(value);
+					this.SendPropertyChanging();
+					this._RoleId = value;
+					this.SendPropertyChanged("RoleId");
+					this.OnRoleIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string RoleName
+		{
+			get
+			{
+				return this._RoleName;
+			}
+			set
+			{
+				if ((this._RoleName != value))
+				{
+					this.OnRoleNameChanging(value);
+					this.SendPropertyChanging();
+					this._RoleName = value;
+					this.SendPropertyChanged("RoleName");
+					this.OnRoleNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="webpages_Role_webpages_UsersInRole", Storage="_webpages_UsersInRoles", ThisKey="RoleId", OtherKey="RoleId")]
+		public EntitySet<webpages_UsersInRole> webpages_UsersInRoles
+		{
+			get
+			{
+				return this._webpages_UsersInRoles;
+			}
+			set
+			{
+				this._webpages_UsersInRoles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_webpages_UsersInRoles(webpages_UsersInRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.webpages_Role = this;
+		}
+		
+		private void detach_webpages_UsersInRoles(webpages_UsersInRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.webpages_Role = null;
 		}
 	}
 }

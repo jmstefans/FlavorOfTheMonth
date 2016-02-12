@@ -1,8 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="fotm" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=KINGKONG-PC\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="fotmConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Leaderboard" Member="Leaderboards">
-    <Type Name="Leaderboard">
-      <Column Name="LeaderboardID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="fotmConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Character" Member="Characters">
+    <Type Name="Character">
+      <Column Name="CharacterID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Server" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedStatus" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.webpages_UsersInRoles" Member="webpages_UsersInRoles">
+    <Type Name="webpages_UsersInRole">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="UserProfile_webpages_UsersInRole" Member="UserProfile" ThisKey="UserId" OtherKey="UserId" Type="UserProfile" IsForeignKey="true" />
+      <Association Name="webpages_Role_webpages_UsersInRole" Member="webpages_Role" ThisKey="RoleId" OtherKey="RoleId" Type="webpages_Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PvpStats" Member="PvpStats">
+    <Type Name="PvpStat">
+      <Column Name="PvpStatsID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Ranking" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="Rating" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
@@ -18,9 +36,60 @@
       <Column Name="SeasonLosses" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="WeeklyWins" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="WeeklyLosses" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Class" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Race" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Gender" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Spec" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="ModifiedStatus" Type="System.Char" DbType="Char(1)" CanBeNull="true" />
       <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="CharacterID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RatingChange" Member="RatingChanges">
+    <Type Name="RatingChange">
+      <Column Name="RatingChangeID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CharacterID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="RatingChange" Member="RatingChange1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedStatus" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserProfile" Member="UserProfiles">
+    <Type Name="UserProfile">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(56) NOT NULL" CanBeNull="false" />
+      <Association Name="UserProfile_webpages_UsersInRole" Member="webpages_UsersInRoles" ThisKey="UserId" OtherKey="UserId" Type="webpages_UsersInRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.webpages_Membership" Member="webpages_Memberships">
+    <Type Name="webpages_Membership">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ConfirmationToken" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="IsConfirmed" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="LastPasswordFailureDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PasswordFailuresSinceLastSuccess" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordChangedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PasswordSalt" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordVerificationToken" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="PasswordVerificationTokenExpirationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.webpages_OAuthMembership" Member="webpages_OAuthMemberships">
+    <Type Name="webpages_OAuthMembership">
+      <Column Name="Provider" Type="System.String" DbType="NVarChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProviderUserId" Type="System.String" DbType="NVarChar(100) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.webpages_Roles" Member="webpages_Roles">
+    <Type Name="webpages_Role">
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Association Name="webpages_Role_webpages_UsersInRole" Member="webpages_UsersInRoles" ThisKey="RoleId" OtherKey="RoleId" Type="webpages_UsersInRole" />
     </Type>
   </Table>
 </Database>

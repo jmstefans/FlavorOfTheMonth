@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using FlavorOfTheMonth.Models;
 
 namespace FlavorOfTheMonth.Controllers
@@ -8,7 +9,6 @@ namespace FlavorOfTheMonth.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Flavor of the month lets you see which World of Warcraft team compositions are currently the most popular.";
-            
             return View(new HomeModel());
         }
 
@@ -18,6 +18,14 @@ namespace FlavorOfTheMonth.Controllers
                 + " Based on these differences we can guess who is playing with who and display the data to you.";
             ViewBag.Message += "Feel free to contact us at contactpandamic@gmail.com";
             return View();
+        }
+
+        public PartialViewResult GetCharacters()
+        {
+            DataClassesDataContext context = new DataClassesDataContext();
+            Character[] chars = context.GetTable<Character>().ToArray();
+
+            return PartialView(chars);
         }
 
         /*

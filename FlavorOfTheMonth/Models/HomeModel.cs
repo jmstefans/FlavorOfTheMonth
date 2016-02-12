@@ -1,4 +1,7 @@
-﻿namespace FlavorOfTheMonth.Models
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace FlavorOfTheMonth.Models
 {
     /// <summary>
     /// Model to be used with the home page.
@@ -44,6 +47,8 @@
             SEA
         }
 
+        public List<Character> Character;
+
         /// <summary>
         /// Constructor which initializes the state of the home screen.
         /// </summary>
@@ -52,6 +57,10 @@
             ClassModel = new ClassModel();
             CurBracket = Bracket._2v2;
             CurRegion = Region.US;
+            DataClassesDataContext context = new DataClassesDataContext();
+            //Character = (from character in context.Characters
+            //             select character).ToList();
+            Character = new List<Character>();
         }
     }
 }

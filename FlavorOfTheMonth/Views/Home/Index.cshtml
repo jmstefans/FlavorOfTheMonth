@@ -20,7 +20,7 @@
 <section>
     <h3 id="hdrRegion">Regions</h3>
     <div class="btn-group" role="group" aria-label="hdrRegion" data-toggle="buttons">
-        <label class="btn btn-primary active">
+        <label class="btn btn-primary active" onclick="refresh('US')">
             <input type="radio" name="options" id="iUS" autocomplete="off" checked>US
         </label>
         <label class="btn btn-primary">
@@ -120,14 +120,51 @@
 @*Teams*@
 <section>
     <h3>Teams</h3>
+    <table>
+        <tr>
+            <th>CharacterID</th>
+            <th>Name</th>
+            <th>Server</th>
+        </tr>
+        @foreach (var c in Model.Character)
+        {
+            <tr>
+                <td>@c.CharacterID</td>
+                <td>@c.Name</td>
+                <td>@c.Server</td>
+            </tr>
+        }
+    </table>
+
+    <input id="btnAjax" name="btnAjax" type="button" value="Get Characters" />
+    <div id="characters" style="background-color:lightskyblue"></div>
 </section>
 
 @*Scripts*@
 <script>
-    function refresh() {
+    $(document).ready(function () {
+
+            $('#btnAjax').click(function () {
+                $.ajax({
+                    url: '/Home/GetCharacters',
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+
+                })
+                .success(function (result) {
+                    $('#characters').html(result);
+                })
+                .error(function (xhr, status) {
+                    alert(status);
+                })
+            });
+    });
+
+    function refresh(a) {
         // Ajax to get new server data if a new region or bracket was picked.
 
         // Client-side updates like amount of class dropdowns to display.
-        alert('test');
+        alert('a: ' + a);
     }
 </script>
