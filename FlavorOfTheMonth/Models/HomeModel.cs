@@ -47,6 +47,9 @@ namespace FlavorOfTheMonth.Models
             SEA
         }
 
+        /// <summary>
+        /// Ajax test purposes only.
+        /// </summary>
         public List<Character> Character;
 
         /// <summary>

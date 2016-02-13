@@ -57,7 +57,7 @@ namespace FlavorOfTheMonth
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["fotmConnectionString1"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["fotmConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

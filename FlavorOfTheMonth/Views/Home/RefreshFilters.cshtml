@@ -1,0 +1,31 @@
+﻿@model FlavorOfTheMonth.Models.HomeModel
+
+<h3>Filters</h3>
+@for (var i = 0; i < (int)(Model.CurBracket); i++)
+{
+    <div class="dropdown inlineBlock">
+        <div class="hack">
+            <button class="btn btn-default dropdown-toggle" type="button" id="@("ddClass" + i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Select a class... @*This needs to change to whatever the latest selection was.*@
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="@("ddClass" + i)">
+                @foreach (var wowClass in Model.ClassModel.ClassesList)
+                {
+                    <li><a href="javascript:@("refresh('" + wowClass + "')")">@wowClass</a></li>
+                }
+            </ul>
+        </div>
+        <div>
+            <button class="btn btn-default dropdown-toggle" type="button" id="@("ddSpec" + i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Select a spec...
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="@("ddSpec" + i)">
+                <li><a href="#">Frost</a></li>
+                <li><a href="#">Blood</a></li>
+                <li><a href="#">Unholy</a></li>
+            </ul>
+        </div>
+    </div>
+}
