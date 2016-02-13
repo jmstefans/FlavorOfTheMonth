@@ -136,6 +136,49 @@ namespace FotmServerApp.Database
             }
         }
 
+        public void InsertTeamsAndMembers(IEnumerable<Team> teams)
+        {
+            var tquery = "insert into [Team] (PvpBracket, Mean) values(@PvpBracket, @Mean);" +
+                         "select scope_identity();";
+            var mquery = "insert into [TeamMember] (TeamID, Name, RealmName, RatingChangeValue, Spec) " +
+                         "values (@TeamID, @Name, @RealmName, @RatingChangeValue, @Spec);";
+
+            using (var trans = DbConnection.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var team in teams)
+                    {
+                        var bracket = team.PvpBracket.ToString();
+                        var id = DbConnection.ExecuteScalar<long>(tquery, new { PvpBracket = bracket, team.Mean }, trans);
+
+                        Console.WriteLine($"{DateTime.Now}: Inserting Team: " + id);
+
+                        foreach (var teamMember in team.Members)
+                        {
+                            DbConnection.Execute(mquery, new
+                            {
+                                TeamID = id,
+                                teamMember.Name,
+                                teamMember.RealmName,
+                                teamMember.RatingChangeValue,
+                                teamMember.Spec
+                            }, trans);
+
+                            Console.WriteLine($"{DateTime.Now}: Inserting team member: " + teamMember.Name);
+                        }
+                    }
+
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
+                }
+            }
+        }
+
         /// <summary>
         /// Inserts rows into the Character table if there are new leaderboard characters.
         /// Inserts and updates rows into the PvpStats table to keep it current with every characters' ratings.

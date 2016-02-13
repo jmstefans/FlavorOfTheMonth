@@ -12,13 +12,56 @@ using WowDotNetAPI.Models;
 
 namespace FotmServerApp.JobScheduling.Jobs
 {
-    public class RatingChangeJob : IJob
+    public class RatingChangeJob 
+        //: IJob
     {
         #region Variables
 
         // Used to define the baseline stats
         private static bool _setBaseLine = true;
-        private static ConcurrentBag<PvpStats> _baseLineStats = new ConcurrentBag<PvpStats>();
+        private static bool SetBaseLine
+        {
+            get
+            {
+                bool result;
+                lock (_baseLock)
+                {
+                    result = _setBaseLine;
+                }
+                return result;
+            }
+            set
+            {
+                lock (_baseLock)
+                {
+                    _setBaseLine = value;
+                }
+            }
+        }
+        private static object _baseLock = new object();
+
+        private static List<PvpStats> _baseLineStats = new List<PvpStats>();
+        private static List<PvpStats> BaselineStats
+        {
+            get
+            {
+                List<PvpStats> stats = null;
+                lock (_lock)
+                {
+                    stats = _baseLineStats;
+                }
+                return stats;
+            }
+            set
+            {
+                lock (_lock)
+                {
+                    if (value != null)
+                        _baseLineStats = value;
+                }
+            }
+        }
+        private static object _lock = new object();
 
         #endregion
 
@@ -38,7 +81,7 @@ namespace FotmServerApp.JobScheduling.Jobs
                         .StartNow()
                         .WithSimpleSchedule(
                             s => s
-                                .WithInterval(TimeSpan.FromMilliseconds(1))
+                                .WithInterval(TimeSpan.FromSeconds(1))
                                 .RepeatForever())
                                 .Build();
                 return _defaultTrigger;
@@ -66,13 +109,17 @@ namespace FotmServerApp.JobScheduling.Jobs
         /// Executes the job, this is handled by the Scheduler in Quartz.
         /// </summary>
         /// <param name="context">Context passed in by Scheduler.</param>
-        public void Execute(IJobExecutionContext context)
-        {
+        //public void Execute(IJobExecutionContext context)
+        //{
+        public void Execute(Dictionary<string, Bracket> test)
+        { 
+            Console.WriteLine($"{DateTime.Now}: Executing RatingChange API call...");
+
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
-            if (_setBaseLine) // only do once on initial execute
+            if (SetBaseLine) // only do once on initial execute
             {
-                _baseLineStats = new ConcurrentBag<PvpStats>(stats);
-                _setBaseLine = false;
+                BaselineStats = new List<PvpStats>(stats);
+                SetBaseLine = false;
                 return;
             }
 
@@ -84,7 +131,7 @@ namespace FotmServerApp.JobScheduling.Jobs
             // sort by faction and into winners and losers
             foreach (var stat in stats)
             {
-                var baseStat = _baseLineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
+                var baseStat = BaselineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
                                                                   b.RealmSlug.Equals(stat.RealmSlug));
                 if (baseStat == null)
                     continue; // player isn't in the baseline, nothing to compare against
@@ -120,77 +167,56 @@ namespace FotmServerApp.JobScheduling.Jobs
             }
 
             // current stats are baseline for next pass
-            _baseLineStats = new ConcurrentBag<PvpStats>(stats);
+            BaselineStats = new List<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
-            var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
+            //var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
+            var bracket = (Bracket)test[BRACKET_KEY];
             var teamSize = GetTeamSize(bracket);
 
             if (allyWinners.Count >= teamSize)
-                ClusterAndInsertDb(allyWinners, teamSize);
+                ClusterAndInsertDb(allyWinners, teamSize, bracket);
 
             if (allyLosers.Count >= teamSize)
-                ClusterAndInsertDb(allyLosers, teamSize);
+                ClusterAndInsertDb(allyLosers, teamSize, bracket);
 
             if (hordeWinners.Count >= teamSize)
-                ClusterAndInsertDb(hordeWinners, teamSize);
+                ClusterAndInsertDb(hordeWinners, teamSize, bracket);
 
             if (hordeLosers.Count >= teamSize)
-                ClusterAndInsertDb(hordeLosers, teamSize);
+                ClusterAndInsertDb(hordeLosers, teamSize, bracket);
         }
 
         #endregion
 
         #region Private Methods
 
-        private ConcurrentQueue<List<Team>> _teamsQueue = new ConcurrentQueue<List<Team>>();
-
         private DbManager _dbManager = DbManager.Default;
 
-        private async void ClusterAndInsertDbAsync(List<TeamMember> membersToCluster, int teamSize)
+        private DbManager DbManager
         {
-            await Task.Run(() => ClusterAndInsertDb(membersToCluster, teamSize));
-        }
-
-        private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize)
-        {
-            var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
-            if (teams == null) return; // TODO: team
-
-            // have to generate team guids first
-            foreach (var team in teams)
+            get
             {
-                team.TeamID = Guid.NewGuid();
-            }
-
-            // then insert them into db before handling team members
-            _dbManager.InsertTeams(teams);
-
-            // create the mappings to associate the TeamMember and Team
-            var teamMappings = new List<TeamMemberMapping>();
-
-            foreach (var team in teams)
-            {
-                foreach (var member in team.Members)
+                DbManager result = null;
+                lock (_dbLock)
                 {
-                    // create guid for member
-                    member.TeamMemberID = Guid.NewGuid();
-
-                    // create teammapping guid, and apply team id and teammemberid
-                    teamMappings.Add(new TeamMemberMapping
-                    {
-                        TeamMemberMappingID = Guid.NewGuid(), 
-                        TeamID = team.TeamID, 
-                        TeamMemberId = member.TeamMemberID
-                    });
+                    result = _dbManager;
                 }
-
-                // now can insert all members
-                _dbManager.InsertObjects(team.Members);
+                return result;
             }
-            
-            // finally all team mappings can be inserted
-            _dbManager.InsertObjects(teamMappings);
+        }
+        private static object _dbLock = new object();
+
+        private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
+        {
+            Console.Write($"{DateTime.Now}: Executing team cluster...");
+            var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
+            if (teams == null) return; 
+
+            foreach (var team in teams)
+                team.PvpBracket = bracket;
+
+            DbManager.InsertTeamsAndMembers(teams);
         }
 
         private int GetTeamSize(Bracket bracket)
@@ -207,7 +233,7 @@ namespace FotmServerApp.JobScheduling.Jobs
                     throw new ArgumentOutOfRangeException("bracket");
             }
         }
-    
+
         #endregion
     }
 }

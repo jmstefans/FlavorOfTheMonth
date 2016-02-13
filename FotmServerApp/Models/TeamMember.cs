@@ -8,8 +8,13 @@ namespace FotmServerApp.Models
         /// <summary>
         /// Unique team member Id.
         /// </summary>
-        public Guid TeamMemberID { get; set; }
+        public long TeamMemberID { get; set; }
         
+        /// <summary>
+        /// ID of team this member belongs to.
+        /// </summary>
+        public long TeamID { get; set; }
+
         /// <summary>
         /// Member character name.
         /// </summary>

@@ -67,13 +67,20 @@ namespace FotmServerApp.JobScheduling
         public void ScheduleRatingChangeJob(string jobKey = "ratingChangeJob",
                                             string groupKey = "ratingChangeGroup",
                                             Bracket bracket = Bracket._3v3,
-                                            ITrigger trigger  = null)
+                                            ITrigger trigger = null)
         {
             if (trigger == null)
                 trigger = RatingChangeJob.DefaultTrigger;
 
-            var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
-            ScheduleJob<RatingChangeJob>(trigger, jobKey, groupKey, jobArgs);
+            //var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
+            var jobArgs = new Dictionary<string, Bracket> { { "bracketKey", Bracket._3v3 } };
+            var job = new RatingChangeJob();
+            while (true)
+            {
+                job.Execute(jobArgs);
+            }
+
+            //ScheduleJob<RatingChangeJob>(trigger, jobKey, groupKey, jobArgs);
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FotmServerApp.Models.Base;
+using WowDotNetAPI.Models;
 
 namespace FotmServerApp.Models
 {
@@ -9,7 +10,12 @@ namespace FotmServerApp.Models
         /// <summary>
         /// Unique team Id.
         /// </summary>
-        public Guid TeamID { get; set; }
+        public long TeamID { get; set; }
+
+        /// <summary>
+        /// Pvp bracket this team is for.
+        /// </summary>
+        public Bracket PvpBracket { get; set; }
 
         /// <summary>
         /// The mean of the team's rating change values.

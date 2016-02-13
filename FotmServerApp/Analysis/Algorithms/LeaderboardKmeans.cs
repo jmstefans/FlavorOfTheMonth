@@ -107,7 +107,8 @@ namespace FotmServerApp.Analysis.Algorithms
             {
                 var team = FindClosestTeam(teams, member);
                 var invalid = team == null ||
-                              team.Members.Any(m => m.Name.Equals(member.Name) && m.RealmName.Equals(member.RealmName));
+                              team.Members.Any(m => m.Name.Equals(member.Name) && 
+                              m.RealmName.Equals(member.RealmName));
                 if (invalid)
                     continue;
                 
