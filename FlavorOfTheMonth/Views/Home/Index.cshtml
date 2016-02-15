@@ -20,23 +20,23 @@
 <section>
     <h3 id="hdrRegion">Regions</h3>
     <div class="btn-group" role="group" aria-label="hdrRegion" data-toggle="buttons">
-        <label class="btn btn-primary active" onclick="refresh('US')">
-            <input type="radio" name="options" id="iUS" autocomplete="off" checked>US
+        <label class="btn btn-primary active" onclick="javascript: document.getElementById('iUS').checked = true; refresh()">
+            <input type="radio" name="regions" id="iUS" autocomplete="off" value="US" checked>US
         </label>
-        <label class="btn btn-primary" onclick="refresh('EU')">
-            <input type="radio" name="options" id="iEU" autocomplete="off">EU
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iEU').checked = true; refresh()">
+            <input type="radio" name="regions" id="iEU" autocomplete="off" value="EU">EU
         </label>
-        <label class="btn btn-primary" onclick="refresh('KR')">
-            <input type="radio" name="options" id="iKR" autocomplete="off">KR
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iKR').checked = true; refresh()">
+            <input type="radio" name="regions" id="iKR" autocomplete="off" value="KR">KR
         </label>
-        <label class="btn btn-primary" onclick="refresh('TW')">
-            <input type="radio" name="options" id="iTW" autocomplete="off">TW
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iTW').checked = true; refresh()">
+            <input type="radio" name="regions" id="iTW" autocomplete="off" value="TW">TW
         </label>
-        <label class="btn btn-primary" onclick="refresh('CN')">
-            <input type="radio" name="options" id="iCN" autocomplete="off">CN
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iCN').checked = true; refresh()">
+            <input type="radio" name="regions" id="iCN" autocomplete="off" value="CN">CN
         </label>
-        <label class="btn btn-primary" onclick="refresh('SEA')">
-            <input type="radio" name="options" id="iSEA" autocomplete="off">SEA
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iSEA').checked = true; refresh()">
+            <input type="radio" name="regions" id="iSEA" autocomplete="off" value="SEA">SEA
         </label>
     </div>
 </section>
@@ -45,24 +45,24 @@
 <section>
     <h3 id="hdrBracket">Brackets</h3>
     <div class="btn-group" role="group" aria-label="hdrBracket" data-toggle="buttons">
-        <label class="btn btn-primary active" onclick="refresh(2)">
-            <input type="radio" name="options" id="i2v2" autocomplete="off" checked>2v2
+        <label class="btn btn-primary active" onclick="javascript: document.getElementById('i2v2').checked = true; refresh()">
+            <input type="radio" name="brackets" id="i2v2" autocomplete="off" value="2v2" checked>2v2
         </label>
-        <label class="btn btn-primary" onclick="refresh(3)">
-            <input type="radio" name="options" id="i3v3" autocomplete="off">3v3
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('i3v3').checked = true; refresh()">
+            <input type="radio" name="brackets" id="i3v3" autocomplete="off" value="3v3">3v3
         </label>
-        <label class="btn btn-primary" onclick="refresh(5)">
-            <input type="radio" name="options" id="i5v5" autocomplete="off">5v5
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('i5v5').checked = true; refresh()">
+            <input type="radio" name="brackets" id="i5v5" autocomplete="off" value="5v5">5v5
         </label>
-        <label class="btn btn-primary" onclick="refresh(15)">
-            <input type="radio" name="options" id="iRBG" autocomplete="off">RBG
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iRBG').checked = true; refresh()">
+            <input type="radio" name="brackets" id="iRBG" autocomplete="off" value="rbg">RBG
         </label>
     </div>
 </section>
 
 @*Filters*@
 <section id="sfilter">
-    @Html.Partial("RefreshFilters")
+    @Html.Partial("RefreshData")
 </section>
 
 @*Teams*@
@@ -109,19 +109,51 @@
             })
         });
 
-        // Change dropdown text to fake functionality of a select element
-        $(".dropdown-menu li a").click(function () {
-            var selText = $(this).text();
-            $(this).parents('.hack').find('button[data-toggle="dropdown"]').html(selText + ' <span class="caret"></span>');
-        });
     });
 
-    function refresh(a) {
-        // Ajax to get new server data if a new region or bracket was picked.
-        $.post('/Home/RefreshFilters', { paramObj: a }, function(result) {
+    // Refreshes the data on the screen after a filter, bracket, or
+    // was changed.
+    function refresh() {
+        // Ajax to get new server data if any button was pressed.
+        var test = JSON.stringify(buildJsonRequestObj());
+        $.post('/Home/RefreshData', { paramObj: test }, function (result) {
             $('#sfilter').html(result);
         });
-
-        // Client-side updates like amount of class dropdowns to display.
     }
-</script>
+
+    // Builds a JSON object which is essentially a snapshot of all the 
+    // current filter, bracket, and region choices.
+    function buildJsonRequestObj() {
+        var jsonData = {};
+        var region = $('input[name=regions]:checked').val();
+        var bracket = $('input[name=brackets]:checked').val();
+        var classes = [];
+        $.each($('[id^="ddClass"]'), function (i) {
+            classes[i] = $(this).html().replace('<span class="caret"></span>', '');
+        });
+        var specs = [];
+        $.each($('[id^="ddSpec"]'), function (i) {
+            specs[i] = $(this).html().replace('<span class="caret"></span>', '');
+        });
+        jsonData.region = region;
+        jsonData.bracket = bracket;
+        jsonData.classes = classes;
+        jsonData.specs = specs;
+        return jsonData;
+    }
+
+    // Change dropdown text to fake functionality of a select element
+    function updateDropdownText(e) {
+        if (!e)
+            e = window.event;
+        var selText = $(e).text();
+        $(e).parents('.hack').find('button[data-toggle="dropdown"]').html(selText + ' <span class="caret"></span>');
+    }
+
+    // Update the spec button text to be "Select a spec..." when the corresponding class filter is clicked
+    function updateSpecButtonText(index) {
+        var id = '#ddSpec' + index;
+        $(id).text('Select a spec...');
+    }
+
+    </script>

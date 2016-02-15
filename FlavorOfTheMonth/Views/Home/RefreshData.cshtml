@@ -1,0 +1,130 @@
+﻿@model FlavorOfTheMonth.Models.HomeModel
+
+<h3>Filters</h3>
+@for (var i = 0; i < (int)(Model.CurBracket); i++)
+{
+    <div class="dropdown inlineBlock">
+        <div class="hack">
+            <button class="btn btn-default dropdown-toggle parameter filterMinWidth" type="button" id="@("ddClass" + i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                @if (Model.CurCharacterList.Count <= 0)
+                {
+                    @Html.Raw("Select a class...");
+                }
+                else
+                {
+                    if(Model.CurCharacterList.ElementAtOrDefault(i) == null)
+                    {
+                        @Html.Raw("Select a class...");
+                    }
+                    else
+                    {
+                        @Model.CurCharacterList.ElementAtOrDefault(i);
+                    }
+                }<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="@("ddClass" + i)">
+                @foreach (var wowClass in Model.ClassModel.ClassesList)
+                {
+                    <li><a class="parameter" onclick="updateDropdownText(this); updateSpecButtonText(@i);" href="javascript:@("refresh('" + wowClass + "')");">@wowClass</a></li>
+                }
+            </ul>
+        </div>
+        <div>
+            <div class="hack">
+                <button class="btn btn-default dropdown-toggle filterMinWidth" type="button" id="@("ddSpec" + i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    @if (Model.CurSelectedSpecList.Count <= 0)
+                    {
+                        @Html.Raw("Select a spec...");
+                    }
+                    else
+                    {
+                        if (Model.CurSelectedSpecList.ElementAtOrDefault(i) == null)
+                        {
+                            @Html.Raw("Select a spec...");
+                        }
+                        else
+                        {
+                            @Model.CurSelectedSpecList.ElementAtOrDefault(i);
+                        }
+                    }
+                    <span class="caret"></span>
+                </button>
+                @*TODO Disable ones associated with no class selected. That means enable when class is selected.*@
+                <ul class="dropdown-menu" aria-labelledby="@("ddSpec" + i)">
+                    @switch (Model.CurCharacterList.ElementAtOrDefault(i))
+                    {
+                        case "Death Knight":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Blood</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:;">Frost</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:;">Unholy</a></li>
+                            break;
+                        case "Druid":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Balance</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Feral</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Guardian</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Restoration</a></li>
+                            break;
+                        case "Hunter":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Beast Mastery</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Marksmanship</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Survival</a></li>
+                            break;
+                        case "Mage":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Arcane</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Fire</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Frost</a></li>
+                            break;
+                        case "Monk":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Brewmaster</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Mistweaver</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Windwalker</a></li>
+                            break;
+                        case "Paladin":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Holy</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Protection</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Retribution</a></li>
+                            break;
+                        case "Priest":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Discipline</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Holy</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Shadow</a></li>
+                            break;
+                        case "Rogue":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Assassination</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Combat</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Subtlety</a></li>
+                            break;
+                        case "Shaman":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Elemental</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Enhancement</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Restoration</a></li>
+                            break;
+                        case "Warlock":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Affliction</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Demonology</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Destruction</a></li>
+                            break;
+                        case "Warrior":
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Select a spec...</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Arms</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Fury</a></li>
+                            <li><a onclick="updateDropdownText(this)" href="javascript:refresh();">Protection</a></li>
+                            break;
+                        default:
+                            break;
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}

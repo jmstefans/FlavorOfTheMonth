@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace FlavorOfTheMonth.Models
 {
@@ -9,7 +8,7 @@ namespace FlavorOfTheMonth.Models
     public class HomeModel
     {
         /// <summary>
-        /// List of wow classes
+        /// Contains string lists for all of the classes and their specs.
         /// </summary>
         public ClassModel ClassModel;
 
@@ -53,6 +52,16 @@ namespace FlavorOfTheMonth.Models
         public List<Character> Character;
 
         /// <summary>
+        /// A list to keep track of the currently selected classes in the filter dropdowns.
+        /// </summary>
+        public List<string> CurCharacterList;
+
+        /// <summary>
+        /// A list to keep track of the currently selected specs in the filter dropdowns.
+        /// </summary>
+        public List<string> CurSelectedSpecList;
+
+        /// <summary>
         /// Constructor which initializes the state of the home screen.
         /// </summary>
         public HomeModel()
@@ -61,9 +70,9 @@ namespace FlavorOfTheMonth.Models
             CurBracket = Bracket._2v2;
             CurRegion = Region.US;
             DataClassesDataContext context = new DataClassesDataContext();
-            //Character = (from character in context.Characters
-            //             select character).ToList();
             Character = new List<Character>();
+            CurCharacterList = new List<string>();
+            CurSelectedSpecList = new List<string>();
         }
     }
 }

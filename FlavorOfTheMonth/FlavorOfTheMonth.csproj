@@ -195,6 +195,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ClassModel.cs" />
     <Compile Include="Models\HomeModel.cs" />
+    <Compile Include="Models\HomeRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WoW_API_Consumer\Requester.cs" />
   </ItemGroup>
@@ -326,7 +327,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\GetCharacters.cshtml" />
-    <Content Include="Views\Home\RefreshFilters.cshtml" />
+    <Content Include="Views\Home\RefreshData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

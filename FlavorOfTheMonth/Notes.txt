@@ -10,3 +10,13 @@ We can use https://asafaweb.com/ to schedule scans against our website for basic
 Used this article to help figure out how to hook up the SimpleMembership that came with this project:
 	http://www.codeguru.com/csharp/.net/net_asp/mvc/using-simplemembership-in-asp.net-mvc-4.htm
 	I still want to add in the three Modified columns to each of the tables.
+
+
+*********************************************************************************************************
+*********************************************** TODOs: **************************************************
+*********************************************************************************************************
+
+Clicking the same value makes a request to the server. E.g. clicking "Select a class..." when that is already the option.
+	
+Disable spec dropdowns associated with no class selected. That means enable when class is selected.
+	Right now they just have an empty dropdown.

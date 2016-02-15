@@ -133,6 +133,10 @@ footer {
     display: inline-block;
 }
 
+.filterMinWidth {
+    min-width: 137px;
+}
+
 /* site title
 ----------------------------------------------------------*/
 .site-title {
