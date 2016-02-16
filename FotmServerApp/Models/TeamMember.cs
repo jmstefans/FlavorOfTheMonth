@@ -1,5 +1,4 @@
-﻿using System;
-using FotmServerApp.Models.Base;
+﻿using FotmServerApp.Models.Base;
 
 namespace FotmServerApp.Models
 {

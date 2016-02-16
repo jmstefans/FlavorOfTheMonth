@@ -61,6 +61,8 @@ namespace FlavorOfTheMonth.Models
         /// </summary>
         public List<string> CurSelectedSpecList;
 
+        public TeamModel TeamModel;
+
         /// <summary>
         /// Constructor which initializes the state of the home screen.
         /// </summary>
@@ -73,6 +75,7 @@ namespace FlavorOfTheMonth.Models
             Character = new List<Character>();
             CurCharacterList = new List<string>();
             CurSelectedSpecList = new List<string>();
+            TeamModel = new TeamModel();
         }
     }
 }

@@ -1,0 +1,23 @@
+﻿@using FlavorOfTheMonth.Models
+
+@model FlavorOfTheMonth.Models.HomeModel
+
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>TeamID</th>
+            <th>Mean</th>
+            <th>Members</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(TeamMember member in Model.TeamModel.Members)
+        {
+            <tr>
+                <td>@member.TeamID</td>
+                <td>todo</td>
+                <td>todo</td>
+            </tr>
+        }
+    </tbody>
+</table>

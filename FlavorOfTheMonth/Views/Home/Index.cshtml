@@ -66,26 +66,8 @@
 </section>
 
 @*Teams*@
-<section>
-    <h3>Teams</h3>
-    <table>
-        <tr>
-            <th>CharacterID</th>
-            <th>Name</th>
-            <th>Server</th>
-        </tr>
-        @foreach (var c in Model.Character)
-        {
-            <tr>
-                <td>@c.CharacterID</td>
-                <td>@c.Name</td>
-                <td>@c.Server</td>
-            </tr>
-        }
-    </table>
-
-    <input id="btnAjax" name="btnAjax" type="button" value="Get Characters" />
-    <div id="characters" style="background-color:lightskyblue"></div>
+<section id="sTeams">
+    @Html.Partial("TeamsPartial")
 </section>
 
 @*Scripts*@
