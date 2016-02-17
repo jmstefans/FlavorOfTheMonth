@@ -10,8 +10,6 @@ namespace FotmServerApp.Analysis.Algorithms
     /// </summary>
     public class LeaderboardKmeans
     {
-
-
         /// <summary>
         /// Clusters the members into teams of provided team size.
         /// </summary>
@@ -165,7 +163,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// </summary>
         private static void ResolveUnevenTeams(List<Team> teams, int teamSize)
         {
-            var unevenTeams = teams.Where(t => t.Members.Count != teamSize);
+            var unevenTeams = teams.Where(t => t.Members.Count != teamSize).ToList();
             foreach (var team in unevenTeams)
             {
                 if (team.Members.Count > teamSize) 
@@ -173,7 +171,7 @@ namespace FotmServerApp.Analysis.Algorithms
                     /* only need the furthest members, they will be added to teams 
                        with sizes < expected team size */
                     var furthestMembers = FindAndRemoveFurthestTeamMembers(team, teamSize);
-                    AddToClosestTeam(unevenTeams.ToList(), furthestMembers, teamSize);
+                    AddToClosestTeam(unevenTeams, furthestMembers, teamSize);
                 }
             }
         }
@@ -208,8 +206,8 @@ namespace FotmServerApp.Analysis.Algorithms
                 furthestDistance = double.MinValue;
 
                 // remove from the uneven team and add to furthest members
-                furthestTeamMembers.Add(furthestMember);
                 unevenTeam.Members.Remove(furthestMember);
+                furthestTeamMembers.Add(furthestMember);
                 teamCount--;
             }
 
@@ -219,7 +217,7 @@ namespace FotmServerApp.Analysis.Algorithms
         /// <summary>
         /// Gets the distance between the team and team member. 
         /// This is using the basic distance formula (as if they were points on a graph), 
-        /// and should eventually be replace with the sum of square differences formula. 
+        /// and should eventually be replaced with the sum of square differences formula. 
         /// </summary>
         private static double GetTeamMemberDistanceToTeam(Team team, TeamMember teamMember)
         {
@@ -230,7 +228,7 @@ namespace FotmServerApp.Analysis.Algorithms
 
         /// <summary>
         /// For each of the team members in the uneven list, finds the closest team 
-        /// with a current size < teamsize and adds it to the list. 
+        /// with a current size less than teamsize and adds it to the list. 
         /// </summary>
         private static void AddToClosestTeam(List<Team> teams, List<TeamMember> teamMembers, int teamSize)
         {
@@ -252,6 +250,5 @@ namespace FotmServerApp.Analysis.Algorithms
                 closestTeam?.Members.Add(teamMember);
             }
         }
-
     }
 }
