@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FotmServerApp.Models;
+using Fotm.Server.Models;
 
-namespace FotmServerApp.Analysis.Algorithms
+namespace Fotm.Server.Analysis.Algorithms
 {
     /// <summary>
     /// Implementation of the Kmeans algorithm to cluster teams from the WoW leaderboard. 

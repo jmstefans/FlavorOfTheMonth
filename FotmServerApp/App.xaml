@@ -1,7 +1,7 @@
-﻿<Application x:Class="FotmServerApp.App"
+﻿<Application x:Class="Fotm.Server.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:FotmServerApp"
+             xmlns:local="clr-namespace:Fotm.Server"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>

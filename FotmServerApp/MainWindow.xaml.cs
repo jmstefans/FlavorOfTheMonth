@@ -2,11 +2,11 @@
 using System;
 using System.Windows;
 using System.Windows.Threading;
-using FotmServerApp.UI.Views;
-using FotmServerApp.Util;
+using Fotm.Server.UI.Views;
+using Fotm.Server.Util;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace FotmServerApp
+namespace Fotm.Server
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -1,7 +1,7 @@
 ﻿using System;
-using FotmServerApp.Models.Base;
+using Fotm.Server.Models.Base;
 
-namespace FotmServerApp.Models
+namespace Fotm.Server.Models
 {
     public class TeamMemberMapping :DbEntityBase
     {

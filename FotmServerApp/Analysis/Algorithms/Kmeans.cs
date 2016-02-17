@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FotmServerApp.Models;
+using Fotm.Server.Models;
 
-namespace FotmServerApp.Analysis.Algorithms
+namespace Fotm.Server.Analysis.Algorithms
 {
     /// <summary>
     /// Class for computing K clusters from N nodes using the K-means algorithm

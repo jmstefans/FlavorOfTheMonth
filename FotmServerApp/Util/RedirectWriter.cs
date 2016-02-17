@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace FotmServerApp.Util
+namespace Fotm.Server.Util
 {
     public class RedirectWriter : StringWriter
     {

@@ -1,4 +1,4 @@
-﻿namespace FotmServerApp.Database.Util
+﻿namespace Fotm.Server.Database.Util
 {
     public class ConnectionStringBuilderUtil
     {

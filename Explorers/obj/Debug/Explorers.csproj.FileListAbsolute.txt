@@ -8,3 +8,7 @@ C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.pd
 C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\Explorers.csprojResolveAssemblyReference.cache
 C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.dll
 C:\Users\andre\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.pdb
+C:\Users\jstefanski\Source\Repos\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.dll
+C:\Users\jstefanski\Source\Repos\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.pdb
+C:\Users\jstefanski\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.dll
+C:\Users\jstefanski\Source\Repos\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.pdb

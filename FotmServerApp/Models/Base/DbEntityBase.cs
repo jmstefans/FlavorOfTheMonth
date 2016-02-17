@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FotmServerApp.Models.Base
+namespace Fotm.Server.Models.Base
 {
     public abstract class DbEntityBase : ObservableObjectBase
     {

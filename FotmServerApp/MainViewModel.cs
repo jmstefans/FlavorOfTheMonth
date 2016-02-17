@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using FotmServerApp.Database;
-using FotmServerApp.Database.DataProvider;
-using FotmServerApp.JobScheduling;
-using FotmServerApp.JobScheduling.Jobs;
-using FotmServerApp.Models.Base;
-using FotmServerApp.WowAPI;
+using Fotm.Server.Database;
+using Fotm.Server.Database.DataProvider;
+using Fotm.Server.JobScheduling;
+using Fotm.Server.Models.Base;
+using Fotm.Server.JobScheduling.Jobs;
+using Fotm.Server.WowAPI;
 using Quartz;
 using WowDotNetAPI.Models;
 
-namespace FotmServerApp
+namespace Fotm.Server
 {
     public class MainViewModel : ObservableObjectBase
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace FotmServerApp.Models.Base
+namespace Fotm.Server.Models.Base
 {
     /// <summary>
     /// Abstract class that implements PropertyChanged for data binding.

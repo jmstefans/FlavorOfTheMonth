@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlavorOfTheMonth
+namespace Fotm.DAL
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -78,7 +78,7 @@ namespace FlavorOfTheMonth
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["fotmConnectionString"].ConnectionString, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

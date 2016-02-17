@@ -6,13 +6,13 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using FotmServerApp.Database.DataProvider;
-using FotmServerApp.Database.Util;
-using FotmServerApp.Models;
-using FotmServerApp.Models.Base;
+using Fotm.Server.Database.DataProvider;
+using Fotm.Server.Models;
+using Fotm.Server.Models.Base;
+using Fotm.Server.Database.Util;
 using WowDotNetAPI.Models;
 
-namespace FotmServerApp.Database
+namespace Fotm.Server.Database
 {
     /// <summary>
     /// Persistent DB class for reading and writing to the database. 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Quartz;
 
-namespace FotmServerApp.JobScheduling.Jobs
+namespace Fotm.Server.JobScheduling.Jobs
 {
     public class KmeansClusteringJob : IJob
     {

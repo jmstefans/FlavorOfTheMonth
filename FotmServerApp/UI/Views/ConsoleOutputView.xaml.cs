@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace FotmServerApp.UI.Views
+namespace Fotm.Server.UI.Views
 {
     /// <summary>
     /// Interaction logic for ConsoleOutputView.xaml

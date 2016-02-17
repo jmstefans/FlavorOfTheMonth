@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using FotmServerApp.Models.Base;
+using Fotm.Server.Models.Base;
 using WowDotNetAPI;
 using WowDotNetAPI.Models;
 
-namespace FotmServerApp.WowAPI
+namespace Fotm.Server.WowAPI
 {
     /// <summary>
     /// Class for retrieving data from the WoW REST API. 

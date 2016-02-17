@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FotmServerApp.UI.Views
+namespace Fotm.Server.UI.Views
 {
     /// <summary>
     /// Interaction logic for SchedulerView.xaml

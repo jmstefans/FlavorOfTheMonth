@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using FotmServerApp.JobScheduling.Jobs;
-using FotmServerApp.Models.Base;
+using Fotm.Server.JobScheduling.Jobs;
+using Fotm.Server.Models.Base;
 using Quartz;
 using Quartz.Impl;
 using WowDotNetAPI.Models;
 
-namespace FotmServerApp.JobScheduling
+namespace Fotm.Server.JobScheduling
 {
     /// <summary>
     /// Class for creating/managing scheduled tasks.

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FotmServerApp.Properties
+namespace Fotm.Server.Properties
 {
 
 

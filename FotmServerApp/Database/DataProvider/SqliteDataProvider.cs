@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
-using FotmServerApp.Database.Util;
-using FotmServerApp.Models.Base;
+using Fotm.Server.Database.Util;
+using Fotm.Server.Models.Base;
 
-namespace FotmServerApp.Database.DataProvider
+namespace Fotm.Server.Database.DataProvider
 {
     /// <summary>
     /// Data access layer for a SQLite database provider.

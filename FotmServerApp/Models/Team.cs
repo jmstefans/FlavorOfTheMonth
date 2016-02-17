@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using FotmServerApp.Models.Base;
+using Fotm.Server.Models.Base;
 using WowDotNetAPI.Models;
 
-namespace FotmServerApp.Models
+namespace Fotm.Server.Models
 {
     public class Team : DbEntityBase
     {
