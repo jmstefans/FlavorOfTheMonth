@@ -30,6 +30,11 @@ namespace FotmServerApp.Models
         public int RatingChangeValue { get; set; }
 
         /// <summary>
+        /// The team member's current rating at point in time.
+        /// </summary>
+        public int CurrentRating { get; set; }
+
+        /// <summary>
         /// Class specialization (Rogue's assasination/combat/subtlety)
         /// </summary>
         public string Spec { get; set; }

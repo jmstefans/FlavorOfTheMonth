@@ -143,6 +143,7 @@ namespace FotmServerApp.JobScheduling.Jobs
                 {
                     Name = stat.Name,
                     RatingChangeValue = ratingChange,
+                    CurrentRating = stat.Rating,
                     RealmName = stat.RealmName,
                     Spec = stat.Spec
                 };

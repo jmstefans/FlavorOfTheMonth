@@ -19,7 +19,12 @@ namespace FotmServerApp.Models
         /// <summary>
         /// The mean of the team's rating change values.
         /// </summary>
-        public double Mean { get; set; }
+        public double MeanRatingChange { get; set; }
+
+        /// <summary>
+        /// The mean of the team's rating.
+        /// </summary>
+        public double MeanRating { get; set; }
 
         /// <summary>
         /// List of members belonging to this team.

@@ -124,7 +124,7 @@ namespace FotmServerApp.Database
                 {
                     foreach (var team in teams)
                     {
-                        DbConnection.Execute(query, new { team.TeamID, team.Mean }, trans);
+                        DbConnection.Execute(query, new { team.TeamID, Mean = team.MeanRatingChange }, trans);
                     }
                     trans.Commit();
                 }
@@ -150,7 +150,7 @@ namespace FotmServerApp.Database
                     foreach (var team in teams)
                     {
                         var bracket = team.PvpBracket.ToString();
-                        var id = DbConnection.ExecuteScalar<long>(tquery, new { PvpBracket = bracket, team.Mean }, trans);
+                        var id = DbConnection.ExecuteScalar<long>(tquery, new { PvpBracket = bracket, Mean = team.MeanRatingChange }, trans);
 
                         Console.WriteLine($"{DateTime.Now}: Inserting Team: " + id);
 

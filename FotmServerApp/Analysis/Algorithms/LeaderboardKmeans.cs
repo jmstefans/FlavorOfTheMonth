@@ -10,7 +10,7 @@ namespace FotmServerApp.Analysis.Algorithms
     /// </summary>
     public class LeaderboardKmeans
     {
-       
+
 
         /// <summary>
         /// Clusters the members into teams of provided team size.
@@ -23,17 +23,16 @@ namespace FotmServerApp.Analysis.Algorithms
                                               int teamSize,
                                               int maximumIterations = 100)
         {
-            var changed = true;
-            var success = true;
-
-            // round up the number of teams to avoid too few
-            var numberOfTeams = members.Count/ teamSize;
-            if (numberOfTeams*teamSize != members.Count)
-                return null; //this line used to be    numberOfTeams += 1;    but that caused in ArrayOutOfBoundsEx in InitializeTeams()
+            var numberOfTeams = members.Count / teamSize;
+            if (numberOfTeams * teamSize != members.Count)
+                return null; // for now, don't cluster uneven number of teams
 
             var clusteredTeams = InitializeTeams(members, numberOfTeams, teamSize);
             var currentIteration = 0;
             var maxIterations = members.Count * maximumIterations;
+
+            var changed = true;
+            var success = true;
 
             while (changed && success && currentIteration < maxIterations)
             {
@@ -42,6 +41,8 @@ namespace FotmServerApp.Analysis.Algorithms
 
                 currentIteration++;
             }
+
+            ResolveUnevenTeams(clusteredTeams, teamSize);
 
             return clusteredTeams;
         }
@@ -59,16 +60,10 @@ namespace FotmServerApp.Analysis.Algorithms
                 var team = new Team();
                 for (var j = 0; j < teamSize; j++)
                 {
-                    team.Members.Add(members[i*teamSize + j]);
+                    team.Members.Add(members[i * teamSize + j]);
                 }
                 teams.Add(team);
             }
-
-            /* Initialize the team's means */
-            //for (var i = 0; i < numberOfTeams; i++)
-            //{
-            //    teams[i].Means = new double[]; // TODO: add this so multiple props can be clustered on
-            //}
 
             return teams;
         }
@@ -85,8 +80,12 @@ namespace FotmServerApp.Analysis.Algorithms
                     var memberCount = team.Members.Count;
                     if (memberCount <= 0)
                         continue; // avoid divide by zero- todo: originally was returning false here, test if necessary
-                    var sum = team.Members.Sum(m => m.RatingChangeValue);
-                    team.Mean = (double)sum / memberCount;
+
+                    var sumRatingChange = team.Members.Sum(m => m.RatingChangeValue);
+                    team.MeanRatingChange = (double)sumRatingChange / memberCount;
+
+                    var sumRating = team.Members.Sum(m => m.CurrentRating);
+                    team.MeanRating = (double)sumRating / memberCount;
                 }
                 return true;
             }
@@ -107,11 +106,11 @@ namespace FotmServerApp.Analysis.Algorithms
             {
                 var team = FindClosestTeam(teams, member);
                 var invalid = team == null ||
-                              team.Members.Any(m => m.Name.Equals(member.Name) && 
+                              team.Members.Any(m => m.Name.Equals(member.Name) &&
                               m.RealmName.Equals(member.RealmName));
                 if (invalid)
                     continue;
-                
+
                 // Remove from previous team
                 RemoveMemberFromTeam(teams, member);
                 team.Members.Add(member); // Note - this won't handle teams with members > cluster size
@@ -131,9 +130,7 @@ namespace FotmServerApp.Analysis.Algorithms
 
             foreach (var team in teams)
             {
-                /* Note - just using basic distance b/w two numbers here
-                          this will need an update to account for multiple properties */
-                var currentDistance = Math.Abs(team.Mean - teamMember.RatingChangeValue);
+                var currentDistance = GetTeamMemberDistanceToTeam(team, teamMember);
                 if (currentDistance < closestDistance)
                 {
                     closestTeam = team;
@@ -162,5 +159,99 @@ namespace FotmServerApp.Analysis.Algorithms
                 }
             }
         }
+
+        /// <summary>
+        /// Resolves teams with sizes not equal to the team size. 
+        /// </summary>
+        private static void ResolveUnevenTeams(List<Team> teams, int teamSize)
+        {
+            var unevenTeams = teams.Where(t => t.Members.Count != teamSize);
+            foreach (var team in unevenTeams)
+            {
+                if (team.Members.Count > teamSize) 
+                {
+                    /* only need the furthest members, they will be added to teams 
+                       with sizes < expected team size */
+                    var furthestMembers = FindAndRemoveFurthestTeamMembers(team, teamSize);
+                    AddToClosestTeam(unevenTeams.ToList(), furthestMembers, teamSize);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the team members in a team that are furthest away (compared to other members of the team) 
+        /// from the team's rating mean and rating change mean
+        /// </summary>
+        private static List<TeamMember> FindAndRemoveFurthestTeamMembers(Team unevenTeam, int teamSize)
+        {
+            var furthestTeamMembers = new List<TeamMember>();
+            var teamCount = unevenTeam.Members.Count;
+
+            var furthestMember = unevenTeam.Members[0]; // init with first team member
+            var furthestDistance = GetTeamMemberDistanceToTeam(unevenTeam, furthestMember);
+
+            // while the uneven team is still uneven
+            while (teamCount > teamSize)
+            {
+                // find the furthest member away from team means
+                foreach (var member in unevenTeam.Members)
+                {
+                    var currentDistance = GetTeamMemberDistanceToTeam(unevenTeam, member);
+                    if (currentDistance > furthestDistance)
+                    {
+                        furthestMember = member;
+                        furthestDistance = currentDistance;
+                    }
+                }
+
+                // reset furthest distance 
+                furthestDistance = double.MinValue;
+
+                // remove from the uneven team and add to furthest members
+                furthestTeamMembers.Add(furthestMember);
+                unevenTeam.Members.Remove(furthestMember);
+                teamCount--;
+            }
+
+            return furthestTeamMembers;
+        }
+
+        /// <summary>
+        /// Gets the distance between the team and team member. 
+        /// This is using the basic distance formula (as if they were points on a graph), 
+        /// and should eventually be replace with the sum of square differences formula. 
+        /// </summary>
+        private static double GetTeamMemberDistanceToTeam(Team team, TeamMember teamMember)
+        {
+            var ratingDiff = team.MeanRating - teamMember.CurrentRating;
+            var ratingChangeDiff = team.MeanRatingChange - teamMember.RatingChangeValue;
+            return Math.Sqrt(Math.Pow(ratingDiff, 2) + Math.Pow(ratingChangeDiff, 2));
+        }
+
+        /// <summary>
+        /// For each of the team members in the uneven list, finds the closest team 
+        /// with a current size < teamsize and adds it to the list. 
+        /// </summary>
+        private static void AddToClosestTeam(List<Team> teams, List<TeamMember> teamMembers, int teamSize)
+        {
+            foreach (var teamMember in teamMembers)
+            {
+                var closestDistance = double.MaxValue;
+                Team closestTeam = null;
+
+                foreach (var team in teams.Where(t => t.Members.Count < teamSize))
+                {
+                    var distance = GetTeamMemberDistanceToTeam(team, teamMember);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTeam = team;
+                    }
+                }
+
+                closestTeam?.Members.Add(teamMember);
+            }
+        }
+
     }
 }
