@@ -54,6 +54,9 @@ namespace Fotm.DAL
     partial void InsertRealm(Realm instance);
     partial void UpdateRealm(Realm instance);
     partial void DeleteRealm(Realm instance);
+    partial void InsertRegion(Region instance);
+    partial void UpdateRegion(Region instance);
+    partial void DeleteRegion(Region instance);
     partial void InsertSpec(Spec instance);
     partial void UpdateSpec(Spec instance);
     partial void DeleteSpec(Spec instance);
@@ -78,7 +81,7 @@ namespace Fotm.DAL
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -168,6 +171,14 @@ namespace Fotm.DAL
 			get
 			{
 				return this.GetTable<Realm>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Region> Regions
+		{
+			get
+			{
+				return this.GetTable<Region>();
 			}
 		}
 		
@@ -2354,6 +2365,164 @@ namespace Fotm.DAL
 		{
 			this.SendPropertyChanging();
 			entity.Realm = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Region")]
+	public partial class Region : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RegionID;
+		
+		private string _Name;
+		
+		private System.DateTime _ModifiedDate;
+		
+		private string _ModifiedStatus;
+		
+		private long _ModifiedUserID;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRegionIDChanging(int value);
+    partial void OnRegionIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnModifiedDateChanging(System.DateTime value);
+    partial void OnModifiedDateChanged();
+    partial void OnModifiedStatusChanging(string value);
+    partial void OnModifiedStatusChanged();
+    partial void OnModifiedUserIDChanging(long value);
+    partial void OnModifiedUserIDChanged();
+    #endregion
+		
+		public Region()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegionID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int RegionID
+		{
+			get
+			{
+				return this._RegionID;
+			}
+			set
+			{
+				if ((this._RegionID != value))
+				{
+					this.OnRegionIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegionID = value;
+					this.SendPropertyChanged("RegionID");
+					this.OnRegionIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime2 NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="NChar(10) NOT NULL", CanBeNull=false)]
+		public string ModifiedStatus
+		{
+			get
+			{
+				return this._ModifiedStatus;
+			}
+			set
+			{
+				if ((this._ModifiedStatus != value))
+				{
+					this.OnModifiedStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedStatus = value;
+					this.SendPropertyChanged("ModifiedStatus");
+					this.OnModifiedStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
+		public long ModifiedUserID
+		{
+			get
+			{
+				return this._ModifiedUserID;
+			}
+			set
+			{
+				if ((this._ModifiedUserID != value))
+				{
+					this.OnModifiedUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedUserID = value;
+					this.SendPropertyChanged("ModifiedUserID");
+					this.OnModifiedUserIDChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	
