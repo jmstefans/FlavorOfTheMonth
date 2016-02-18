@@ -611,10 +611,276 @@ CREATE TABLE [dbo].[Region](
 GO
 
 
-use fotm
+/*SET IDENTITY_INSERT Faction ON*/
 
 insert into Faction (FactionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (0, 'Alliance', SYSDATETIME(), 'I', 0)
 
 insert into Faction (FactionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (1, 'Horde', SYSDATETIME(), 'I', 0)
+
+/*SET IDENTITY_INSERT Faction OFF*/
+
+
+SET IDENTITY_INSERT Class ON
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (1, 'Warrior', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (2, 'Paladin', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (3, 'Hunter', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (4, 'Rogue', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (5, 'Priest', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (6, 'Death Knight', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (7, 'Shaman', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (8, 'Mage', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (9, 'Warlock', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (10, 'Monk', SYSDATETIME(), 'I', 0)
+
+insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (11, 'Druid', SYSDATETIME(), 'I', 0)
+
+SET IDENTITY_INSERT Class OFF
+
+
+/*SET IDENTITY_INSERT Gender ON*/
+
+insert into Gender (GenderID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (0, 'Male', SYSDATETIME(), 'I', 0)
+
+insert into Gender (GenderID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (1, 'Female', SYSDATETIME(), 'I', 0)
+
+/*SET IDENTITY_INSERT Gender OFF*/
+
+
+SET IDENTITY_INSERT Race ON
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (1, 'Human', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (2, 'Orc', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (3, 'Dwarf', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (4, 'Night Elf', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (5, 'Undead', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (6, 'Tauren', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (7, 'Gnome', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (8, 'Troll', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (9, 'Goblin', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (10, 'Blood Elf', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (11, 'Draenei', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (22, 'Worgen', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (24, 'Pandaren', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (25, 'Pandaren', SYSDATETIME(), 'I', 0)
+
+insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (26, 'Pandaren', SYSDATETIME(), 'I', 0)
+
+SET IDENTITY_INSERT Race OFF
+
+
+SET IDENTITY_INSERT Region ON
+
+insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (0, 'US', SYSDATETIME(), 'I', 0)
+
+insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (1, 'EU', SYSDATETIME(), 'I', 0)
+
+insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (2, 'KR', SYSDATETIME(), 'I', 0)
+
+insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (3, 'TW', SYSDATETIME(), 'I', 0)
+
+insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (4, 'CN', SYSDATETIME(), 'I', 0)
+
+insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (5, 'SEA', SYSDATETIME(), 'I', 0)
+
+SET IDENTITY_INSERT Region OFF
+
+
+SET IDENTITY_INSERT Spec ON
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (62, 'Arcane', 'MAGE_ARCANE', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (63, 'Fire', 'MAGE_FIRE', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (64, 'Frost', 'MAKE_FROST', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (65, 'Holy', 'PALADIN_HOLY', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (66, 'Protection', 'PALADIN_PROTECTION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (70, 'Retribution', 'PALADIN_RETRIBUTION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (71, 'Arms', 'WARRIOR_ARMS', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (72, 'Fury', 'WARRIOR_FURY', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (73, 'Protection', 'WARRIOR_PROTECTION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (102, 'Balance', 'DRUID_BALANCE', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (103, 'Feral', 'DRUID_FERAL', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (104, 'Guardian', 'DRUID_GUARDIAN', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (105, 'Restoration', 'DRUID_RESTOR', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (250, 'Blood', 'DK_BLOOD', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (251, 'Frost', 'DK_FROST', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (252, 'Unholy', 'DK_UNHOLY', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (253, 'Beast Mastery', 'HUNTER_BEASTMASTER', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (254, 'Marksmanship', 'HUNTER_MARKSMAN', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (255, 'Survival', 'HUNTER_SURVIVAL', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (256, 'Discipline', 'PRIEST_DISCIPLINE', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (257, 'Holy', 'PRIEST_HOLY', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (258, 'Shadow', 'PRIEST_SHADOW', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (259, 'Assassination', 'ROGUE_ASSASSINATION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (260, 'Combat', 'ROGUE_COMBAT', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (261, 'Subtlety', 'ROGUE_SUBTLETY', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (262, 'Elemental', 'SHAMAN_ELEMENTAL', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (263, 'Enhancement', 'SHAMAN_ENHANCEMENT', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (264, 'Restoration', 'SHAMAN_RESTORATION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (265, 'Affliction', 'WARLOCK_AFFLICTION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (266, 'Demonology', 'WARLOCK_DEMONOLOGY', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (267, 'Destruction', 'WARLOCK_DESTRUCTION', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (268, 'Brewmaster', 'MONK_BREWMASTER', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (269, 'Windwalker', 'MONK_WINDDANCER', SYSDATETIME(), 'I', 0)
+
+insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+	values (270, 'Mistweaver', 'MONK_MISTWEAVER', SYSDATETIME(), 'I', 0)
+
+SET IDENTITY_INSERT Spec OFF
+
+
+SET IDENTITY_INSERT UserProfile ON
+
+insert into UserProfile (UserId, UserName)
+	values (0, 'john')
+
+insert into UserProfile (UserId, UserName)
+	values (1, 'andrew')
+
+SET IDENTITY_INSERT UserProfile OFF
+
+
+SET IDENTITY_INSERT webpages_Roles ON
+
+insert into webpages_Roles (RoleId, RoleName)
+	values (0, 'Admin')
+
+insert into webpages_Roles (RoleId, RoleName)
+	values (1, 'Member')
+
+insert into webpages_Roles (RoleId, RoleName)
+	values (2, 'Registered')
+
+insert into webpages_Roles (RoleId, RoleName)
+	values (3, 'Unregistered')
+
+SET IDENTITY_INSERT webpages_Roles OFF
+
+
+insert into webpages_UsersInRoles (UserId, RoleId)
+	values (0, 0)
+
+insert into webpages_UsersInRoles (UserId, RoleId)
+	values (1, 0)
