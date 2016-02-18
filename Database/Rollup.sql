@@ -586,6 +586,29 @@ ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_UserId]
 GO
 
 
+USE [fotm]
+GO
+
+/****** Object:  Table [dbo].[Region]    Script Date: 2/17/2016 7:46:23 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Region](
+	[RegionID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[ModifiedDate] [datetime2](7) NOT NULL,
+	[ModifiedStatus] [nchar](10) NOT NULL,
+	[ModifiedUserID] [bigint] NOT NULL,
+ CONSTRAINT [PK_Region] PRIMARY KEY CLUSTERED 
+(
+	[RegionID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
 
 
 use fotm
