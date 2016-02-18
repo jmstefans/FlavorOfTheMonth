@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fotm.Server.Models.Base
+namespace Fotm.DAL.Models.Base
 {
     public abstract class ManagerBase<T> where T: ManagerBase<T>, new()
     {

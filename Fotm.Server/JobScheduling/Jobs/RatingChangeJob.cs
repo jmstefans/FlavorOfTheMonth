@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Fotm.DAL.Database;
+using Fotm.DAL.Models;
 using Fotm.Server.Analysis.Algorithms;
-using Fotm.Server.Database;
-using Fotm.Server.Models;
 using Fotm.Server.WowAPI;
 using Quartz;
 using WowDotNetAPI.Models;
@@ -192,7 +190,7 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         #region Private Methods
 
-        private DbManager _dbManager = Database.DbManager.Default;
+        private DbManager _dbManager = DbManager.Default;
 
         private DbManager DbManager
         {

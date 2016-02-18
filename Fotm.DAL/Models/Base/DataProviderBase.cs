@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace Fotm.Server.Models.Base
+namespace Fotm.DAL.Models.Base
 {
     /// <summary>
     /// Base class for a data provider.

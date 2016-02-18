@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.Entity.Infrastructure;
-using Fotm.Server.Database.Util;
-using Fotm.Server.Models.Base;
+using Fotm.DAL.Database.Util;
+using Fotm.DAL.Models.Base;
 
-namespace Fotm.Server.Database.DataProvider
+namespace Fotm.DAL.Database.DataProvider
 {
     public class SqlDataProvider : DataProviderBase
     {

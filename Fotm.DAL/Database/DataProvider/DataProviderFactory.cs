@@ -1,7 +1,7 @@
 ﻿using System;
-using Fotm.Server.Models.Base;
+using Fotm.DAL.Models.Base;
 
-namespace Fotm.Server.Database.DataProvider
+namespace Fotm.DAL.Database.DataProvider
 {
     /// <summary>
     /// Factory pattern for creating a DataProvider.

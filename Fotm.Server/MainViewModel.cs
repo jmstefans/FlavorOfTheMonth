@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Windows;
-using Fotm.Server.Database;
-using Fotm.Server.Database.DataProvider;
+﻿using System.Windows;
+using Fotm.DAL.Database;
+using Fotm.DAL.Database.DataProvider;
+using Fotm.DAL.Models.Base;
 using Fotm.Server.JobScheduling;
-using Fotm.Server.Models.Base;
-using Fotm.Server.JobScheduling.Jobs;
-using Fotm.Server.WowAPI;
-using Quartz;
-using WowDotNetAPI.Models;
 
 namespace Fotm.Server
 {

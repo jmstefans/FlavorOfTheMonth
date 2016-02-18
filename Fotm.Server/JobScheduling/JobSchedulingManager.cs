@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fotm.DAL.Models.Base;
 using Fotm.Server.JobScheduling.Jobs;
-using Fotm.Server.Models.Base;
 using Quartz;
 using Quartz.Impl;
 using WowDotNetAPI.Models;

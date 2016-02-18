@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Fotm.Server.Models.Base;
+using Fotm.DAL.Models.Base;
 using WowDotNetAPI;
 using WowDotNetAPI.Models;
 

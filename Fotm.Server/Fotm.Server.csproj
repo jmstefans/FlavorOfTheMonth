@@ -7,8 +7,8 @@
     <ProjectGuid>{BA665210-AA36-4A23-AD4A-76B4952E48AE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FotmServerApp</RootNamespace>
-    <AssemblyName>FotmServerApp</AssemblyName>
+    <RootNamespace>Fotm.Server</RootNamespace>
+    <AssemblyName>Fotm.Server</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -134,21 +134,8 @@
     <Compile Include="Analysis\Algorithms\LeaderboardKmeans.cs" />
     <Compile Include="JobScheduling\Jobs\KmeansClusteringJob.cs" />
     <Compile Include="JobScheduling\Jobs\RatingChangeJob.cs" />
-    <Compile Include="Models\Base\DbEntityBase.cs" />
-    <Compile Include="Models\Base\ManagerBase.cs" />
-    <Compile Include="Models\Base\ObservableObjectBase.cs" />
-    <Compile Include="Models\Base\DataProviderBase.cs" />
-    <Compile Include="Database\DataProvider\DataProviderFactory.cs" />
-    <Compile Include="Database\DataProvider\SqlDataProvider.cs" />
-    <Compile Include="Database\DataProvider\SqliteDataProvider.cs" />
-    <Compile Include="Database\DbManager.cs" />
-    <Compile Include="Database\Util\ConnectionStringBuilderUtil.cs" />
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="Models\RatingChange.cs" />
-    <Compile Include="Models\Team.cs" />
-    <Compile Include="Models\TeamMember.cs" />
-    <Compile Include="Models\TeamMemberMapping.cs" />
     <Compile Include="UI\Views\ActiveJobsView.xaml.cs">
       <DependentUpon>ActiveJobsView.xaml</DependentUpon>
     </Compile>
@@ -252,6 +239,10 @@
     <ProjectReference Include="..\Explorers\Explorers.csproj">
       <Project>{2a828141-9ef2-4a8a-8944-b2f2d1775cc9}</Project>
       <Name>Explorers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fotm.DAL\Fotm.DAL.csproj">
+      <Project>{3542fb2f-6233-4215-a912-6b0a2b2b2790}</Project>
+      <Name>Fotm.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -6,13 +6,12 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Fotm.Server.Database.DataProvider;
-using Fotm.Server.Models;
-using Fotm.Server.Models.Base;
-using Fotm.Server.Database.Util;
+using Fotm.DAL.Database.DataProvider;
+using Fotm.DAL.Models;
+using Fotm.DAL.Models.Base;
 using WowDotNetAPI.Models;
 
-namespace Fotm.Server.Database
+namespace Fotm.DAL.Database
 {
     /// <summary>
     /// Persistent DB class for reading and writing to the database. 
@@ -76,6 +75,9 @@ namespace Fotm.Server.Database
 
         /// <summary>
         /// Inserts an enumerable collection of DbEntityBase objects into DB. 
+        /// Note - This method uses reflection for the object properties.
+        ///        So if performance is an issue, consider a custom insert.
+        /// TODO: possible refactor - dapper should handle the property mapping, reflection may not be needed.
         /// </summary>
         /// <typeparam name="T">The DbEntity to insert <see cref="DbEntityBase"/></typeparam>
         /// <param name="objects">DbEntityBase objects to insert into DB.</param>
@@ -114,7 +116,7 @@ namespace Fotm.Server.Database
         /// Note - use this method not the generic insert for teams.
         /// </summary>
         /// <param name="teams">Teams to insert.</param>
-        public void InsertTeams(IEnumerable<Team> teams)
+        public void InsertTeams(IEnumerable<Models.Team> teams)
         {
             var query = "insert into [Team] (TeamID, Mean, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
                         $"values (@TeamID, @Mean, '{new SqlDateTime(DateTime.Now)}', 'I', 0);";
@@ -136,11 +138,15 @@ namespace Fotm.Server.Database
             }
         }
 
-        public void InsertTeamsAndMembers(IEnumerable<Team> teams)
+        /// <summary>
+        /// Inserts teams and associated team members into the database.
+        /// </summary>
+        /// <param name="teams">The teams (w/ team members) to be inserted.</param>
+        public void InsertTeamsAndMembers(IEnumerable<Models.Team> teams)
         {
-            var tquery = "insert into [Team] (PvpBracket, Mean) values(@PvpBracket, @Mean);" +
+            var teamQuery = "insert into [Team] (PvpBracket, Mean) values(@PvpBracket, @Mean);" +
                          "select scope_identity();";
-            var mquery = "insert into [TeamMember] (TeamID, Name, RealmName, RatingChangeValue, Spec) " +
+            var memberQuery = "insert into [TeamMember] (TeamID, Name, RealmName, RatingChangeValue, Spec) " +
                          "values (@TeamID, @Name, @RealmName, @RatingChangeValue, @Spec);";
 
             using (var trans = DbConnection.BeginTransaction())
@@ -150,13 +156,13 @@ namespace Fotm.Server.Database
                     foreach (var team in teams)
                     {
                         var bracket = team.PvpBracket.ToString();
-                        var id = DbConnection.ExecuteScalar<long>(tquery, new { PvpBracket = bracket, Mean = team.MeanRatingChange }, trans);
+                        var id = DbConnection.ExecuteScalar<long>(teamQuery, new { PvpBracket = bracket, Mean = team.MeanRatingChange }, trans);
 
                         Console.WriteLine($"{DateTime.Now}: Inserting Team: " + id);
 
                         foreach (var teamMember in team.Members)
                         {
-                            DbConnection.Execute(mquery, new
+                            DbConnection.Execute(memberQuery, new
                             {
                                 TeamID = id,
                                 teamMember.Name,
@@ -309,19 +315,10 @@ namespace Fotm.Server.Database
             var properties = type.GetProperties();
             var columns = new List<string>();
             var txtInfo = new CultureInfo("en-US", false).TextInfo;
-            //var attrType = typeof(DbEntityBase.DbInsertProperty);
 
             for (var i = 0; i < properties.Length; i++)
             {
                 var col = txtInfo.ToTitleCase(properties[i].Name);
-
-                //if (Attribute.IsDefined(properties[i], attrType))
-                //{
-                //    var insertProperty = (DbEntityBase.DbInsertProperty)Attribute.GetCustomAttribute(properties[i], attrType);
-                //    if (!insertProperty.IsApplicable)
-                //        continue;
-                //}
-
                 columns.Add(col);
             }
 

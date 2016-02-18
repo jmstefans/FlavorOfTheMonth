@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fotm.Server.Models;
+using Fotm.DAL.Models;
 
 namespace Fotm.Server.Analysis.Algorithms
 {

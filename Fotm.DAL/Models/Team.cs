@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Fotm.Server.Models.Base;
+using Fotm.DAL.Models.Base;
 using WowDotNetAPI.Models;
 
-namespace Fotm.Server.Models
+namespace Fotm.DAL.Models
 {
     public class Team : DbEntityBase
     {
@@ -29,7 +29,6 @@ namespace Fotm.Server.Models
         /// <summary>
         /// List of members belonging to this team.
         /// </summary>
-        [DbInsertProperty(false)]
         public List<TeamMember> Members { get; set; }
 
         /// <summary>
