@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Fotm.DAL;
+using System.Linq;
 using System.Web.Mvc;
 using FlavorOfTheMonth.Models;
 using Newtonsoft.Json;
