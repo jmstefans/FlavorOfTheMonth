@@ -205,29 +205,6 @@ CREATE TABLE [dbo].[Race](
 
 GO
 
-USE [fotm]
-GO
-
-/****** Object:  Table [dbo].[Realm]    Script Date: 2/16/2016 5:33:22 PM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[Realm](
-	[RealmID] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
-	[ModifiedDate] [datetime2](7) NOT NULL,
-	[ModifiedStatus] [nchar](10) NOT NULL,
-	[ModifiedUserID] [bigint] NOT NULL,
- CONSTRAINT [PK_Realm] PRIMARY KEY CLUSTERED 
-(
-	[RealmID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
-GO
 
 USE [fotm]
 GO
@@ -279,6 +256,61 @@ CREATE TABLE [dbo].[Team](
 ) ON [PRIMARY]
 
 GO
+
+
+USE [fotm]
+GO
+
+/****** Object:  Table [dbo].[Region]    Script Date: 2/17/2016 7:46:23 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Region](
+	[RegionID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[ModifiedDate] [datetime2](7) NOT NULL,
+	[ModifiedStatus] [nchar](10) NOT NULL,
+	[ModifiedUserID] [bigint] NOT NULL,
+ CONSTRAINT [PK_Region] PRIMARY KEY CLUSTERED 
+(
+	[RegionID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+USE [fotm]
+GO
+
+/****** Object:  Table [dbo].[Realm]    Script Date: 2/19/2016 2:43:24 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Realm](
+	[RealmID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NOT NULL,
+	[RegionID] [int] NOT NULL,
+	[ModifiedDate] [datetime2](7) NOT NULL,
+	[ModifiedStatus] [nchar](10) NOT NULL,
+	[ModifiedUserID] [bigint] NOT NULL,
+ CONSTRAINT [PK_Realm] PRIMARY KEY CLUSTERED 
+(
+	[RealmID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Realm]  WITH CHECK ADD FOREIGN KEY([RegionID])
+REFERENCES [dbo].[Region] ([RegionID])
+GO
+
 
 USE [fotm]
 GO
@@ -583,31 +615,6 @@ REFERENCES [dbo].[UserProfile] ([UserId])
 GO
 
 ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_UserId]
-GO
-
-
-USE [fotm]
-GO
-
-/****** Object:  Table [dbo].[Region]    Script Date: 2/17/2016 7:46:23 PM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[Region](
-	[RegionID] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
-	[ModifiedDate] [datetime2](7) NOT NULL,
-	[ModifiedStatus] [nchar](10) NOT NULL,
-	[ModifiedUserID] [bigint] NOT NULL,
- CONSTRAINT [PK_Region] PRIMARY KEY CLUSTERED 
-(
-	[RegionID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
 GO
 
 
