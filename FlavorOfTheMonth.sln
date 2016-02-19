@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlavorOfTheMonth", "FlavorOfTheMonth\FlavorOfTheMonth.csproj", "{6ADC52C3-D371-483C-848C-12546770DC3A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3542FB2F-6233-4215-A912-6B0A2B2B2790} = {3542FB2F-6233-4215-A912-6B0A2B2B2790}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorers", "Explorers\Explorers.csproj", "{2A828141-9EF2-4A8A-8944-B2F2D1775CC9}"
 EndProject

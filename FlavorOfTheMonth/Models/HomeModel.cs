@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Fotm.DAL;
+using System.Collections.Generic;
 
 namespace FlavorOfTheMonth.Models
 {
