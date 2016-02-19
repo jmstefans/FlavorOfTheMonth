@@ -10,22 +10,22 @@ namespace Fotm.Server.Analysis.Algorithms
     /// </summary>
     public class Kmeans
     {
-        public void Main(List<RatingChange> aList)
-        {
-            double[][] rawData = new double[aList.Count][];
-        }
+        //public void Main(List<RatingChange> aList)
+        //{
+        //    double[][] rawData = new double[aList.Count][];
+        //}
 
-        public static int[] ClusterRatingChanges(List<RatingChange> ratingChanges, int numberOfClusters, out double[][] rawData)
-        {
-            rawData = new double[ratingChanges.Count][];
-            for (var i = 0; i < ratingChanges.Count; i++)
-            {
-                var change = ratingChanges[i];
-                //rawData[i] = new[] { change.RatingChangeValue,  change.ModifiedDate.ToOADate() };
-            }
+        //public static int[] ClusterRatingChanges(List<RatingChange> ratingChanges, int numberOfClusters, out double[][] rawData)
+        //{
+        //    rawData = new double[ratingChanges.Count][];
+        //    for (var i = 0; i < ratingChanges.Count; i++)
+        //    {
+        //        var change = ratingChanges[i];
+        //        //rawData[i] = new[] { change.RatingChangeValue,  change.ModifiedDate.ToOADate() };
+        //    }
 
-            return Cluster(rawData, numberOfClusters);
-        }
+        //    return Cluster(rawData, numberOfClusters);
+        //}
 
 
         // Demo of the Kmeans algorithm with sample data.

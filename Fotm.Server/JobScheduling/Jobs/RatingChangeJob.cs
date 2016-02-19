@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Fotm.DAL;
 using Fotm.DAL.Database;
 using Fotm.DAL.Models;
 using Fotm.Server.Analysis.Algorithms;
 using Fotm.Server.WowAPI;
 using Quartz;
+using WowDotNetAPI;
 using WowDotNetAPI.Models;
 
 namespace Fotm.Server.JobScheduling.Jobs
@@ -38,6 +42,8 @@ namespace Fotm.Server.JobScheduling.Jobs
         }
         private static object _baseLock = new object();
 
+        private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
+
         private static List<PvpStats> _baseLineStats = new List<PvpStats>();
         private static List<PvpStats> BaselineStats
         {
@@ -61,12 +67,29 @@ namespace Fotm.Server.JobScheduling.Jobs
         }
         private static object _lock = new object();
 
+
+        private DbManager _dbManager = DbManager.Default;
+
+        private DbManager DbManager
+        {
+            get
+            {
+                DbManager result = null;
+                lock (_dbLock)
+                {
+                    result = _dbManager;
+                }
+                return result;
+            }
+        }
+        private static object _dbLock = new object();
+
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Can be used as the default trigger for this job.
+        /// Default trigger with an interval of 1 sec that repeats for ever.
         /// </summary>
         public static ITrigger DefaultTrigger
         {
@@ -108,15 +131,15 @@ namespace Fotm.Server.JobScheduling.Jobs
         /// </summary>
         /// <param name="context">Context passed in by Scheduler.</param>
         //public void Execute(IJobExecutionContext context)
-        //{
-        public void Execute(Dictionary<string, Bracket> test)
-        { 
+        public void Execute(Dictionary<string, Bracket> jobArgs)
+        {
             Console.WriteLine($"{DateTime.Now}: Executing RatingChange API call...");
 
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
             if (SetBaseLine) // only do once on initial execute
             {
-                BaselineStats = new List<PvpStats>(stats);
+                //BaselineStats = new List<PvpStats>(stats);
+                _baseLineBag = new ConcurrentBag<PvpStats>(stats);
                 SetBaseLine = false;
                 return;
             }
@@ -129,21 +152,27 @@ namespace Fotm.Server.JobScheduling.Jobs
             // sort by faction and into winners and losers
             foreach (var stat in stats)
             {
-                var baseStat = BaselineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
-                                                                  b.RealmSlug.Equals(stat.RealmSlug));
+                var baseStat = _baseLineBag.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
+                                                                b.RealmSlug.Equals(stat.RealmSlug));
                 if (baseStat == null)
                     continue; // player isn't in the baseline, nothing to compare against
 
                 var ratingChange = stat.Rating - baseStat.Rating;
                 if (ratingChange == 0) continue; // no rating change, ignore
 
+                var character = GetCharacter(stat);
                 var teamMember = new TeamMember
                 {
-                    Name = stat.Name,
                     RatingChangeValue = ratingChange,
                     CurrentRating = stat.Rating,
-                    RealmName = stat.RealmName,
-                    Spec = stat.Spec
+                    CharacterID = character.CharacterID,
+                    SpecID = character.SpecID,
+                    RaceID = character.RaceID,
+                    FactionID = character.FactionID,
+                    GenderID = character.GenderID,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedStatus = "I",
+                    ModifiedUserID = 0,
                 };
 
                 var isAlly = stat.FactionId == 0;
@@ -166,11 +195,11 @@ namespace Fotm.Server.JobScheduling.Jobs
             }
 
             // current stats are baseline for next pass
-            BaselineStats = new List<PvpStats>(stats);
+            _baseLineBag = new ConcurrentBag<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
             //var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
-            var bracket = (Bracket)test[BRACKET_KEY];
+            var bracket = jobArgs[BRACKET_KEY];
             var teamSize = GetTeamSize(bracket);
 
             if (allyWinners.Count >= teamSize)
@@ -190,30 +219,39 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         #region Private Methods
 
-        private DbManager _dbManager = DbManager.Default;
-
-        private DbManager DbManager
+        private DAL.Character GetCharacter(PvpStats pvpStats)
         {
-            get
+            // have to use the realm ID from the DB, not the pvp stats object
+            var realm = DbManager.GetRealmByName(pvpStats.RealmName);
+            if (realm != null)
             {
-                DbManager result = null;
-                lock (_dbLock)
-                {
-                    result = _dbManager;
-                }
-                return result;
+                var character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
+                if (character != null)
+                    return character;
             }
+
+            // no matching character, fetch from api and insert into db
+            var apiCharacter = WowAPIManager.Default.GetCharacter(pvpStats.Name, pvpStats.RealmName);
+            DbManager.InsertApiCharacterAsDbCharacter(apiCharacter, pvpStats);
+
+            // realm id will have been resolved after character insert
+            realm = DbManager.GetRealmByName(pvpStats.RealmName);
+            return DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
         }
-        private static object _dbLock = new object();
 
         private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
-        {
+       {
             Console.Write($"{DateTime.Now}: Executing team cluster...");
             var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
-            if (teams == null) return; 
+            if (teams == null) return;
 
             foreach (var team in teams)
-                team.PvpBracket = bracket;
+            {
+                team.Bracket = bracket.ToString();
+                team.ModifiedDate = DateTime.Now;
+                team.ModifiedStatus = "I";
+                team.ModifiedUserID = 0;
+            }
 
             DbManager.InsertTeamsAndMembers(teams);
         }
@@ -229,7 +267,7 @@ namespace Fotm.Server.JobScheduling.Jobs
                 case Bracket._5v5:
                     return 5;
                 default:
-                    throw new ArgumentOutOfRangeException("bracket");
+                    throw new ArgumentOutOfRangeException(nameof(bracket));
             }
         }
 

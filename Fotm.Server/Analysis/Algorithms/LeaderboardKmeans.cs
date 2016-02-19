@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fotm.DAL;
 using Fotm.DAL.Models;
 
 namespace Fotm.Server.Analysis.Algorithms
@@ -58,7 +59,7 @@ namespace Fotm.Server.Analysis.Algorithms
                 var team = new Team();
                 for (var j = 0; j < teamSize; j++)
                 {
-                    team.Members.Add(members[i * teamSize + j]);
+                    team.TeamMembers.Add(members[i * teamSize + j]);
                 }
                 teams.Add(team);
             }
@@ -75,14 +76,14 @@ namespace Fotm.Server.Analysis.Algorithms
             {
                 foreach (var team in teams)
                 {
-                    var memberCount = team.Members.Count;
+                    var memberCount = team.TeamMembers.Count;
                     if (memberCount <= 0)
                         continue; // avoid divide by zero- todo: originally was returning false here, test if necessary
 
-                    var sumRatingChange = team.Members.Sum(m => m.RatingChangeValue);
+                    var sumRatingChange = team.TeamMembers.Sum(m => m.RatingChangeValue);
                     team.MeanRatingChange = (double)sumRatingChange / memberCount;
 
-                    var sumRating = team.Members.Sum(m => m.CurrentRating);
+                    var sumRating = team.TeamMembers.Sum(m => m.CurrentRating);
                     team.MeanRating = (double)sumRating / memberCount;
                 }
                 return true;
@@ -104,14 +105,13 @@ namespace Fotm.Server.Analysis.Algorithms
             {
                 var team = FindClosestTeam(teams, member);
                 var invalid = team == null ||
-                              team.Members.Any(m => m.Name.Equals(member.Name) &&
-                              m.RealmName.Equals(member.RealmName));
+                              team.TeamMembers.Any(m => m.CharacterID == member.CharacterID);
                 if (invalid)
                     continue;
 
                 // Remove from previous team
                 RemoveMemberFromTeam(teams, member);
-                team.Members.Add(member); // Note - this won't handle teams with members > cluster size
+                team.TeamMembers.Add(member); // Note - this won't handle teams with members > cluster size
                 changed = true;
             }
 
@@ -146,13 +146,12 @@ namespace Fotm.Server.Analysis.Algorithms
         {
             foreach (var team in teams)
             {
-                for (var i = 0; i < team.Members.Count; i++)
+                for (var i = 0; i < team.TeamMembers.Count; i++)
                 {
-                    var member = team.Members[i];
-                    if (member.Name.Equals(teamMemberToRemove.Name) &&
-                        member.RealmName.Equals(teamMemberToRemove.RealmName))
+                    var member = team.TeamMembers[i];
+                    if (member.CharacterID == teamMemberToRemove.CharacterID)
                     {
-                        team.Members.RemoveAt(i);
+                        team.TeamMembers.RemoveAt(i);
                     }
                 }
             }
@@ -163,10 +162,10 @@ namespace Fotm.Server.Analysis.Algorithms
         /// </summary>
         private static void ResolveUnevenTeams(List<Team> teams, int teamSize)
         {
-            var unevenTeams = teams.Where(t => t.Members.Count != teamSize).ToList();
+            var unevenTeams = teams.Where(t => t.TeamMembers.Count != teamSize).ToList();
             foreach (var team in unevenTeams)
             {
-                if (team.Members.Count > teamSize) 
+                if (team.TeamMembers.Count > teamSize) 
                 {
                     /* only need the furthest members, they will be added to teams 
                        with sizes < expected team size */
@@ -183,16 +182,16 @@ namespace Fotm.Server.Analysis.Algorithms
         private static List<TeamMember> FindAndRemoveFurthestTeamMembers(Team unevenTeam, int teamSize)
         {
             var furthestTeamMembers = new List<TeamMember>();
-            var teamCount = unevenTeam.Members.Count;
+            var teamCount = unevenTeam.TeamMembers.Count;
 
-            var furthestMember = unevenTeam.Members[0]; // init with first team member
+            var furthestMember = unevenTeam.TeamMembers[0]; // init with first team member
             var furthestDistance = GetTeamMemberDistanceToTeam(unevenTeam, furthestMember);
 
             // while the uneven team is still uneven
             while (teamCount > teamSize)
             {
                 // find the furthest member away from team means
-                foreach (var member in unevenTeam.Members)
+                foreach (var member in unevenTeam.TeamMembers)
                 {
                     var currentDistance = GetTeamMemberDistanceToTeam(unevenTeam, member);
                     if (currentDistance > furthestDistance)
@@ -206,7 +205,7 @@ namespace Fotm.Server.Analysis.Algorithms
                 furthestDistance = double.MinValue;
 
                 // remove from the uneven team and add to furthest members
-                unevenTeam.Members.Remove(furthestMember);
+                unevenTeam.TeamMembers.Remove(furthestMember);
                 furthestTeamMembers.Add(furthestMember);
                 teamCount--;
             }
@@ -237,7 +236,7 @@ namespace Fotm.Server.Analysis.Algorithms
                 var closestDistance = double.MaxValue;
                 Team closestTeam = null;
 
-                foreach (var team in teams.Where(t => t.Members.Count < teamSize))
+                foreach (var team in teams.Where(t => t.TeamMembers.Count < teamSize))
                 {
                     var distance = GetTeamMemberDistanceToTeam(team, teamMember);
                     if (distance < closestDistance)
@@ -247,7 +246,7 @@ namespace Fotm.Server.Analysis.Algorithms
                     }
                 }
 
-                closestTeam?.Members.Add(teamMember);
+                closestTeam?.TeamMembers.Add(teamMember);
             }
         }
     }

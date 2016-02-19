@@ -13,18 +13,25 @@ namespace Fotm.Server.WowAPI
         #region API KEY
 
         private const string API_KEY = "wxkatqct3862fp52eqcbwuqr3judxzdu";
-        
+
         #endregion
 
         #region Leaderboards
 
         public IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
-                                                        Locale locale = Locale.en_US,
-                                                        Bracket bracket = Bracket._3v3)
+            Locale locale = Locale.en_US,
+            Bracket bracket = Bracket._3v3)
         {
             var explorer = new WowExplorer(region, locale, API_KEY);
             var leaders = explorer.GetLeaderBoards(bracket);
             return leaders.PvpStats;
+        }
+
+        public Character GetCharacter(string name, string realmName, 
+                                      Region region = Region.US, Locale locale = Locale.en_US)
+        {
+            var explorer = new WowExplorer(region, locale, API_KEY);
+            return explorer.GetCharacter(realmName, name);
         }
 
         #endregion

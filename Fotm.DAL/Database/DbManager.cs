@@ -63,6 +63,21 @@ namespace Fotm.DAL.Database
 
         #region Create
 
+        #region Create Scripts
+
+        private const string TEAM_INSERT_QUERY =
+            "insert into [Team] (Bracket, MeanRatingChange, MeanRating, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+            "values(@Bracket, @MeanRatingChange, @MeanRating, @ModifiedDate, @ModifiedStatus, @ModifiedUserID);" +
+            "select scope_identity();";
+
+        private const string TEAM_MEMBER_INSERT_QUERY =
+            "insert into [TeamMember] " +
+            "(TeamID, RatingChangeValue, CurrentRating, CharacterID, SpecID, RaceID, FactionID, GenderID,ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+            "values" +
+            "(@TeamID, @RatingChangeValue, @CurrentRating, @CharacterID, @SpecID, @RaceID, @FactionID, @GenderID, @ModifiedDate, @ModifiedStatus, @ModifiedUserID);";
+
+        #endregion
+
         /// <summary>
         /// Asynchronously inserts an enumerable collection of DbEntityBase objects into DB. 
         /// </summary>
@@ -110,189 +125,150 @@ namespace Fotm.DAL.Database
                 }
             }
         }
-
-        /// <summary>
-        /// Inserts a list of teams into the DB. 
-        /// Note - use this method not the generic insert for teams.
-        /// </summary>
-        /// <param name="teams">Teams to insert.</param>
-        public void InsertTeams(IEnumerable<Models.Team> teams)
+        
+        public void InsertTeamsAndMembers(IEnumerable<Team> teams)
         {
-            var query = "insert into [Team] (TeamID, Mean, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
-                        $"values (@TeamID, @Mean, '{new SqlDateTime(DateTime.Now)}', 'I', 0);";
-            using (var trans = DbConnection.BeginTransaction())
+            //using (var trans = DbConnection.BeginTransaction())
+            //{
+            //    try
+            //    {
+            foreach (var team in teams)
             {
-                try
+                var teamId = DbConnection.ExecuteScalar<long>(TEAM_INSERT_QUERY, team);
+                //var teamId = DbConnection.ExecuteScalar<long>(TEAM_INSERT_QUERY, team, trans);
+                Console.WriteLine($"{DateTime.Now}: Inserting Team: " + teamId);
+
+                foreach (var teamMember in team.TeamMembers)
                 {
-                    foreach (var team in teams)
-                    {
-                        DbConnection.Execute(query, new { team.TeamID, Mean = team.MeanRatingChange }, trans);
-                    }
-                    trans.Commit();
-                }
-                catch (Exception e)
-                {
-                    trans.Rollback();
-                    Console.WriteLine("Team insert failed: " + e);
+                    var dbTeam = GetTeamByTeamId(teamId);
+                    teamMember.Team = dbTeam;
+
+                    DbConnection.Execute(TEAM_MEMBER_INSERT_QUERY, teamMember);
+                    //DbConnection.Execute(TEAM_MEMBER_INSERT_QUERY, teamMember, trans);
+                    Console.WriteLine($"{DateTime.Now}: Inserting team member, character ID: " +
+                                              teamMember.CharacterID);
                 }
             }
-        }
 
+            //    trans.Commit();
+            //}
+            //catch (Exception e)
+            //{
+            //    trans.Rollback();
+            //    Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
+            //}
+            //}
+        }
+        
         /// <summary>
-        /// Inserts teams and associated team members into the database.
+        /// TODO
         /// </summary>
-        /// <param name="teams">The teams (w/ team members) to be inserted.</param>
-        public void InsertTeamsAndMembers(IEnumerable<Models.Team> teams)
+        /// <param name="apiCharacter"></param>
+        /// <param name="pvpStats"></param>
+        public void InsertApiCharacterAsDbCharacter(WowDotNetAPI.Models.Character apiCharacter, PvpStats pvpStats)
         {
-            var teamQuery = "insert into [Team] (PvpBracket, Mean) values(@PvpBracket, @Mean);" +
-                         "select scope_identity();";
-            var memberQuery = "insert into [TeamMember] (TeamID, Name, RealmName, RatingChangeValue, Spec) " +
-                         "values (@TeamID, @Name, @RealmName, @RatingChangeValue, @Spec);";
-
-            using (var trans = DbConnection.BeginTransaction())
+            var realm = GetRealmByName(apiCharacter.Realm);
+            if (realm == null)
             {
-                try
-                {
-                    foreach (var team in teams)
-                    {
-                        var bracket = team.PvpBracket.ToString();
-                        var id = DbConnection.ExecuteScalar<long>(teamQuery, new { PvpBracket = bracket, Mean = team.MeanRatingChange }, trans);
-
-                        Console.WriteLine($"{DateTime.Now}: Inserting Team: " + id);
-
-                        foreach (var teamMember in team.Members)
-                        {
-                            DbConnection.Execute(memberQuery, new
-                            {
-                                TeamID = id,
-                                teamMember.Name,
-                                teamMember.RealmName,
-                                teamMember.RatingChangeValue,
-                                teamMember.Spec
-                            }, trans);
-
-                            Console.WriteLine($"{DateTime.Now}: Inserting team member: " + teamMember.Name);
-                        }
-                    }
-
-                    trans.Commit();
-                }
-                catch (Exception e)
-                {
-                    trans.Rollback();
-                    Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
-                }
+                InsertNewRealm(apiCharacter.Realm);
+                realm = GetRealmByName(apiCharacter.Realm);
             }
+
+            var spec = GetSpecByName(pvpStats.Spec);
+            if (spec == null)
+            {
+                InsertNewSpec(pvpStats.Spec);
+                spec = GetSpecByName(pvpStats.Spec);
+            }
+
+            var raceId = pvpStats.RaceId;
+            var classId = (int)apiCharacter.Class;
+            var factionId = pvpStats.FactionId;
+            var genderId = pvpStats.GenderId;
+
+            var character = new Character
+            {
+                Name = apiCharacter.Name,
+                RealmID = realm.RealmID,
+                SpecID = spec.SpecID,
+                RaceID = raceId,
+                ClassID = classId,
+                FactionID = Convert.ToBoolean(factionId),
+                GenderID = Convert.ToBoolean(genderId),
+                SeasonWins = pvpStats.SeasonWins,
+                SeasonLosses = pvpStats.SeasonLosses,
+                WeeklyWins = pvpStats.WeeklyWins,
+                WeeklyLosses = pvpStats.WeeklyLosses,
+                ModifiedDate = DateTime.Now,
+                ModifiedStatus = "I",
+                ModifiedUserID = 0
+            };
+
+            var columns = new[]
+            {
+                "Name", "RealmID", "SpecID", "RaceID", "ClassID", "FactionID", "GenderID", "SeasonWins", "SeasonLosses",
+                "WeeklyWins", "WeeklyLosses", "ModifiedDate", "ModifiedStatus", "ModifiedUserID"
+            };
+            var colParams = GetColumnParameters(columns);
+            var query =
+                      $"insert into [Character] ({string.Join(",", columns)}) " +
+                      $"values ({string.Join(",", colParams)});";
+
+            DbConnection.Execute(query, character);
         }
 
-        /// <summary>
-        /// Inserts rows into the Character table if there are new leaderboard characters.
-        /// Inserts and updates rows into the PvpStats table to keep it current with every characters' ratings.
-        /// Inserts a new row into the RatingChange table with the rating difference and time of the change.
-        /// We will cluster on the RatingChange table to look for teams.
-        /// </summary>
-        public void InsertRatingChanges(IEnumerable<PvpStats> objects)
+        public void InsertNewRealm(string realmName)
         {
-            using (var trans = DbConnection.BeginTransaction())
-            {
-                try
-                {
-                    foreach (var pvp in objects)
-                    {
-                        // Check to see if character is already in database
-                        bool isInDB = DbConnection.Query<int>(
-                            $"select count(*) from Character where name like '{pvp.Name}' and server like '" + FormatRealmName(pvp.RealmName) + "'", null, trans).First() == 1;
-
-                        // If character is not in database
-                        if (!isInDB)
-                        {
-                            // Add character to Character table
-                            string sql = $"INSERT INTO Character values ('{pvp.Name}', '" + FormatRealmName(pvp.RealmName) + $"', '{DateTime.Now}', 'I', 0); SELECT CAST(SCOPE_IDENTITY() as int)";
-                            var id = DbConnection.Query<int>(sql, null, trans).Single();
-
-                            // get the id from query above and insert with pvp stats table
-
-                            // Add character to PvpStats table
-                            var cols = GetColumnNames<PvpStats>();
-                            var colPar = GetColumnParameters(cols);
-                            var query = $"insert into PvpStats values ({string.Join(",", colPar)}, '{DateTime.Now}', 'I', 0, {id});";
-                            DbConnection.Execute(query, pvp, trans);
-
-                            // Don't need to add to RatingChange table just yet since we don't have a difference of rating yet
-                        }
-                        else // If character is in database
-                        {
-                            // Get character's id
-                            uint characterID = (uint)
-                                DbConnection.Query<int>(
-                                    $"select top 1 characterid from character where name like '{pvp.Name}' and server like '" + FormatRealmName(pvp.RealmName) + "'",
-                                    null, trans).First();
-
-                            // Get rating difference
-                            int ratingDiff = pvp.Rating - (int)DbConnection.Query<int>(
-                                $"select top 1 rating from pvpstats where characterid = {characterID} order by modifieddate desc",
-                                null, trans).First();
-
-                            // If there is no difference we're done, otherwise if there is a difference in rating between what we just pulled from the WoW servers and 
-                            // our rating in the database.
-                            if (ratingDiff != 0)
-                            {
-                                // Update that character's PvpStats row with current values to keep it current
-                                var querrrry =
-                                    $"update pvpstats set Rating = {pvp.Rating}, ModifiedDate = '{DateTime.Now}', ModifiedStatus = 'U' where characterid = {characterID}";
-                                DbConnection.Execute(querrrry, null, trans);
-
-                                // Insert a row into the RatingChange table indicating the difference and current time
-                                var querrry =
-                                    $"insert into ratingchange values ({characterID}, {ratingDiff}, '{DateTime.Now}', 'I', 0)";
-                                DbConnection.Execute(querrry, null, trans);
-                            }
-                        }
-                    }
-
-                    trans.Commit();
-                }
-                catch (Exception e)
-                {
-                    trans.Rollback();
-                    Console.WriteLine("Failed: " + e);
-                }
-            }
-            //return objects;
+            var query = $"insert into [Realm] (Name, ModifiedDate, ModifiedStatus, ModifiedUserID) values (@Name, '{DateTime.Now}', 'I', 0);";
+            DbConnection.Execute(query, new { Name = realmName });
         }
 
-        // Returns a new version of the passed in realm name with an extra apostrophe next to the old one.
-        // For example "Kel'Thuzad" becomes "Kel''Thuzad".
-        private string FormatRealmName(string aRealm)
+        public void InsertNewSpec(string blizzSpecName)
         {
-            return aRealm.Replace("\'", "\'\'");
+            var query = $"insert into [Spec] (Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+                        $"values (@Name, @BlizzName, '{DateTime.Now}', 'I', 0);";
+            DbConnection.Execute(query, new { Name = blizzSpecName, BlizzName = blizzSpecName });
         }
 
         #endregion Create
 
         #region Read
 
-        /// <summary>
-        /// Gets a list of RatingChange objects between the provided dates. 
-        /// </summary>
-        /// <param name="startDate">Beginning date.</param>
-        /// <param name="endDate">Ending date.</param>
-        /// <returns>List of RatingChange objects.</returns>
-        public List<RatingChange> GetRatingChanges(DateTime startDate, DateTime endDate)
+        public Character GetCharacter(string name, int realmId)
         {
-            var query = "select * from RatingChange where ModifiedDate >= @StartDate and ModifiedDate <= @EndDate";
-            return DbConnection.Query<RatingChange>(query, new { StartDate = startDate, EndDate = endDate }).ToList();
+            var query = "select * from Character where Name = @Name and RealmID = @RealmID";
+            return DbConnection.Query<Character>(query, new { Name = name, RealmID = realmId }).FirstOrDefault();
         }
 
-        /// <summary>
-        /// Gets the PvpStats for given character.
-        /// </summary>
-        /// <param name="characterId">Character record ID.</param>
-        /// <returns>PvpStats of that character if found.</returns>
-        public PvpStats GetPvpStats(int characterId)
+        public Class GetClassByName(string name)
         {
-            var query = "select * from PvpStats where CharacterID=@Id;";
-            return DbConnection.Query<PvpStats>(query, new { Id = characterId }).First();
+            var query = "select * from Class where Name = @Name;";
+            return DbConnection.Query<Class>(query, new { Name = name }).FirstOrDefault();
+        }
+
+        public Realm GetRealmByName(string name)
+        {
+            var query = "select * from Realm where Name = @Name;";
+            return DbConnection.Query<Realm>(query, new { Name = name }).FirstOrDefault();
+        }
+
+        public Race GetRaceByName(string name)
+        {
+            var query = "select * from Race where Name = @Name;";
+            return DbConnection.Query<Race>(query, new { Name = name }).FirstOrDefault();
+        }
+
+        public Spec GetSpecByName(string name)
+        {
+            var query = "select * from Spec where BlizzName = @BlizzName;";
+            return DbConnection.Query<Spec>(query, new { BlizzName = name }).FirstOrDefault();
+        }
+
+
+        public Team GetTeamByTeamId(long teamId)
+        {
+            var query = "select * from Team where TeamID = @TeamID";
+            return DbConnection.Query<Team>(query, new { TeamID = teamId }).FirstOrDefault();
         }
 
         #endregion
