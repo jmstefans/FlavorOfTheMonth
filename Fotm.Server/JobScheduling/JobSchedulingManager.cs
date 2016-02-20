@@ -72,15 +72,15 @@ namespace Fotm.Server.JobScheduling
             if (trigger == null)
                 trigger = LeaderboardClusteringJob.DefaultTrigger;
 
-            //var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
-            var jobArgs = new Dictionary<string, Bracket> { { "bracketKey", Bracket._3v3 } };
-            var job = new LeaderboardClusteringJob();
-            while (true)
-            {
-                job.Execute(jobArgs);
-            }
+            var jobArgs = LeaderboardClusteringJob.GetRatingChangeJobArguments(Bracket._3v3);
+            //var jobArgs = new Dictionary<string, Bracket> { { "bracketKey", Bracket._3v3 } };
+            //var job = new LeaderboardClusteringJob();
+            //while (true)
+            //{
+            //    job.Execute(jobArgs);
+            //}
 
-            //ScheduleJob<RatingChangeJob>(trigger, jobKey, groupKey, jobArgs);
+            ScheduleJob<LeaderboardClusteringJob>(trigger, jobKey, groupKey, jobArgs);
         }
 
         #endregion

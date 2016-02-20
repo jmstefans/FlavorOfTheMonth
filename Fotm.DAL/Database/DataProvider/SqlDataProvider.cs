@@ -14,12 +14,16 @@ namespace Fotm.DAL.Database.DataProvider
 
         public override IDbConnection GetDataProviderConnection()
         {
-            return new SqlConnectionFactory().CreateConnection(ConnectionString);
+            lock (_dbLock)
+            {
+                return new SqlConnectionFactory().CreateConnection(ConnectionString);
+            }
         }
+        private object _dbLock = new object();
 
         public override string GetFormattedConnectionString(params string[] connectionProperties)
         {
-            if (connectionProperties.Length != 2) 
+            if (connectionProperties.Length != 2)
                 throw new ArgumentException("Connection string requires server name and database name");
 
             return ConnectionStringBuilderUtil.CreateSqlServerConnectionString(connectionProperties[0], connectionProperties[1]);

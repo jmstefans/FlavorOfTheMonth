@@ -15,7 +15,7 @@ using WowDotNetAPI.Models;
 namespace Fotm.Server.JobScheduling.Jobs
 {
     public class LeaderboardClusteringJob
-    //: IJob
+    : IJob
     {
         #region Variables
 
@@ -105,8 +105,8 @@ namespace Fotm.Server.JobScheduling.Jobs
         /// Executes the job, this is handled by the Scheduler in Quartz.
         /// </summary>
         /// <param name="context">Context passed in by Scheduler.</param>
-        //public void Execute(IJobExecutionContext context)
-        public void Execute(Dictionary<string, Bracket> jobArgs)
+        public void Execute(IJobExecutionContext context)
+        //public void Execute(Dictionary<string, Bracket> jobArgs)
         {
             Console.WriteLine($"{DateTime.Now}: Executing RatingChange API call...");
 
@@ -173,8 +173,8 @@ namespace Fotm.Server.JobScheduling.Jobs
             _baseLineBag = new ConcurrentBag<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
-            //var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
-            var bracket = jobArgs[BRACKET_KEY];
+            var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
+            //var bracket = jobArgs[BRACKET_KEY];
             var teamSize = GetTeamSize(bracket);
 
             if (allyWinners.Count >= teamSize)

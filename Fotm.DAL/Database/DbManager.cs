@@ -31,15 +31,19 @@ namespace Fotm.DAL.Database
         {
             get
             {
-                if (_dbConnection == null)
-                    throw new ArgumentException("DB connection cannot be null.");
+                lock (_dbLock)
+                {
+                    if (_dbConnection == null)
+                        throw new ArgumentException("DB connection cannot be null.");
 
-                if (_dbConnection.State != ConnectionState.Open)
-                    _dbConnection.Open();
+                    if (_dbConnection.State != ConnectionState.Open)
+                        _dbConnection.Open();
 
-                return _dbConnection;
+                    return _dbConnection;
+                }
             }
         }
+        private object _dbLock = new object();
 
         #endregion
 
@@ -132,43 +136,47 @@ namespace Fotm.DAL.Database
         /// <param name="teams">The teams with team members to insert.</param>
         public void InsertTeamsAndMembers(IEnumerable<Team> teams)
         {
-            using (var trans = DbConnection.BeginTransaction())
+            using (var conn = _dataProvider.GetDataProviderConnection())
             {
-                try
+                conn.Open();
+                using (var trans = conn.BeginTransaction())
                 {
-                    foreach (var team in teams)
+                    try
                     {
-                        var teamId = DbConnection.ExecuteScalar<long>(TEAM_INSERT_QUERY, team, trans);
-                        Console.WriteLine($"{DateTime.Now}: Inserting Team: " + teamId);
-
-                        foreach (var teamMember in team.TeamMembers)
+                        foreach (var team in teams)
                         {
-                            DbConnection.Execute(TEAM_MEMBER_INSERT_QUERY, new
+                            var teamId = conn.ExecuteScalar<long>(TEAM_INSERT_QUERY, team, trans);
+                            Console.WriteLine($"{DateTime.Now}: Inserting Team: " + teamId);
+
+                            foreach (var teamMember in team.TeamMembers)
                             {
-                                TeamID = teamId,
-                                RatingChangeValue = teamMember.RatingChangeValue,
-                                CurrentRating = teamMember.CurrentRating,
-                                CharacterId = teamMember.CharacterID,
-                                SpecID = teamMember.SpecID,
-                                RaceID = teamMember.RaceID,
-                                FactionID = teamMember.FactionID,
-                                GenderID = teamMember.GenderID,
-                                ModifiedDate = teamMember.ModifiedDate,
-                                ModifiedStatus = teamMember.ModifiedStatus,
-                                ModifiedUserID = teamMember.ModifiedUserID
-                            }, trans);
+                                conn.Execute(TEAM_MEMBER_INSERT_QUERY, new
+                                {
+                                    TeamID = teamId,
+                                    RatingChangeValue = teamMember.RatingChangeValue,
+                                    CurrentRating = teamMember.CurrentRating,
+                                    CharacterId = teamMember.CharacterID,
+                                    SpecID = teamMember.SpecID,
+                                    RaceID = teamMember.RaceID,
+                                    FactionID = teamMember.FactionID,
+                                    GenderID = teamMember.GenderID,
+                                    ModifiedDate = teamMember.ModifiedDate,
+                                    ModifiedStatus = teamMember.ModifiedStatus,
+                                    ModifiedUserID = teamMember.ModifiedUserID
+                                }, trans);
 
-                            Console.WriteLine($"{DateTime.Now}: Inserting team member, character ID: " +
-                                                      teamMember.CharacterID);
+                                Console.WriteLine($"{DateTime.Now}: Inserting team member, character ID: " +
+                                                          teamMember.CharacterID);
+                            }
                         }
-                    }
 
-                    trans.Commit();
-                }
-                catch (Exception e)
-                {
-                    trans.Rollback();
-                    Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
+                        trans.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        trans.Rollback();
+                        Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
+                    }
                 }
             }
         }
@@ -228,7 +236,10 @@ namespace Fotm.DAL.Database
                       $"insert into [Character] ({string.Join(",", columns)}) " +
                       $"values ({string.Join(",", colParams)});";
 
-            DbConnection.Execute(query, character);
+            using (var conn = _dataProvider.GetDataProviderConnection())
+            {
+                conn.Execute(query, character);
+            }
         }
 
         /// <summary>
@@ -243,15 +254,18 @@ namespace Fotm.DAL.Database
             var query =
                       $"insert into [PvpStats] ({string.Join(",", cols)}) " +
                       $"values ({string.Join(",", colParams)});";
-            DbConnection.Execute(query, new
+            using (var conn = _dataProvider.GetDataProviderConnection())
             {
-                Ranking = pvpStats.Ranking,
-                Rating = pvpStats.Rating,
-                CharacterID = characterId,
-                ModifiedDate = DateTime.Now,
-                ModifiedStatus = "I",
-                ModifiedUserID = 0
-            });
+                conn.Execute(query, new
+                {
+                    Ranking = pvpStats.Ranking,
+                    Rating = pvpStats.Rating,
+                    CharacterID = characterId,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedStatus = "I",
+                    ModifiedUserID = 0
+                });
+            }
         }
 
         /// <summary>
@@ -262,7 +276,10 @@ namespace Fotm.DAL.Database
         {
             var query = $"insert into [Realm] (Name, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
                         $"values (@Name, '{DateTime.Now}', 'I', 0);";
-            DbConnection.Execute(query, new { Name = realmName });
+            using (var conn = _dataProvider.GetDataProviderConnection())
+            {
+                conn.Execute(query, new { Name = realmName });
+            }
         }
 
         /// <summary>
@@ -273,7 +290,8 @@ namespace Fotm.DAL.Database
         {
             var query = $"insert into [Spec] (Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
                         $"values (@Name, @BlizzName, '{DateTime.Now}', 'I', 0);";
-            DbConnection.Execute(query, new { Name = blizzSpecName, BlizzName = blizzSpecName });
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                conn.Execute(query, new { Name = blizzSpecName, BlizzName = blizzSpecName });
         }
 
         #endregion Create
@@ -289,7 +307,8 @@ namespace Fotm.DAL.Database
         public Character GetCharacter(string name, int realmId)
         {
             var query = "select * from Character where Name = @Name and RealmID = @RealmID";
-            return DbConnection.Query<Character>(query, new { Name = name, RealmID = realmId }).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<Character>(query, new { Name = name, RealmID = realmId }).FirstOrDefault();
         }
 
         /// <summary>
@@ -300,7 +319,8 @@ namespace Fotm.DAL.Database
         public Class GetClassByName(string name)
         {
             var query = "select * from Class where Name = @Name;";
-            return DbConnection.Query<Class>(query, new { Name = name }).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<Class>(query, new { Name = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -311,7 +331,8 @@ namespace Fotm.DAL.Database
         public Realm GetRealmByName(string name)
         {
             var query = "select * from Realm where Name = @Name;";
-            return DbConnection.Query<Realm>(query, new { Name = name }).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<Realm>(query, new { Name = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -322,7 +343,8 @@ namespace Fotm.DAL.Database
         public Race GetRaceByName(string name)
         {
             var query = "select * from Race where Name = @Name;";
-            return DbConnection.Query<Race>(query, new { Name = name }).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<Race>(query, new { Name = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -333,7 +355,8 @@ namespace Fotm.DAL.Database
         public Spec GetSpecByName(string name)
         {
             var query = "select * from Spec where BlizzName = @BlizzName;";
-            return DbConnection.Query<Spec>(query, new { BlizzName = name }).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<Spec>(query, new { BlizzName = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -344,7 +367,8 @@ namespace Fotm.DAL.Database
         public Team GetTeamByTeamId(long teamId)
         {
             var query = "select * from Team where TeamID = @TeamID";
-            return DbConnection.Query<Team>(query, new { TeamID = teamId }).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<Team>(query, new { TeamID = teamId }).FirstOrDefault();
         }
 
         /// <summary>
@@ -355,7 +379,8 @@ namespace Fotm.DAL.Database
         public PvpStat GetPvpStatByCharacterId(long characterId)
         {
             var query = "select * from PvpStats where CharacterID = @CharacterID";
-            return DbConnection.Query<PvpStat>(query, new {CharacterID = characterId}).FirstOrDefault();
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                return conn.Query<PvpStat>(query, new { CharacterID = characterId }).FirstOrDefault();
         }
 
         #endregion
@@ -374,16 +399,17 @@ namespace Fotm.DAL.Database
                 "set Ranking = @Ranking, Rating = @Rating, CharacterID = @CharacterID, " +
                 "ModifiedDate = @ModifiedDate, ModifiedStatus = @ModifiedStatus, ModifiedUserID = @ModifiedUserID " +
                 "where PvpStatsID = @PvpStatsID;";
-            DbConnection.Execute(query, new
-            {
-                Ranking = pvpStats.Ranking,
-                Rating = pvpStats.Rating,
-                CharacterID = dbPvpStat.CharacterID,
-                ModifiedDate = DateTime.Now,
-                ModifiedStatus = "I",
-                ModifiedUserID = 0,
-                PvpStatsID = dbPvpStat.PvpStatsID
-            });
+            using (var conn = _dataProvider.GetDataProviderConnection())
+                conn.Execute(query, new
+                {
+                    Ranking = pvpStats.Ranking,
+                    Rating = pvpStats.Rating,
+                    CharacterID = dbPvpStat.CharacterID,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedStatus = "I",
+                    ModifiedUserID = 0,
+                    PvpStatsID = dbPvpStat.PvpStatsID
+                });
         }
 
         #endregion
