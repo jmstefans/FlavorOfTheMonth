@@ -137,7 +137,8 @@
     <Compile Include="JobScheduling\Jobs\LeaderboardClusteringJob.cs" />
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
     <Compile Include="MainViewModel.cs" />
-    <Compile Include="UI\Views\ActiveJobsView.xaml.cs">
+    <Compile Include="UI\ViewModels\NewJobViewModel.cs" />
+    <Compile Include="UI\Views\Jobs\ActiveJobsView.xaml.cs">
       <DependentUpon>ActiveJobsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Views\AnalysisView.xaml.cs">
@@ -149,7 +150,10 @@
     <Compile Include="UI\Views\DatabaseView.xaml.cs">
       <DependentUpon>DatabaseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Views\NewJobView.xaml.cs">
+    <Compile Include="UI\Views\Jobs\JobsView.xaml.cs">
+      <DependentUpon>JobsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\Jobs\NewJobView.xaml.cs">
       <DependentUpon>NewJobView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\ConsoleRedirectWriter.cs" />
@@ -167,7 +171,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\Views\ActiveJobsView.xaml">
+    <Page Include="UI\Views\Jobs\ActiveJobsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -183,7 +187,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Views\NewJobView.xaml">
+    <Page Include="UI\Views\Jobs\JobsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\Jobs\NewJobView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -220,7 +228,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\ViewModels\" />
+    <Resource Include="UI\Images\data_source.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\Images\check.ico" />
@@ -251,6 +259,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\Images\debug.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\Dialogs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" />

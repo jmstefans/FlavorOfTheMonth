@@ -8,6 +8,7 @@
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:fluent="urn:fluent-ribbon"
         xmlns:views="clr-namespace:Fotm.Server.UI.Views"
+        xmlns:jobs="clr-namespace:Fotm.Server.UI.Views.Jobs"
         mc:Ignorable="d"
         Title="FOTM SERVER APP" 
         TitleCaps="False"
@@ -45,7 +46,10 @@
                 </fluent:RibbonGroupBox>
 
                 <fluent:RibbonGroupBox Header="Database">
-
+                    <fluent:Button Header="Set Data Source"
+                                   Icon="UI/Images/data_source.ico"
+                                   LargeIcon="UI/Images/data_source.ico"
+                                   Click="SetDataSource_OnClick"/>
                 </fluent:RibbonGroupBox>
 
                 <fluent:RibbonGroupBox Header="Temp">
@@ -100,9 +104,9 @@
                                                     IsMaximized="False">
                         <xcad:LayoutAnchorablePane >
                             
-                            <xcad:LayoutAnchorable ContentId="Scheduler"
-                                                   Title="Scheduler">
-                                <views:NewJobView/>
+                            <xcad:LayoutAnchorable ContentId="Job Scheduler"
+                                                   Title="Job Scheduler">
+                                <jobs:JobsView/>
                             </xcad:LayoutAnchorable>
                             
                         </xcad:LayoutAnchorablePane>

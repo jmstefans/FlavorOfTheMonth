@@ -49,7 +49,7 @@ namespace Fotm.Server
         private void Initialize()
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
-            _jobManager.ScheduleRatingChangeJob();
+            //_jobManager.ScheduleRatingChangeJob();
         }
 
         #endregion
