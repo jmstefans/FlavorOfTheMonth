@@ -109,6 +109,9 @@ GO
 ALTER DATABASE [fotm] SET  READ_WRITE 
 GO
 
+PRINT 'Fotm Database created.'
+
+
 USE [fotm]
 GO
 
@@ -157,6 +160,8 @@ CREATE TABLE [dbo].[Faction](
 
 GO
 
+PRINT 'Faction table created.'
+
 USE [fotm]
 GO
 
@@ -181,6 +186,8 @@ CREATE TABLE [dbo].[Gender](
 
 GO
 
+PRINT 'Gender table created.'
+
 USE [fotm]
 GO
 
@@ -204,6 +211,8 @@ CREATE TABLE [dbo].[Race](
 ) ON [PRIMARY]
 
 GO
+
+PRINT 'Race table created.'
 
 
 USE [fotm]
@@ -231,6 +240,8 @@ CREATE TABLE [dbo].[Spec](
 
 GO
 
+PRINT 'Spec table created.'
+
 USE [fotm]
 GO
 
@@ -257,6 +268,8 @@ CREATE TABLE [dbo].[Team](
 
 GO
 
+PRINT 'Team table created.'
+
 
 USE [fotm]
 GO
@@ -281,6 +294,8 @@ CREATE TABLE [dbo].[Region](
 ) ON [PRIMARY]
 
 GO
+
+PRINT 'Region table created.'
 
 USE [fotm]
 GO
@@ -310,6 +325,8 @@ GO
 ALTER TABLE [dbo].[Realm]  WITH CHECK ADD FOREIGN KEY([RegionID])
 REFERENCES [dbo].[Region] ([RegionID])
 GO
+
+PRINT 'Realm table created.'
 
 
 USE [fotm]
@@ -373,6 +390,8 @@ ALTER TABLE [dbo].[Character]  WITH CHECK ADD FOREIGN KEY([SpecID])
 REFERENCES [dbo].[Spec] ([SpecID])
 GO
 
+PRINT 'Character table created.'
+
 USE [fotm]
 GO
 
@@ -402,6 +421,8 @@ GO
 ALTER TABLE [dbo].[PvpStats]  WITH CHECK ADD FOREIGN KEY([CharacterID])
 REFERENCES [dbo].[Character] ([CharacterID])
 GO
+
+PRINT 'PvpStats table created.'
 
 USE [fotm]
 GO
@@ -470,6 +491,8 @@ GO
 ALTER TABLE [dbo].[TeamMember] CHECK CONSTRAINT [FK__TeamMembe__TeamI__3A81B327]
 GO
 
+PRINT 'TeamMember table created.'
+
 
 USE [fotm]
 GO
@@ -495,6 +518,8 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 
 GO
+
+PRINT 'UserProfile table created.'
 
 
 USE [fotm]
@@ -533,6 +558,9 @@ GO
 ALTER TABLE [dbo].[webpages_Membership] ADD  DEFAULT ((0)) FOR [PasswordFailuresSinceLastSuccess]
 GO
 
+PRINT 'webpages_Membership table created.'
+
+
 USE [fotm]
 GO
 
@@ -555,6 +583,9 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 GO
+
+PRINT 'webpages_OAuthMembership table created.'
+
 
 USE [fotm]
 GO
@@ -580,6 +611,9 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 
 GO
+
+PRINT 'webpages_Roles table created.'
+
 
 USE [fotm]
 GO
@@ -617,8 +651,10 @@ GO
 ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_UserId]
 GO
 
+PRINT 'webpages_UsersInRoles table created.'
 
-/*SET IDENTITY_INSERT Faction ON*/
+
+PRINT 'Inserting Factions'
 
 insert into Faction (FactionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (0, 'Alliance', SYSDATETIME(), 'I', 0)
@@ -626,8 +662,8 @@ insert into Faction (FactionID, Name, ModifiedDate, ModifiedStatus, ModifiedUser
 insert into Faction (FactionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (1, 'Horde', SYSDATETIME(), 'I', 0)
 
-/*SET IDENTITY_INSERT Faction OFF*/
 
+PRINT 'Inserting Classes'
 
 SET IDENTITY_INSERT Class ON
 
@@ -667,7 +703,7 @@ insert into Class (ClassID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 SET IDENTITY_INSERT Class OFF
 
 
-/*SET IDENTITY_INSERT Gender ON*/
+PRINT 'Inserting Genders'
 
 insert into Gender (GenderID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (0, 'Male', SYSDATETIME(), 'I', 0)
@@ -675,8 +711,8 @@ insert into Gender (GenderID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID
 insert into Gender (GenderID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (1, 'Female', SYSDATETIME(), 'I', 0)
 
-/*SET IDENTITY_INSERT Gender OFF*/
 
+PRINT 'Inserting Races'
 
 SET IDENTITY_INSERT Race ON
 
@@ -728,6 +764,8 @@ insert into Race (RaceID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
 SET IDENTITY_INSERT Race OFF
 
 
+PRINT 'Inserting Regions'
+
 SET IDENTITY_INSERT Region ON
 
 insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID)
@@ -750,6 +788,8 @@ insert into Region (RegionID, Name, ModifiedDate, ModifiedStatus, ModifiedUserID
 
 SET IDENTITY_INSERT Region OFF
 
+
+PRINT 'Inserting Specs'
 
 SET IDENTITY_INSERT Spec ON
 
@@ -858,6 +898,8 @@ insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, Modifie
 SET IDENTITY_INSERT Spec OFF
 
 
+PRINT 'Inserting UserProfiles'
+
 SET IDENTITY_INSERT UserProfile ON
 
 insert into UserProfile (UserId, UserName)
@@ -868,6 +910,8 @@ insert into UserProfile (UserId, UserName)
 
 SET IDENTITY_INSERT UserProfile OFF
 
+
+PRINT 'Inserting webpages_Roles'
 
 SET IDENTITY_INSERT webpages_Roles ON
 
@@ -885,6 +929,8 @@ insert into webpages_Roles (RoleId, RoleName)
 
 SET IDENTITY_INSERT webpages_Roles OFF
 
+
+PRINT 'Inserting webpages_UsersInRoles'
 
 insert into webpages_UsersInRoles (UserId, RoleId)
 	values (0, 0)
