@@ -14,13 +14,12 @@ using WowDotNetAPI.Models;
 
 namespace Fotm.Server.JobScheduling.Jobs
 {
-    public class RatingChangeJob 
-        //: IJob
+    public class LeaderboardClusteringJob
+    //: IJob
     {
         #region Variables
 
         // Used to define the baseline stats
-        private static bool _setBaseLine = true;
         private static bool SetBaseLine
         {
             get
@@ -40,35 +39,9 @@ namespace Fotm.Server.JobScheduling.Jobs
                 }
             }
         }
+        private static bool _setBaseLine = true;
         private static object _baseLock = new object();
 
-        private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
-
-        private static List<PvpStats> _baseLineStats = new List<PvpStats>();
-        private static List<PvpStats> BaselineStats
-        {
-            get
-            {
-                List<PvpStats> stats = null;
-                lock (_lock)
-                {
-                    stats = _baseLineStats;
-                }
-                return stats;
-            }
-            set
-            {
-                lock (_lock)
-                {
-                    if (value != null)
-                        _baseLineStats = value;
-                }
-            }
-        }
-        private static object _lock = new object();
-
-
-        private DbManager _dbManager = DbManager.Default;
 
         private DbManager DbManager
         {
@@ -82,8 +55,11 @@ namespace Fotm.Server.JobScheduling.Jobs
                 return result;
             }
         }
+        private DbManager _dbManager = DbManager.Default;
         private static object _dbLock = new object();
 
+        private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
+        
         #endregion
 
         #region Properties
@@ -118,8 +94,8 @@ namespace Fotm.Server.JobScheduling.Jobs
         /// Gets the job arguments used by the RatingChangeJob execution. 
         /// Call this before running the job.
         /// </summary>
-        /// <param name="bracket"></param>
-        /// <returns></returns>
+        /// <param name="bracket">The bracket to query API for.</param>
+        /// <returns>Dictionary populated with job keys and properties for execution.</returns>
         public static Dictionary<string, object> GetRatingChangeJobArguments(Bracket bracket)
         {
             return new Dictionary<string, object> { { BRACKET_KEY, bracket } };
@@ -221,18 +197,22 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         private DAL.Character GetCharacter(PvpStats pvpStats)
         {
+            /* TODO: on each pass, the character and pvp stats will be updated in the database */
+
             // have to use the realm ID from the DB, not the pvp stats object
             var realm = DbManager.GetRealmByName(pvpStats.RealmName);
             if (realm != null)
             {
                 var character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
                 if (character != null)
+                {
+                    // TODO: update pvp stats record before returning character
                     return character;
+                } 
             }
 
             // no matching character, fetch from api and insert into db
-            var apiCharacter = WowAPIManager.Default.GetCharacter(pvpStats.Name, pvpStats.RealmName);
-            DbManager.InsertApiCharacterAsDbCharacter(apiCharacter, pvpStats);
+            DbManager.InsertCharacter(pvpStats);
 
             // realm id will have been resolved after character insert
             realm = DbManager.GetRealmByName(pvpStats.RealmName);
@@ -240,8 +220,8 @@ namespace Fotm.Server.JobScheduling.Jobs
         }
 
         private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
-       {
-            Console.Write($"{DateTime.Now}: Executing team cluster...");
+        {
+            Console.WriteLine($"{DateTime.Now}: Executing team cluster...");
             var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
             if (teams == null) return;
 

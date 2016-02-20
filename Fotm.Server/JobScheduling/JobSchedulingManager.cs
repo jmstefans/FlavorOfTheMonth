@@ -70,11 +70,11 @@ namespace Fotm.Server.JobScheduling
                                             ITrigger trigger = null)
         {
             if (trigger == null)
-                trigger = RatingChangeJob.DefaultTrigger;
+                trigger = LeaderboardClusteringJob.DefaultTrigger;
 
             //var jobArgs = RatingChangeJob.GetRatingChangeJobArguments(Bracket._3v3);
             var jobArgs = new Dictionary<string, Bracket> { { "bracketKey", Bracket._3v3 } };
-            var job = new RatingChangeJob();
+            var job = new LeaderboardClusteringJob();
             while (true)
             {
                 job.Execute(jobArgs);

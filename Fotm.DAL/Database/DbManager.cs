@@ -125,53 +125,65 @@ namespace Fotm.DAL.Database
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Inserts each team and associates its team members.
+        /// </summary>
+        /// <param name="teams">The teams with team members to insert.</param>
         public void InsertTeamsAndMembers(IEnumerable<Team> teams)
         {
-            //using (var trans = DbConnection.BeginTransaction())
-            //{
-            //    try
-            //    {
-            foreach (var team in teams)
+            using (var trans = DbConnection.BeginTransaction())
             {
-                var teamId = DbConnection.ExecuteScalar<long>(TEAM_INSERT_QUERY, team);
-                //var teamId = DbConnection.ExecuteScalar<long>(TEAM_INSERT_QUERY, team, trans);
-                Console.WriteLine($"{DateTime.Now}: Inserting Team: " + teamId);
-
-                foreach (var teamMember in team.TeamMembers)
+                try
                 {
-                    var dbTeam = GetTeamByTeamId(teamId);
-                    teamMember.Team = dbTeam;
+                    foreach (var team in teams)
+                    {
+                        var teamId = DbConnection.ExecuteScalar<long>(TEAM_INSERT_QUERY, team, trans);
+                        Console.WriteLine($"{DateTime.Now}: Inserting Team: " + teamId);
 
-                    DbConnection.Execute(TEAM_MEMBER_INSERT_QUERY, teamMember);
-                    //DbConnection.Execute(TEAM_MEMBER_INSERT_QUERY, teamMember, trans);
-                    Console.WriteLine($"{DateTime.Now}: Inserting team member, character ID: " +
-                                              teamMember.CharacterID);
+                        foreach (var teamMember in team.TeamMembers)
+                        {
+                            DbConnection.Execute(TEAM_MEMBER_INSERT_QUERY, new
+                            {
+                                TeamID = teamId,
+                                RatingChangeValue = teamMember.RatingChangeValue,
+                                CurrentRating = teamMember.CurrentRating,
+                                CharacterId = teamMember.CharacterID,
+                                SpecID = teamMember.SpecID,
+                                RaceID = teamMember.RaceID,
+                                FactionID = teamMember.FactionID,
+                                GenderID = teamMember.GenderID,
+                                ModifiedDate = teamMember.ModifiedDate,
+                                ModifiedStatus = teamMember.ModifiedStatus,
+                                ModifiedUserID = teamMember.ModifiedUserID
+                            }, trans);
+
+                            Console.WriteLine($"{DateTime.Now}: Inserting team member, character ID: " +
+                                                      teamMember.CharacterID);
+                        }
+                    }
+
+                    trans.Commit();
+                }
+                catch (Exception e)
+                {
+                    trans.Rollback();
+                    Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
                 }
             }
-
-            //    trans.Commit();
-            //}
-            //catch (Exception e)
-            //{
-            //    trans.Rollback();
-            //    Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
-            //}
-            //}
         }
-        
+
         /// <summary>
-        /// TODO
+        /// Converts an API PvpStats object to the DB Character model and inserts into DB.
         /// </summary>
-        /// <param name="apiCharacter"></param>
-        /// <param name="pvpStats"></param>
-        public void InsertApiCharacterAsDbCharacter(WowDotNetAPI.Models.Character apiCharacter, PvpStats pvpStats)
+        /// <param name="pvpStats">The PvpStats object retrieved from the DB.</param>
+        public void InsertCharacter(PvpStats pvpStats)
         {
-            var realm = GetRealmByName(apiCharacter.Realm);
+            var realm = GetRealmByName(pvpStats.RealmName);
             if (realm == null)
             {
-                InsertNewRealm(apiCharacter.Realm);
-                realm = GetRealmByName(apiCharacter.Realm);
+                InsertNewRealm(pvpStats.RealmName);
+                realm = GetRealmByName(pvpStats.RealmName);
             }
 
             var spec = GetSpecByName(pvpStats.Spec);
@@ -182,17 +194,16 @@ namespace Fotm.DAL.Database
             }
 
             var raceId = pvpStats.RaceId;
-            var classId = (int)apiCharacter.Class;
             var factionId = pvpStats.FactionId;
             var genderId = pvpStats.GenderId;
 
             var character = new Character
             {
-                Name = apiCharacter.Name,
+                Name = pvpStats.Name,
                 RealmID = realm.RealmID,
                 SpecID = spec.SpecID,
                 RaceID = raceId,
-                ClassID = classId,
+                ClassID = pvpStats.ClassId,
                 FactionID = Convert.ToBoolean(factionId),
                 GenderID = Convert.ToBoolean(genderId),
                 SeasonWins = pvpStats.SeasonWins,
@@ -206,8 +217,11 @@ namespace Fotm.DAL.Database
 
             var columns = new[]
             {
-                "Name", "RealmID", "SpecID", "RaceID", "ClassID", "FactionID", "GenderID", "SeasonWins", "SeasonLosses",
-                "WeeklyWins", "WeeklyLosses", "ModifiedDate", "ModifiedStatus", "ModifiedUserID"
+                "Name", "RealmID", "SpecID", "RaceID",
+                "ClassID", "FactionID", "GenderID",
+                "SeasonWins", "SeasonLosses","WeeklyWins",
+                "WeeklyLosses", "ModifiedDate",
+                "ModifiedStatus", "ModifiedUserID"
             };
             var colParams = GetColumnParameters(columns);
             var query =
@@ -217,12 +231,20 @@ namespace Fotm.DAL.Database
             DbConnection.Execute(query, character);
         }
 
+        /// <summary>
+        /// Inserts new realm into the DB.
+        /// </summary>
+        /// <param name="realmName">Name of realm to insert.</param>
         public void InsertNewRealm(string realmName)
         {
             var query = $"insert into [Realm] (Name, ModifiedDate, ModifiedStatus, ModifiedUserID) values (@Name, '{DateTime.Now}', 'I', 0);";
             DbConnection.Execute(query, new { Name = realmName });
         }
 
+        /// <summary>
+        /// Inserts new spec into DB.
+        /// </summary>
+        /// <param name="blizzSpecName">Name of blizz spec to insert (e.g. MAGE_FROST)</param>
         public void InsertNewSpec(string blizzSpecName)
         {
             var query = $"insert into [Spec] (Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
@@ -234,37 +256,67 @@ namespace Fotm.DAL.Database
 
         #region Read
 
+        /// <summary>
+        /// Gets the DB Character object by name and realm ID.
+        /// </summary>
+        /// <param name="name">Character's name.</param>
+        /// <param name="realmId">Character's realm ID.</param>
+        /// <returns>Character if found otherwise null.</returns>
         public Character GetCharacter(string name, int realmId)
         {
             var query = "select * from Character where Name = @Name and RealmID = @RealmID";
             return DbConnection.Query<Character>(query, new { Name = name, RealmID = realmId }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the DB class object by name.
+        /// </summary>
+        /// <param name="name">Name of the class.</param>
+        /// <returns>Class if found otherwise null.</returns>
         public Class GetClassByName(string name)
         {
             var query = "select * from Class where Name = @Name;";
             return DbConnection.Query<Class>(query, new { Name = name }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the DB Realm object by name.
+        /// </summary>
+        /// <param name="name">Name of the realm.</param>
+        /// <returns>Realm if found otherwise null.</returns>
         public Realm GetRealmByName(string name)
         {
             var query = "select * from Realm where Name = @Name;";
             return DbConnection.Query<Realm>(query, new { Name = name }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the DB Race object by name.
+        /// </summary>
+        /// <param name="name">Name of the race.</param>
+        /// <returns>Race if found otherwise null.</returns>
         public Race GetRaceByName(string name)
         {
             var query = "select * from Race where Name = @Name;";
             return DbConnection.Query<Race>(query, new { Name = name }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the DB spec object by name.
+        /// </summary>
+        /// <param name="name">Name of the spec.</param>
+        /// <returns>Spec if found otherwise null.</returns>
         public Spec GetSpecByName(string name)
         {
             var query = "select * from Spec where BlizzName = @BlizzName;";
             return DbConnection.Query<Spec>(query, new { BlizzName = name }).FirstOrDefault();
         }
 
-
+        /// <summary>
+        /// Gets the DB Team object by name.
+        /// </summary>
+        /// <param name="teamId">ID of the team.</param>
+        /// <returns>Team if found otherwise null.</returns>
         public Team GetTeamByTeamId(long teamId)
         {
             var query = "select * from Team where TeamID = @TeamID";
