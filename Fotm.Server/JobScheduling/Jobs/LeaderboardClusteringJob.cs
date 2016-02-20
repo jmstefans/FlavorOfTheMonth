@@ -59,7 +59,7 @@ namespace Fotm.Server.JobScheduling.Jobs
         private static object _dbLock = new object();
 
         private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
-        
+
         #endregion
 
         #region Properties
@@ -197,26 +197,35 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         private DAL.Character GetCharacter(PvpStats pvpStats)
         {
-            /* TODO: on each pass, the character and pvp stats will be updated in the database */
+            // TODO: still need to update the character on each pass
 
             // have to use the realm ID from the DB, not the pvp stats object
+            DAL.Character character = null;
             var realm = DbManager.GetRealmByName(pvpStats.RealmName);
             if (realm != null)
+                character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
+
+            if (character == null)
             {
-                var character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
-                if (character != null)
-                {
-                    // TODO: update pvp stats record before returning character
-                    return character;
-                } 
+                // no matching character, fetch from api and insert into db
+                DbManager.InsertCharacter(pvpStats);
+                // realm id will have been resolved after insert
+                realm = DbManager.GetRealmByName(pvpStats.RealmName);
+                // refetch after insert
+                character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
             }
 
-            // no matching character, fetch from api and insert into db
-            DbManager.InsertCharacter(pvpStats);
+            if (character == null)
+                throw new ArgumentException(nameof(character)); // if happens, something failed at db layer
 
-            // realm id will have been resolved after character insert
-            realm = DbManager.GetRealmByName(pvpStats.RealmName);
-            return DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
+            // need to update or insert the pvp stat on each pass
+            var dbPvpStat = DbManager.GetPvpStatByCharacterId(character.CharacterID);
+            if (dbPvpStat == null)
+                DbManager.InsertPvpStats(pvpStats, character.CharacterID);
+            else
+                DbManager.UpdatePvpStats(pvpStats, dbPvpStat);
+
+            return character;
         }
 
         private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
