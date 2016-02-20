@@ -232,6 +232,29 @@ namespace Fotm.DAL.Database
         }
 
         /// <summary>
+        /// Uses the PvpStats (API) object to insert a new PvpStat record in the DB.
+        /// </summary>
+        /// <param name="pvpStats">The PvpStats object pulled from API.</param>
+        /// <param name="characterId">The associated ID of the DB character record.</param>
+        public void InsertPvpStats(PvpStats pvpStats, long characterId)
+        {
+            var cols = new[] { "Ranking ", "Rating", "CharacterID", "ModifiedDate", "ModifiedStatus", "ModifiedUserID" };
+            var colParams = GetColumnParameters(cols);
+            var query =
+                      $"insert into [PvpStats] ({string.Join(",", cols)}) " +
+                      $"values ({string.Join(",", colParams)});";
+            DbConnection.Execute(query, new
+            {
+                Ranking = pvpStats.Ranking,
+                Rating = pvpStats.Rating,
+                CharacterID = characterId,
+                ModifiedDate = DateTime.Now,
+                ModifiedStatus = "I",
+                ModifiedUserID = 0
+            });
+        }
+
+        /// <summary>
         /// Inserts new realm into the DB.
         /// </summary>
         /// <param name="realmName">Name of realm to insert.</param>
@@ -323,9 +346,43 @@ namespace Fotm.DAL.Database
             return DbConnection.Query<Team>(query, new { TeamID = teamId }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the DB PvpStat object by character ID. 
+        /// </summary>
+        /// <param name="characterId">The associated ID of DB character record.</param>
+        /// <returns>PvpStat if found otherwise null.</returns>
+        public PvpStat GetPvpStatByCharacterId(long characterId)
+        {
+            var query = "select * from PvpStats where CharacterID = @CharacterID";
+            return DbConnection.Query<PvpStat>(query, new {CharacterID = characterId}).FirstOrDefault();
+        }
+
         #endregion
 
         #region Update
+
+        /// <summary>
+        /// Updates the PvpStat record in DB with data from the PvpStats (pulled from the API).
+        /// </summary>
+        /// <param name="pvpStats">The PvpStats object pulled from API.</param>
+        /// <param name="dbPvpStat">The current PvpStat (DB) object.</param>
+        public void UpdatePvpStats(PvpStats pvpStats, PvpStat dbPvpStat)
+        {
+            var query =
+                "update PvpStats " +
+                "set Ranking = @Ranking, Rating = @Rating, CharacterID = @CharacterID, " +
+                "ModifiedDate = @ModifiedDate, ModifiedStatus = @ModifiedStatus, ModifiedUserID = @ModifiedUserID " +
+                "where PvpStatsID = @PvpStatsID;";
+            DbConnection.Execute(query, new
+            {
+                Ranking = pvpStats.Ranking,
+                Rating = pvpStats.Rating,
+                CharacterID = dbPvpStat.CharacterID,
+                ModifiedDate = DateTime.Now,
+                ModifiedStatus = "I",
+                ModifiedUserID = 0
+            });
+        }
 
         #endregion
 
