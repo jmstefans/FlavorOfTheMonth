@@ -51,9 +51,6 @@ namespace Fotm.DAL
     partial void InsertRace(Race instance);
     partial void UpdateRace(Race instance);
     partial void DeleteRace(Race instance);
-    partial void InsertRealm(Realm instance);
-    partial void UpdateRealm(Realm instance);
-    partial void DeleteRealm(Realm instance);
     partial void InsertRegion(Region instance);
     partial void UpdateRegion(Region instance);
     partial void DeleteRegion(Region instance);
@@ -78,10 +75,13 @@ namespace Fotm.DAL
     partial void Insertwebpages_Role(webpages_Role instance);
     partial void Updatewebpages_Role(webpages_Role instance);
     partial void Deletewebpages_Role(webpages_Role instance);
+    partial void InsertRealm(Realm instance);
+    partial void UpdateRealm(Realm instance);
+    partial void DeleteRealm(Realm instance);
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -166,14 +166,6 @@ namespace Fotm.DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<Realm> Realms
-		{
-			get
-			{
-				return this.GetTable<Realm>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Region> Regions
 		{
 			get
@@ -237,6 +229,14 @@ namespace Fotm.DAL
 				return this.GetTable<webpages_Role>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Realm> Realms
+		{
+			get
+			{
+				return this.GetTable<Realm>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Character")]
@@ -287,9 +287,9 @@ namespace Fotm.DAL
 		
 		private EntityRef<Race> _Race;
 		
-		private EntityRef<Realm> _Realm;
-		
 		private EntityRef<Spec> _Spec;
+		
+		private EntityRef<Realm> _Realm;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -335,8 +335,8 @@ namespace Fotm.DAL
 			this._Faction = default(EntityRef<Faction>);
 			this._Gender = default(EntityRef<Gender>);
 			this._Race = default(EntityRef<Race>);
-			this._Realm = default(EntityRef<Realm>);
 			this._Spec = default(EntityRef<Spec>);
+			this._Realm = default(EntityRef<Realm>);
 			OnCreated();
 		}
 		
@@ -826,40 +826,6 @@ namespace Fotm.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Realm_Character", Storage="_Realm", ThisKey="RealmID", OtherKey="RealmID", IsForeignKey=true)]
-		public Realm Realm
-		{
-			get
-			{
-				return this._Realm.Entity;
-			}
-			set
-			{
-				Realm previousValue = this._Realm.Entity;
-				if (((previousValue != value) 
-							|| (this._Realm.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Realm.Entity = null;
-						previousValue.Characters.Remove(this);
-					}
-					this._Realm.Entity = value;
-					if ((value != null))
-					{
-						value.Characters.Add(this);
-						this._RealmID = value.RealmID;
-					}
-					else
-					{
-						this._RealmID = default(int);
-					}
-					this.SendPropertyChanged("Realm");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_Character", Storage="_Spec", ThisKey="SpecID", OtherKey="SpecID", IsForeignKey=true)]
 		public Spec Spec
 		{
@@ -890,6 +856,40 @@ namespace Fotm.DAL
 						this._SpecID = default(int);
 					}
 					this.SendPropertyChanged("Spec");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Realm_Character", Storage="_Realm", ThisKey="RealmID", OtherKey="RealmID", IsForeignKey=true)]
+		public Realm Realm
+		{
+			get
+			{
+				return this._Realm.Entity;
+			}
+			set
+			{
+				Realm previousValue = this._Realm.Entity;
+				if (((previousValue != value) 
+							|| (this._Realm.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Realm.Entity = null;
+						previousValue.Characters.Remove(this);
+					}
+					this._Realm.Entity = value;
+					if ((value != null))
+					{
+						value.Characters.Add(this);
+						this._RealmID = value.RealmID;
+					}
+					else
+					{
+						this._RealmID = default(int);
+					}
+					this.SendPropertyChanged("Realm");
 				}
 			}
 		}
@@ -2182,192 +2182,6 @@ namespace Fotm.DAL
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Realm")]
-	public partial class Realm : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _RealmID;
-		
-		private string _Name;
-		
-		private System.DateTime _ModifiedDate;
-		
-		private string _ModifiedStatus;
-		
-		private long _ModifiedUserID;
-		
-		private EntitySet<Character> _Characters;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnRealmIDChanging(int value);
-    partial void OnRealmIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnModifiedDateChanging(System.DateTime value);
-    partial void OnModifiedDateChanged();
-    partial void OnModifiedStatusChanging(string value);
-    partial void OnModifiedStatusChanged();
-    partial void OnModifiedUserIDChanging(long value);
-    partial void OnModifiedUserIDChanged();
-    #endregion
-		
-		public Realm()
-		{
-			this._Characters = new EntitySet<Character>(new Action<Character>(this.attach_Characters), new Action<Character>(this.detach_Characters));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RealmID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int RealmID
-		{
-			get
-			{
-				return this._RealmID;
-			}
-			set
-			{
-				if ((this._RealmID != value))
-				{
-					this.OnRealmIDChanging(value);
-					this.SendPropertyChanging();
-					this._RealmID = value;
-					this.SendPropertyChanged("RealmID");
-					this.OnRealmIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime2 NOT NULL")]
-		public System.DateTime ModifiedDate
-		{
-			get
-			{
-				return this._ModifiedDate;
-			}
-			set
-			{
-				if ((this._ModifiedDate != value))
-				{
-					this.OnModifiedDateChanging(value);
-					this.SendPropertyChanging();
-					this._ModifiedDate = value;
-					this.SendPropertyChanged("ModifiedDate");
-					this.OnModifiedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="NChar(10) NOT NULL", CanBeNull=false)]
-		public string ModifiedStatus
-		{
-			get
-			{
-				return this._ModifiedStatus;
-			}
-			set
-			{
-				if ((this._ModifiedStatus != value))
-				{
-					this.OnModifiedStatusChanging(value);
-					this.SendPropertyChanging();
-					this._ModifiedStatus = value;
-					this.SendPropertyChanged("ModifiedStatus");
-					this.OnModifiedStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
-		public long ModifiedUserID
-		{
-			get
-			{
-				return this._ModifiedUserID;
-			}
-			set
-			{
-				if ((this._ModifiedUserID != value))
-				{
-					this.OnModifiedUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._ModifiedUserID = value;
-					this.SendPropertyChanged("ModifiedUserID");
-					this.OnModifiedUserIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Realm_Character", Storage="_Characters", ThisKey="RealmID", OtherKey="RealmID")]
-		public EntitySet<Character> Characters
-		{
-			get
-			{
-				return this._Characters;
-			}
-			set
-			{
-				this._Characters.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Characters(Character entity)
-		{
-			this.SendPropertyChanging();
-			entity.Realm = this;
-		}
-		
-		private void detach_Characters(Character entity)
-		{
-			this.SendPropertyChanging();
-			entity.Realm = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Region")]
 	public partial class Region : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -2383,6 +2197,8 @@ namespace Fotm.DAL
 		private string _ModifiedStatus;
 		
 		private long _ModifiedUserID;
+		
+		private EntitySet<Realm> _Realms;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2402,6 +2218,7 @@ namespace Fotm.DAL
 		
 		public Region()
 		{
+			this._Realms = new EntitySet<Realm>(new Action<Realm>(this.attach_Realms), new Action<Realm>(this.detach_Realms));
 			OnCreated();
 		}
 		
@@ -2505,6 +2322,19 @@ namespace Fotm.DAL
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Region_Realm", Storage="_Realms", ThisKey="RegionID", OtherKey="RegionID")]
+		public EntitySet<Realm> Realms
+		{
+			get
+			{
+				return this._Realms;
+			}
+			set
+			{
+				this._Realms.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2523,6 +2353,18 @@ namespace Fotm.DAL
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_Realms(Realm entity)
+		{
+			this.SendPropertyChanging();
+			entity.Region = this;
+		}
+		
+		private void detach_Realms(Realm entity)
+		{
+			this.SendPropertyChanging();
+			entity.Region = null;
 		}
 	}
 	
@@ -4207,6 +4049,257 @@ namespace Fotm.DAL
 		{
 			this.SendPropertyChanging();
 			entity.webpages_Role = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Realm")]
+	public partial class Realm : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RealmID;
+		
+		private string _Name;
+		
+		private int _RegionID;
+		
+		private System.DateTime _ModifiedDate;
+		
+		private string _ModifiedStatus;
+		
+		private long _ModifiedUserID;
+		
+		private EntitySet<Character> _Characters;
+		
+		private EntityRef<Region> _Region;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRealmIDChanging(int value);
+    partial void OnRealmIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnRegionIDChanging(int value);
+    partial void OnRegionIDChanged();
+    partial void OnModifiedDateChanging(System.DateTime value);
+    partial void OnModifiedDateChanged();
+    partial void OnModifiedStatusChanging(string value);
+    partial void OnModifiedStatusChanged();
+    partial void OnModifiedUserIDChanging(long value);
+    partial void OnModifiedUserIDChanged();
+    #endregion
+		
+		public Realm()
+		{
+			this._Characters = new EntitySet<Character>(new Action<Character>(this.attach_Characters), new Action<Character>(this.detach_Characters));
+			this._Region = default(EntityRef<Region>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RealmID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int RealmID
+		{
+			get
+			{
+				return this._RealmID;
+			}
+			set
+			{
+				if ((this._RealmID != value))
+				{
+					this.OnRealmIDChanging(value);
+					this.SendPropertyChanging();
+					this._RealmID = value;
+					this.SendPropertyChanged("RealmID");
+					this.OnRealmIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegionID", DbType="Int NOT NULL")]
+		public int RegionID
+		{
+			get
+			{
+				return this._RegionID;
+			}
+			set
+			{
+				if ((this._RegionID != value))
+				{
+					if (this._Region.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRegionIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegionID = value;
+					this.SendPropertyChanged("RegionID");
+					this.OnRegionIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime2 NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="NChar(10) NOT NULL", CanBeNull=false)]
+		public string ModifiedStatus
+		{
+			get
+			{
+				return this._ModifiedStatus;
+			}
+			set
+			{
+				if ((this._ModifiedStatus != value))
+				{
+					this.OnModifiedStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedStatus = value;
+					this.SendPropertyChanged("ModifiedStatus");
+					this.OnModifiedStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
+		public long ModifiedUserID
+		{
+			get
+			{
+				return this._ModifiedUserID;
+			}
+			set
+			{
+				if ((this._ModifiedUserID != value))
+				{
+					this.OnModifiedUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedUserID = value;
+					this.SendPropertyChanged("ModifiedUserID");
+					this.OnModifiedUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Realm_Character", Storage="_Characters", ThisKey="RealmID", OtherKey="RealmID")]
+		public EntitySet<Character> Characters
+		{
+			get
+			{
+				return this._Characters;
+			}
+			set
+			{
+				this._Characters.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Region_Realm", Storage="_Region", ThisKey="RegionID", OtherKey="RegionID", IsForeignKey=true)]
+		public Region Region
+		{
+			get
+			{
+				return this._Region.Entity;
+			}
+			set
+			{
+				Region previousValue = this._Region.Entity;
+				if (((previousValue != value) 
+							|| (this._Region.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Region.Entity = null;
+						previousValue.Realms.Remove(this);
+					}
+					this._Region.Entity = value;
+					if ((value != null))
+					{
+						value.Realms.Add(this);
+						this._RegionID = value.RegionID;
+					}
+					else
+					{
+						this._RegionID = default(int);
+					}
+					this.SendPropertyChanged("Region");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Characters(Character entity)
+		{
+			this.SendPropertyChanging();
+			entity.Realm = this;
+		}
+		
+		private void detach_Characters(Character entity)
+		{
+			this.SendPropertyChanging();
+			entity.Realm = null;
 		}
 	}
 }

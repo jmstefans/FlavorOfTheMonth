@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="fotm" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="Fotm.DAL.Properties.Settings" SettingsPropertyName="fotmConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="Fotm.DAL.Properties.Settings" SettingsPropertyName="fotmConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Character" Member="Characters">
     <Type Name="Character">
       <Column Name="CharacterID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -23,8 +23,8 @@
       <Association Name="Faction_Character" Member="Faction" ThisKey="FactionID" OtherKey="FactionID" Type="Faction" IsForeignKey="true" />
       <Association Name="Gender_Character" Member="Gender" ThisKey="GenderID" OtherKey="GenderID" Type="Gender" IsForeignKey="true" />
       <Association Name="Race_Character" Member="Race" ThisKey="RaceID" OtherKey="RaceID" Type="Race" IsForeignKey="true" />
-      <Association Name="Realm_Character" Member="Realm" ThisKey="RealmID" OtherKey="RealmID" Type="Realm" IsForeignKey="true" />
       <Association Name="Spec_Character" Member="Spec" ThisKey="SpecID" OtherKey="SpecID" Type="Spec" IsForeignKey="true" />
+      <Association Name="Realm_Character" Member="Realm" ThisKey="RealmID" OtherKey="RealmID" Type="Realm" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.webpages_UsersInRoles" Member="webpages_UsersInRoles">
@@ -90,16 +90,6 @@
       <Association Name="Race_TeamMember" Member="TeamMembers" ThisKey="RaceID" OtherKey="RaceID" Type="TeamMember" />
     </Type>
   </Table>
-  <Table Name="dbo.Realm" Member="Realms">
-    <Type Name="Realm">
-      <Column Name="RealmID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="ModifiedStatus" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Association Name="Realm_Character" Member="Characters" ThisKey="RealmID" OtherKey="RealmID" Type="Character" />
-    </Type>
-  </Table>
   <Table Name="dbo.Region" Member="Regions">
     <Type Name="Region">
       <Column Name="RegionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -107,6 +97,7 @@
       <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="ModifiedStatus" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="Region_Realm" Member="Realms" ThisKey="RegionID" OtherKey="RegionID" Type="Realm" />
     </Type>
   </Table>
   <Table Name="dbo.Spec" Member="Specs">
@@ -189,6 +180,18 @@
       <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="RoleName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Association Name="webpages_Role_webpages_UsersInRole" Member="webpages_UsersInRoles" ThisKey="RoleId" OtherKey="RoleId" Type="webpages_UsersInRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Realm" Member="Realms">
+    <Type Name="Realm">
+      <Column Name="RealmID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RegionID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedStatus" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="Realm_Character" Member="Characters" ThisKey="RealmID" OtherKey="RealmID" Type="Character" />
+      <Association Name="Region_Realm" Member="Region" ThisKey="RegionID" OtherKey="RegionID" Type="Region" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
