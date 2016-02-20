@@ -42,7 +42,6 @@ namespace Fotm.Server.JobScheduling.Jobs
         private static bool _setBaseLine = true;
         private static object _baseLock = new object();
 
-
         private DbManager DbManager
         {
             get
@@ -231,6 +230,7 @@ namespace Fotm.Server.JobScheduling.Jobs
         private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
         {
             Console.WriteLine($"{DateTime.Now}: Executing team cluster...");
+
             var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
             if (teams == null) return;
 

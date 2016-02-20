@@ -260,7 +260,8 @@ namespace Fotm.DAL.Database
         /// <param name="realmName">Name of realm to insert.</param>
         public void InsertNewRealm(string realmName)
         {
-            var query = $"insert into [Realm] (Name, ModifiedDate, ModifiedStatus, ModifiedUserID) values (@Name, '{DateTime.Now}', 'I', 0);";
+            var query = $"insert into [Realm] (Name, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+                        $"values (@Name, '{DateTime.Now}', 'I', 0);";
             DbConnection.Execute(query, new { Name = realmName });
         }
 
