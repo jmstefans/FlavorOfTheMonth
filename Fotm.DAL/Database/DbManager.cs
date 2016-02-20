@@ -381,7 +381,8 @@ namespace Fotm.DAL.Database
                 CharacterID = dbPvpStat.CharacterID,
                 ModifiedDate = DateTime.Now,
                 ModifiedStatus = "I",
-                ModifiedUserID = 0
+                ModifiedUserID = 0,
+                PvpStatsID = dbPvpStat.PvpStatsID
             });
         }
 
