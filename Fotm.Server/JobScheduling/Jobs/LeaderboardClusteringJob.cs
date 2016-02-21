@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Fotm.DAL;
 using Fotm.DAL.Database;
 using Fotm.DAL.Models;
+using Fotm.DAL.Util;
 using Fotm.Server.Analysis.Algorithms;
 using Fotm.Server.Util;
 using Fotm.Server.WowAPI;
