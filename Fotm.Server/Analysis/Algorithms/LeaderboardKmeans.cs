@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Fotm.DAL;
-using Fotm.DAL.Models;
+using Fotm.Server.Util;
 
 namespace Fotm.Server.Analysis.Algorithms
 {
@@ -24,7 +24,10 @@ namespace Fotm.Server.Analysis.Algorithms
         {
             var numberOfTeams = members.Count / teamSize;
             if (numberOfTeams * teamSize != members.Count)
+            {
+                LoggingUtil.LogMessage(DateTime.Now, "The team size requested doesn't divide evenly with the number of team members provided");
                 return null; // for now, don't cluster uneven number of teams
+            }
 
             var clusteredTeams = InitializeTeams(members, numberOfTeams, teamSize);
             var currentIteration = 0;
@@ -88,8 +91,11 @@ namespace Fotm.Server.Analysis.Algorithms
                 }
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LoggingUtil.LogMessage(DateTime.Now, 
+                                        $"Exception thrown attempting to update team means: {e.StackTrace}", 
+                                        LoggingUtil.LogType.Warning);
                 return false;
             }
         }
@@ -165,7 +171,7 @@ namespace Fotm.Server.Analysis.Algorithms
             var unevenTeams = teams.Where(t => t.TeamMembers.Count != teamSize).ToList();
             foreach (var team in unevenTeams)
             {
-                if (team.TeamMembers.Count > teamSize) 
+                if (team.TeamMembers.Count > teamSize)
                 {
                     /* only need the furthest members, they will be added to teams 
                        with sizes < expected team size */

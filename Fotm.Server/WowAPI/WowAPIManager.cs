@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using Fotm.DAL.Models.Base;
+using Fotm.Server.Util;
 using WowDotNetAPI;
 using WowDotNetAPI.Models;
 
@@ -12,7 +15,7 @@ namespace Fotm.Server.WowAPI
     {
         #region API KEY
 
-        private const string API_KEY = "wxkatqct3862fp52eqcbwuqr3judxzdu";
+        private const string API_KEY = "";
 
         #endregion
 
@@ -22,16 +25,32 @@ namespace Fotm.Server.WowAPI
             Locale locale = Locale.en_US,
             Bracket bracket = Bracket._3v3)
         {
-            var explorer = new WowExplorer(region, locale, API_KEY);
-            var leaders = explorer.GetLeaderBoards(bracket);
-            return leaders.PvpStats;
+            try
+            {
+                var explorer = new WowExplorer(region, locale, API_KEY);
+                var leaders = explorer.GetLeaderBoards(bracket);
+                return leaders.PvpStats;
+            }
+            catch (WebException ex)
+            {
+                LoggingUtil.LogMessage(DateTime.Now, $"WebException caught at API manager request: {ex}");
+                throw;
+            }
         }
 
-        public Character GetCharacter(string name, string realmName, 
+        public Character GetCharacter(string name, string realmName,
                                       Region region = Region.US, Locale locale = Locale.en_US)
         {
-            var explorer = new WowExplorer(region, locale, API_KEY);
-            return explorer.GetCharacter(realmName, name);
+            try
+            {
+                var explorer = new WowExplorer(region, locale, API_KEY);
+                return explorer.GetCharacter(realmName, name);
+            }
+            catch (WebException ex)
+            {
+                LoggingUtil.LogMessage(DateTime.Now, $"WebException caught at API manager request: {ex}");
+                throw;
+            }
         }
 
         #endregion

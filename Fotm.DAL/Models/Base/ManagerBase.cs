@@ -2,6 +2,10 @@
 
 namespace Fotm.DAL.Models.Base
 {
+    /// <summary>
+    /// Base class for all Managemer classes. 
+    /// </summary>
+    /// <typeparam name="T">The Manager type to create</typeparam>
     public abstract class ManagerBase<T> where T: ManagerBase<T>, new()
     {
         #region Optional Singleton Pattern

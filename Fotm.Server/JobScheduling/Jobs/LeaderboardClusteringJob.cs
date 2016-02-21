@@ -7,6 +7,7 @@ using Fotm.DAL;
 using Fotm.DAL.Database;
 using Fotm.DAL.Models;
 using Fotm.Server.Analysis.Algorithms;
+using Fotm.Server.Util;
 using Fotm.Server.WowAPI;
 using Quartz;
 using WowDotNetAPI;
@@ -14,6 +15,11 @@ using WowDotNetAPI.Models;
 
 namespace Fotm.Server.JobScheduling.Jobs
 {
+    /// <summary>
+    /// Job to query the PvpStats records of the WoWAPI, 
+    /// sort and cluster into teams, 
+    /// and insert successful teams into the database.
+    /// </summary>
     public class LeaderboardClusteringJob
     : IJob
     {
@@ -41,7 +47,9 @@ namespace Fotm.Server.JobScheduling.Jobs
         }
         private static bool _setBaseLine = true;
         private static object _baseLock = new object();
+        private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
 
+        // Database manager
         private DbManager DbManager
         {
             get
@@ -56,8 +64,6 @@ namespace Fotm.Server.JobScheduling.Jobs
         }
         private DbManager _dbManager = DbManager.Default;
         private static object _dbLock = new object();
-
-        private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
 
         #endregion
 
@@ -104,21 +110,22 @@ namespace Fotm.Server.JobScheduling.Jobs
         private static object _statsLock = new object();
 
         /// <summary>
-        /// Executes the job, this is handled by the Scheduler in Quartz.
+        /// Executes the sort, cluster, and db requests of WoW leaderboard API calls. 
+        /// IJobs are created and handled via the Quartz Scheduler, both are managed by the <see cref="JobSchedulingManager"/>
         /// </summary>
         /// <param name="context">Context passed in by Scheduler.</param>
         public void Execute(IJobExecutionContext context)
         //public void Execute(Dictionary<string, Bracket> jobArgs)
         {
-            Console.WriteLine($"{DateTime.Now}: Executing RatingChange API call...");
+            LoggingUtil.LogMessage(DateTime.Now, "Executing RatingChange API call...", LoggingUtil.LogType.Notice);
 
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
 
             lock (_statsLock)
             {
-                if (SetBaseLine) // only do once on initial execute
+                if (SetBaseLine) // only set baseline on initial execute
                 {
-                    //BaselineStats = new List<PvpStats>(stats);
+                    // TODO: can this be moved to the constructor of this job?
                     _baseLineBag = new ConcurrentBag<PvpStats>(stats);
                     SetBaseLine = false;
                     return;
@@ -183,6 +190,7 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             // ensure that each group has enough players to fill at least 1 team
             var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
+            // TESTING
             //var bracket = jobArgs[BRACKET_KEY];
             var teamSize = GetTeamSize(bracket);
 
@@ -215,9 +223,9 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             if (character == null)
             {
-                // no matching character, fetch from api and insert into db
+                // no matching character, insert into db
                 DbManager.InsertCharacter(pvpStats);
-                // realm id will have been resolved after insert
+                // realm id will have been resolved after character insert
                 realm = DbManager.GetRealmByName(pvpStats.RealmName);
                 // refetch after insert
                 character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
@@ -238,7 +246,7 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
         {
-            Console.WriteLine($"{DateTime.Now}: Executing team cluster...");
+            LoggingUtil.LogMessage(DateTime.Now, "Executing team cluster...", LoggingUtil.LogType.Notice);
 
             var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
             if (teams == null) return;

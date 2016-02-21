@@ -9,6 +9,7 @@ using Dapper;
 using Fotm.DAL.Database.DataProvider;
 using Fotm.DAL.Models;
 using Fotm.DAL.Models.Base;
+using Fotm.Server.Util;
 using WowDotNetAPI.Models;
 
 namespace Fotm.DAL.Database
@@ -125,7 +126,7 @@ namespace Fotm.DAL.Database
                 catch (Exception e)
                 {
                     trans.Rollback();
-                    Console.WriteLine("Failed: " + e);
+                    LoggingUtil.LogMessage(DateTime.Now, "SQL insert failed: " + e);
                 }
             }
         }
@@ -146,7 +147,7 @@ namespace Fotm.DAL.Database
                         foreach (var team in teams)
                         {
                             var teamId = conn.ExecuteScalar<long>(TEAM_INSERT_QUERY, team, trans);
-                            Console.WriteLine($"{DateTime.Now}: Inserting Team: " + teamId);
+                            LoggingUtil.LogMessage(DateTime.Now, "Inserting Team: " + teamId, LoggingUtil.LogType.Notice);
 
                             foreach (var teamMember in team.TeamMembers)
                             {
@@ -165,7 +166,7 @@ namespace Fotm.DAL.Database
                                     ModifiedUserID = teamMember.ModifiedUserID
                                 }, trans);
 
-                                Console.WriteLine($"{DateTime.Now}: Inserting team member, character ID: " +
+                                LoggingUtil.LogMessage(DateTime.Now, "Inserting team member, character ID: " +
                                                           teamMember.CharacterID);
                             }
                         }
@@ -175,7 +176,7 @@ namespace Fotm.DAL.Database
                     catch (Exception e)
                     {
                         trans.Rollback();
-                        Console.WriteLine($"{DateTime.Now}: Insert teams and members failed: " + e);
+                        LoggingUtil.LogMessage(DateTime.Now, "Insert teams and members failed: " + e);
                     }
                 }
             }
@@ -201,19 +202,15 @@ namespace Fotm.DAL.Database
                 spec = GetSpecByName(pvpStats.Spec);
             }
 
-            var raceId = pvpStats.RaceId;
-            var factionId = pvpStats.FactionId;
-            var genderId = pvpStats.GenderId;
-
             var character = new Character
             {
                 Name = pvpStats.Name,
                 RealmID = realm.RealmID,
                 SpecID = spec.SpecID,
-                RaceID = raceId,
+                RaceID = pvpStats.RaceId,
                 ClassID = pvpStats.ClassId,
-                FactionID = Convert.ToBoolean(factionId),
-                GenderID = Convert.ToBoolean(genderId),
+                FactionID = Convert.ToBoolean(pvpStats.FactionId),
+                GenderID = Convert.ToBoolean(pvpStats.GenderId),
                 SeasonWins = pvpStats.SeasonWins,
                 SeasonLosses = pvpStats.SeasonLosses,
                 WeeklyWins = pvpStats.WeeklyWins,

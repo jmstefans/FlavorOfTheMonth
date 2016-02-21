@@ -9,7 +9,10 @@ using WowDotNetAPI.Models;
 namespace Fotm.Server.JobScheduling
 {
     /// <summary>
-    /// Class for creating/managing scheduled tasks.
+    /// Manager class for creating and scheduling of jobs.
+    /// The JobSchedulingManager and IJobs that it create, 
+    /// exchange information back and forth needed to complete a job.
+    /// But access to IJobs is only handled through the JobSchedulingManager.
     /// </summary>
     public class JobSchedulingManager : ManagerBase<JobSchedulingManager>, IDisposable
     {
@@ -73,6 +76,8 @@ namespace Fotm.Server.JobScheduling
                 trigger = LeaderboardClusteringJob.DefaultTrigger;
 
             var jobArgs = LeaderboardClusteringJob.GetRatingChangeJobArguments(Bracket._3v3);
+
+            // TESTING
             //var jobArgs = new Dictionary<string, Bracket> { { "bracketKey", Bracket._3v3 } };
             //var job = new LeaderboardClusteringJob();
             //while (true)
