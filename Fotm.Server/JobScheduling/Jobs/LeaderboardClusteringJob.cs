@@ -101,6 +101,8 @@ namespace Fotm.Server.JobScheduling.Jobs
         }
         private const string BRACKET_KEY = "bracketKey";
 
+        private static object _statsLock = new object();
+
         /// <summary>
         /// Executes the job, this is handled by the Scheduler in Quartz.
         /// </summary>
@@ -111,12 +113,16 @@ namespace Fotm.Server.JobScheduling.Jobs
             Console.WriteLine($"{DateTime.Now}: Executing RatingChange API call...");
 
             var stats = WowAPIManager.Default.GetPvpStats().ToList();
-            if (SetBaseLine) // only do once on initial execute
+
+            lock (_statsLock)
             {
-                //BaselineStats = new List<PvpStats>(stats);
-                _baseLineBag = new ConcurrentBag<PvpStats>(stats);
-                SetBaseLine = false;
-                return;
+                if (SetBaseLine) // only do once on initial execute
+                {
+                    //BaselineStats = new List<PvpStats>(stats);
+                    _baseLineBag = new ConcurrentBag<PvpStats>(stats);
+                    SetBaseLine = false;
+                    return;
+                }
             }
 
             var allyWinners = new List<TeamMember>();
@@ -124,53 +130,56 @@ namespace Fotm.Server.JobScheduling.Jobs
             var hordeWinners = new List<TeamMember>();
             var hordeLosers = new List<TeamMember>(); // factionId = 1
 
-            // sort by faction and into winners and losers
-            foreach (var stat in stats)
+            lock (_statsLock) // need to lock here for consistent base line stats
             {
-                var baseStat = _baseLineBag.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
-                                                                b.RealmSlug.Equals(stat.RealmSlug));
-                if (baseStat == null)
-                    continue; // player isn't in the baseline, nothing to compare against
-
-                var ratingChange = stat.Rating - baseStat.Rating;
-                if (ratingChange == 0) continue; // no rating change, ignore
-
-                var character = GetCharacter(stat);
-                var teamMember = new TeamMember
+                // sort by faction and into winners and losers
+                foreach (var stat in stats)
                 {
-                    RatingChangeValue = ratingChange,
-                    CurrentRating = stat.Rating,
-                    CharacterID = character.CharacterID,
-                    SpecID = character.SpecID,
-                    RaceID = character.RaceID,
-                    FactionID = character.FactionID,
-                    GenderID = character.GenderID,
-                    ModifiedDate = DateTime.Now,
-                    ModifiedStatus = "I",
-                    ModifiedUserID = 0,
-                };
+                    var baseStat = _baseLineBag.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
+                                                                    b.RealmSlug.Equals(stat.RealmSlug));
+                    if (baseStat == null)
+                        continue; // player isn't in the baseline, nothing to compare against
 
-                var isAlly = stat.FactionId == 0;
-                var wonGame = ratingChange > 0;
+                    var ratingChange = stat.Rating - baseStat.Rating;
+                    if (ratingChange == 0) continue; // no rating change, ignore
 
-                if (isAlly)
-                {
-                    if (wonGame)
-                        allyWinners.Add(teamMember);
-                    else
-                        allyLosers.Add(teamMember);
+                    var character = GetCharacter(stat);
+                    var teamMember = new TeamMember
+                    {
+                        RatingChangeValue = ratingChange,
+                        CurrentRating = stat.Rating,
+                        CharacterID = character.CharacterID,
+                        SpecID = character.SpecID,
+                        RaceID = character.RaceID,
+                        FactionID = character.FactionID,
+                        GenderID = character.GenderID,
+                        ModifiedDate = DateTime.Now,
+                        ModifiedStatus = "I",
+                        ModifiedUserID = 0,
+                    };
+
+                    var isAlly = stat.FactionId == 0;
+                    var wonGame = ratingChange > 0;
+
+                    if (isAlly)
+                    {
+                        if (wonGame)
+                            allyWinners.Add(teamMember);
+                        else
+                            allyLosers.Add(teamMember);
+                    }
+                    else // horde
+                    {
+                        if (wonGame)
+                            hordeWinners.Add(teamMember);
+                        else
+                            hordeLosers.Add(teamMember);
+                    }
                 }
-                else // horde
-                {
-                    if (wonGame)
-                        hordeWinners.Add(teamMember);
-                    else
-                        hordeLosers.Add(teamMember);
-                }
+
+                // current stats are baseline for next pass
+                _baseLineBag = new ConcurrentBag<PvpStats>(stats);
             }
-
-            // current stats are baseline for next pass
-            _baseLineBag = new ConcurrentBag<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
             var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
