@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Fotm.Server.Util
+namespace Fotm.DAL.Util
 {
     public class LoggingUtil 
     {
@@ -25,8 +25,7 @@ namespace Fotm.Server.Util
         /// <param name="writeToConsole">Set to true if the error should also be written to the console.</param>
         public static void LogMessage(DateTime currentDateTime, string errorMessage, LogType type = LogType.Error, bool writeToConsole = true)
         {
-
-            var error = $"Error logged at {currentDateTime.ToLongTimeString()} --- {errorMessage}";
+            var error = $"{type} logged @ {currentDateTime.ToLongTimeString()} -- {errorMessage}";
             LogMessageAsync(error);
             Console.WriteLine(error);
         }

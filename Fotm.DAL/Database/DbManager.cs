@@ -9,7 +9,7 @@ using Dapper;
 using Fotm.DAL.Database.DataProvider;
 using Fotm.DAL.Models;
 using Fotm.DAL.Models.Base;
-using Fotm.Server.Util;
+using Fotm.DAL.Util;
 using WowDotNetAPI.Models;
 
 namespace Fotm.DAL.Database
