@@ -33,7 +33,7 @@ namespace FlavorOfTheMonth.Models
         /// A list of the percentages of the total for each teamp 
         /// composition. Index will correspond to the TeamList's index.
         /// </summary>
-        public List<int> PercentageList { get; set; }
+        public List<float> PercentageList { get; set; }
 
         /// <summary>
         /// You know what the fuck this does.
@@ -41,6 +41,7 @@ namespace FlavorOfTheMonth.Models
         public TeamModel()
         {
             Members = new List<TeamMember>();
+            PercentageList = new List<float>();
         }
     }
 }

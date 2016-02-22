@@ -945,7 +945,7 @@ PRINT 'Creating Stored Procedures'
 USE [fotm]
 GO
 
-/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 2/21/2016 6:53:49 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 2/21/2016 8:10:24 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -975,9 +975,8 @@ BEGIN
 		LEFT OUTER JOIN fotm.dbo.Class cl on c.ClassID = cl.ClassID
 		LEFT OUTER JOIN fotm.dbo.Spec s on c.SpecID = s.SpecID
 		WHERE tm.ModifiedDate >= DATEADD(DAY, -30, SYSDATETIME())
-		ORDER BY t.TeamID
+		ORDER BY t.TeamID, cl.Name, s.SpecName
 END
 
 GO
-
 

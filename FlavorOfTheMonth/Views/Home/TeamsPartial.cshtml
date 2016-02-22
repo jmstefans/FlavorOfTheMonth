@@ -14,7 +14,7 @@
         {
             <tr>
                 <td>@team</td>
-                <td>placeholder%</td>
+                <td>@(Model.TeamModel.PercentageList.ElementAt(Model.TeamModel.TeamList.IndexOf(team)) + "%") </td>
             </tr>
         }
     </tbody>
