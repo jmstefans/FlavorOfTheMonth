@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace FlavorOfTheMonth.Controllers
 {
+    /// <summary>
+    /// Class that handles all of the user actions that can occur from the home page.
+    /// </summary>
     public class HomeController : Controller
     {
         private HomeModel respModel = new HomeModel();
@@ -16,7 +19,12 @@ namespace FlavorOfTheMonth.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Flavor of the month lets you see which World of Warcraft team compositions are currently the most popular.";
-            return View(new HomeModel());
+
+            // Get default data
+            respModel.TeamModel.TeamList = GetData();
+            respModel.CurBracket = HomeModel.Bracket._3v3;
+
+            return View(respModel);
         }
 
         // Returns the About view when called with GET /Home/About
@@ -26,15 +34,6 @@ namespace FlavorOfTheMonth.Controllers
                 + " Based on these differences we can guess who is playing with who and display the data to you.";
             ViewBag.Message += "Feel free to contact us at contactpandamic@gmail.com";
             return View();
-        }
-
-        // Example/demo purposes only
-        public PartialViewResult GetCharacters()
-        {
-            DataClassesDataContext context = new DataClassesDataContext();
-            Character[] chars = context.GetTable<Character>().ToArray();
-
-            return PartialView(chars);
         }
 
         // Method to handle the POST /Home/RefreshData
@@ -113,9 +112,9 @@ namespace FlavorOfTheMonth.Controllers
 
             switch (reqModel.bracket)
             {
-                case "3v3":
+                case "2v2":
                     {
-                        result = HomeModel.Bracket._3v3;
+                        result = HomeModel.Bracket._2v2;
                         break;
                     }
                 case "5v5":
@@ -128,10 +127,10 @@ namespace FlavorOfTheMonth.Controllers
                         result = HomeModel.Bracket._rbg;
                         break;
                     }
-                case "2v2":
+                case "3v3":
                 default:
                     {
-                        result = HomeModel.Bracket._2v2;
+                        result = HomeModel.Bracket._3v3;
                         break;
                     }
             }
@@ -142,6 +141,38 @@ namespace FlavorOfTheMonth.Controllers
         private string GetTrimmedParam(string s)
         {
             return s.Replace("\n", "").Replace("\\n", "").Trim();
+        }
+
+        private List<string> GetData()
+        {
+            var db = new DataClassesDataContext();
+            var result = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular()
+                         select new
+                         {
+                             d.TeamID,
+                             d.Name,
+                             d.SpecName
+                         };
+
+            // Create string interpretations of teams (Assuming only 3v3, US for now)
+            // FORM OF: {TeamMember1Class}{TeamMember1Spec}{TeamMember2Class}{TeamMember2Spec}{TeamMember3Class}{TeamMember3Spec}
+            int counter = 0;
+            bool firstTime = true;
+            List<string> teamsList = new List<string>();
+            string s = "";
+            foreach (var t in result)
+            {
+                if ((counter % (int)GetBracketFromString() == 0) && !firstTime)
+                {
+                    teamsList.Add(s);
+                    s = "";
+                }
+                firstTime = false;
+                s += t.Name + t.SpecName;
+                
+                counter++;
+            }
+            return teamsList;
         }
 
         #endregion Helpers
