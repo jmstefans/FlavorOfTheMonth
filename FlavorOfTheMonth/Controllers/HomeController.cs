@@ -20,7 +20,6 @@ namespace FlavorOfTheMonth.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Flavor of the month lets you see which World of Warcraft team compositions are currently the most popular.";
-            ViewBag.Test = 
             // Get default data
             respModel.TeamModel.TeamList = GetData();
 
