@@ -25,11 +25,23 @@ namespace FlavorOfTheMonth.Models
         public List<TeamMember> Members { get; set; }
 
         /// <summary>
+        /// String representation of teams.
+        /// </summary>
+        public List<string> TeamList { get; set; }
+
+        /// <summary>
+        /// A list of the percentages of the total for each teamp 
+        /// composition. Index will correspond to the TeamList's index.
+        /// </summary>
+        public List<float> PercentageList { get; set; }
+
+        /// <summary>
         /// You know what the fuck this does.
         /// </summary>
         public TeamModel()
         {
             Members = new List<TeamMember>();
+            PercentageList = new List<float>();
         }
     }
 }

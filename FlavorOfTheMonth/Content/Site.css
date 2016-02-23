@@ -141,11 +141,11 @@ footer {
     padding: 10px;
 }
 
-.rowAlternating > tr:nth-child(even){
+.rowAlternating tr:nth-child(even){
   background-color: #2D2D2D;
 }
 
-.rowAlternating > tr:nth-child(odd){
+.rowAlternating tr:nth-child(odd){
   background-color: #3A3A3A;
 }
 
@@ -559,7 +559,7 @@ table {
 
 th {
     font-size: 1.2em;
-    text-align: left;
+    text-align: center;
     border: none 0px;
     padding-left: 0;
 }
@@ -598,6 +598,10 @@ th {
 
     th.desc a:after {
         content: '▼';
+    }
+
+    th.center {
+        text-align: center;
     }
 
 td {

@@ -5,18 +5,16 @@
 <table id="dataTable">
     <thead>
         <tr>
-            <th>TeamID</th>
-            <th>Mean</th>
-            <th>Members</th>
+            <th class="center">Teams</th>
+            <th class="center">Percentage</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach(TeamMember member in Model.TeamModel.Members)
+    <tbody class="rowAlternating">
+        @foreach(string team in Model.TeamModel.TeamList)
         {
             <tr>
-                <td>@member.TeamID</td>
-                <td>todo</td>
-                <td>todo</td>
+                <td>@team</td>
+                <td>@(Model.TeamModel.PercentageList.ElementAt(Model.TeamModel.TeamList.IndexOf(team)) + "%") </td>
             </tr>
         }
     </tbody>

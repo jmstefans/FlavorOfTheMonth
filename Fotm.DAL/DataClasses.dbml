@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="fotm" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="Fotm.DAL.Properties.Settings" SettingsPropertyName="fotmConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True" SettingsObjectName="Fotm.DAL.Properties.Settings" SettingsPropertyName="fotmConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Character" Member="Characters">
     <Type Name="Character">
       <Column Name="CharacterID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -23,8 +23,8 @@
       <Association Name="Faction_Character" Member="Faction" ThisKey="FactionID" OtherKey="FactionID" Type="Faction" IsForeignKey="true" />
       <Association Name="Gender_Character" Member="Gender" ThisKey="GenderID" OtherKey="GenderID" Type="Gender" IsForeignKey="true" />
       <Association Name="Race_Character" Member="Race" ThisKey="RaceID" OtherKey="RaceID" Type="Race" IsForeignKey="true" />
-      <Association Name="Spec_Character" Member="Spec" ThisKey="SpecID" OtherKey="SpecID" Type="Spec" IsForeignKey="true" />
       <Association Name="Realm_Character" Member="Realm" ThisKey="RealmID" OtherKey="RealmID" Type="Realm" IsForeignKey="true" />
+      <Association Name="Spec_Character" Member="Spec" ThisKey="SpecID" OtherKey="SpecID" Type="Spec" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.webpages_UsersInRoles" Member="webpages_UsersInRoles">
@@ -100,18 +100,6 @@
       <Association Name="Region_Realm" Member="Realms" ThisKey="RegionID" OtherKey="RegionID" Type="Realm" />
     </Type>
   </Table>
-  <Table Name="dbo.Spec" Member="Specs">
-    <Type Name="Spec">
-      <Column Name="SpecID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="BlizzName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Column Name="ModifiedStatus" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
-      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Association Name="Spec_Character" Member="Characters" ThisKey="SpecID" OtherKey="SpecID" Type="Character" />
-      <Association Name="Spec_TeamMember" Member="TeamMembers" ThisKey="SpecID" OtherKey="SpecID" Type="TeamMember" />
-    </Type>
-  </Table>
   <Table Name="dbo.Team" Member="Teams">
     <Type Name="Team">
       <Column Name="TeamID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -142,8 +130,8 @@
       <Association Name="Faction_TeamMember" Member="Faction" ThisKey="FactionID" OtherKey="FactionID" Type="Faction" IsForeignKey="true" />
       <Association Name="Gender_TeamMember" Member="Gender" ThisKey="GenderID" OtherKey="GenderID" Type="Gender" IsForeignKey="true" />
       <Association Name="Race_TeamMember" Member="Race" ThisKey="RaceID" OtherKey="RaceID" Type="Race" IsForeignKey="true" />
-      <Association Name="Spec_TeamMember" Member="Spec" ThisKey="SpecID" OtherKey="SpecID" Type="Spec" IsForeignKey="true" />
       <Association Name="Team_TeamMember" Member="Team" ThisKey="TeamID" OtherKey="TeamID" Type="Team" IsForeignKey="true" />
+      <Association Name="Spec_TeamMember" Member="Spec" ThisKey="SpecID" OtherKey="SpecID" Type="Spec" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.UserProfile" Member="UserProfiles">
@@ -194,4 +182,23 @@
       <Association Name="Region_Realm" Member="Region" ThisKey="RegionID" OtherKey="RegionID" Type="Region" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Spec" Member="Specs">
+    <Type Name="Spec">
+      <Column Name="SpecID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SpecName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BlizzName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedStatus" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedUserID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="Spec_Character" Member="Characters" ThisKey="SpecID" OtherKey="SpecID" Type="Character" />
+      <Association Name="Spec_TeamMember" Member="TeamMembers" ThisKey="SpecID" OtherKey="SpecID" Type="TeamMember" />
+    </Type>
+  </Table>
+  <Function Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular" Method="SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular">
+    <ElementType Name="SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult">
+      <Column Name="TeamID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SpecName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

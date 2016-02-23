@@ -54,9 +54,6 @@ namespace Fotm.DAL
     partial void InsertRegion(Region instance);
     partial void UpdateRegion(Region instance);
     partial void DeleteRegion(Region instance);
-    partial void InsertSpec(Spec instance);
-    partial void UpdateSpec(Spec instance);
-    partial void DeleteSpec(Spec instance);
     partial void InsertTeam(Team instance);
     partial void UpdateTeam(Team instance);
     partial void DeleteTeam(Team instance);
@@ -78,10 +75,13 @@ namespace Fotm.DAL
     partial void InsertRealm(Realm instance);
     partial void UpdateRealm(Realm instance);
     partial void DeleteRealm(Realm instance);
+    partial void InsertSpec(Spec instance);
+    partial void UpdateSpec(Spec instance);
+    partial void DeleteSpec(Spec instance);
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -174,14 +174,6 @@ namespace Fotm.DAL
 			}
 		}
 		
-		public System.Data.Linq.Table<Spec> Specs
-		{
-			get
-			{
-				return this.GetTable<Spec>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Team> Teams
 		{
 			get
@@ -237,6 +229,21 @@ namespace Fotm.DAL
 				return this.GetTable<Realm>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Spec> Specs
+		{
+			get
+			{
+				return this.GetTable<Spec>();
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular")]
+		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular()
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+			return ((ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult>)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Character")]
@@ -287,9 +294,9 @@ namespace Fotm.DAL
 		
 		private EntityRef<Race> _Race;
 		
-		private EntityRef<Spec> _Spec;
-		
 		private EntityRef<Realm> _Realm;
+		
+		private EntityRef<Spec> _Spec;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -335,8 +342,8 @@ namespace Fotm.DAL
 			this._Faction = default(EntityRef<Faction>);
 			this._Gender = default(EntityRef<Gender>);
 			this._Race = default(EntityRef<Race>);
-			this._Spec = default(EntityRef<Spec>);
 			this._Realm = default(EntityRef<Realm>);
+			this._Spec = default(EntityRef<Spec>);
 			OnCreated();
 		}
 		
@@ -826,40 +833,6 @@ namespace Fotm.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_Character", Storage="_Spec", ThisKey="SpecID", OtherKey="SpecID", IsForeignKey=true)]
-		public Spec Spec
-		{
-			get
-			{
-				return this._Spec.Entity;
-			}
-			set
-			{
-				Spec previousValue = this._Spec.Entity;
-				if (((previousValue != value) 
-							|| (this._Spec.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Spec.Entity = null;
-						previousValue.Characters.Remove(this);
-					}
-					this._Spec.Entity = value;
-					if ((value != null))
-					{
-						value.Characters.Add(this);
-						this._SpecID = value.SpecID;
-					}
-					else
-					{
-						this._SpecID = default(int);
-					}
-					this.SendPropertyChanged("Spec");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Realm_Character", Storage="_Realm", ThisKey="RealmID", OtherKey="RealmID", IsForeignKey=true)]
 		public Realm Realm
 		{
@@ -890,6 +863,40 @@ namespace Fotm.DAL
 						this._RealmID = default(int);
 					}
 					this.SendPropertyChanged("Realm");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_Character", Storage="_Spec", ThisKey="SpecID", OtherKey="SpecID", IsForeignKey=true)]
+		public Spec Spec
+		{
+			get
+			{
+				return this._Spec.Entity;
+			}
+			set
+			{
+				Spec previousValue = this._Spec.Entity;
+				if (((previousValue != value) 
+							|| (this._Spec.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Spec.Entity = null;
+						previousValue.Characters.Remove(this);
+					}
+					this._Spec.Entity = value;
+					if ((value != null))
+					{
+						value.Characters.Add(this);
+						this._SpecID = value.SpecID;
+					}
+					else
+					{
+						this._SpecID = default(int);
+					}
+					this.SendPropertyChanged("Spec");
 				}
 			}
 		}
@@ -2368,244 +2375,6 @@ namespace Fotm.DAL
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Spec")]
-	public partial class Spec : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _SpecID;
-		
-		private string _Name;
-		
-		private string _BlizzName;
-		
-		private System.DateTime _ModifiedDate;
-		
-		private string _ModifiedStatus;
-		
-		private long _ModifiedUserID;
-		
-		private EntitySet<Character> _Characters;
-		
-		private EntitySet<TeamMember> _TeamMembers;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnSpecIDChanging(int value);
-    partial void OnSpecIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnBlizzNameChanging(string value);
-    partial void OnBlizzNameChanged();
-    partial void OnModifiedDateChanging(System.DateTime value);
-    partial void OnModifiedDateChanged();
-    partial void OnModifiedStatusChanging(string value);
-    partial void OnModifiedStatusChanged();
-    partial void OnModifiedUserIDChanging(long value);
-    partial void OnModifiedUserIDChanged();
-    #endregion
-		
-		public Spec()
-		{
-			this._Characters = new EntitySet<Character>(new Action<Character>(this.attach_Characters), new Action<Character>(this.detach_Characters));
-			this._TeamMembers = new EntitySet<TeamMember>(new Action<TeamMember>(this.attach_TeamMembers), new Action<TeamMember>(this.detach_TeamMembers));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int SpecID
-		{
-			get
-			{
-				return this._SpecID;
-			}
-			set
-			{
-				if ((this._SpecID != value))
-				{
-					this.OnSpecIDChanging(value);
-					this.SendPropertyChanging();
-					this._SpecID = value;
-					this.SendPropertyChanged("SpecID");
-					this.OnSpecIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BlizzName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string BlizzName
-		{
-			get
-			{
-				return this._BlizzName;
-			}
-			set
-			{
-				if ((this._BlizzName != value))
-				{
-					this.OnBlizzNameChanging(value);
-					this.SendPropertyChanging();
-					this._BlizzName = value;
-					this.SendPropertyChanged("BlizzName");
-					this.OnBlizzNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime2 NOT NULL")]
-		public System.DateTime ModifiedDate
-		{
-			get
-			{
-				return this._ModifiedDate;
-			}
-			set
-			{
-				if ((this._ModifiedDate != value))
-				{
-					this.OnModifiedDateChanging(value);
-					this.SendPropertyChanging();
-					this._ModifiedDate = value;
-					this.SendPropertyChanged("ModifiedDate");
-					this.OnModifiedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="NChar(10) NOT NULL", CanBeNull=false)]
-		public string ModifiedStatus
-		{
-			get
-			{
-				return this._ModifiedStatus;
-			}
-			set
-			{
-				if ((this._ModifiedStatus != value))
-				{
-					this.OnModifiedStatusChanging(value);
-					this.SendPropertyChanging();
-					this._ModifiedStatus = value;
-					this.SendPropertyChanged("ModifiedStatus");
-					this.OnModifiedStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
-		public long ModifiedUserID
-		{
-			get
-			{
-				return this._ModifiedUserID;
-			}
-			set
-			{
-				if ((this._ModifiedUserID != value))
-				{
-					this.OnModifiedUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._ModifiedUserID = value;
-					this.SendPropertyChanged("ModifiedUserID");
-					this.OnModifiedUserIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_Character", Storage="_Characters", ThisKey="SpecID", OtherKey="SpecID")]
-		public EntitySet<Character> Characters
-		{
-			get
-			{
-				return this._Characters;
-			}
-			set
-			{
-				this._Characters.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_TeamMember", Storage="_TeamMembers", ThisKey="SpecID", OtherKey="SpecID")]
-		public EntitySet<TeamMember> TeamMembers
-		{
-			get
-			{
-				return this._TeamMembers;
-			}
-			set
-			{
-				this._TeamMembers.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Characters(Character entity)
-		{
-			this.SendPropertyChanging();
-			entity.Spec = this;
-		}
-		
-		private void detach_Characters(Character entity)
-		{
-			this.SendPropertyChanging();
-			entity.Spec = null;
-		}
-		
-		private void attach_TeamMembers(TeamMember entity)
-		{
-			this.SendPropertyChanging();
-			entity.Spec = this;
-		}
-		
-		private void detach_TeamMembers(TeamMember entity)
-		{
-			this.SendPropertyChanging();
-			entity.Spec = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Team")]
 	public partial class Team : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -2878,9 +2647,9 @@ namespace Fotm.DAL
 		
 		private EntityRef<Race> _Race;
 		
-		private EntityRef<Spec> _Spec;
-		
 		private EntityRef<Team> _Team;
+		
+		private EntityRef<Spec> _Spec;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2918,8 +2687,8 @@ namespace Fotm.DAL
 			this._Faction = default(EntityRef<Faction>);
 			this._Gender = default(EntityRef<Gender>);
 			this._Race = default(EntityRef<Race>);
-			this._Spec = default(EntityRef<Spec>);
 			this._Team = default(EntityRef<Team>);
+			this._Spec = default(EntityRef<Spec>);
 			OnCreated();
 		}
 		
@@ -3323,40 +3092,6 @@ namespace Fotm.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_TeamMember", Storage="_Spec", ThisKey="SpecID", OtherKey="SpecID", IsForeignKey=true)]
-		public Spec Spec
-		{
-			get
-			{
-				return this._Spec.Entity;
-			}
-			set
-			{
-				Spec previousValue = this._Spec.Entity;
-				if (((previousValue != value) 
-							|| (this._Spec.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Spec.Entity = null;
-						previousValue.TeamMembers.Remove(this);
-					}
-					this._Spec.Entity = value;
-					if ((value != null))
-					{
-						value.TeamMembers.Add(this);
-						this._SpecID = value.SpecID;
-					}
-					else
-					{
-						this._SpecID = default(int);
-					}
-					this.SendPropertyChanged("Spec");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Team_TeamMember", Storage="_Team", ThisKey="TeamID", OtherKey="TeamID", IsForeignKey=true)]
 		public Team Team
 		{
@@ -3387,6 +3122,40 @@ namespace Fotm.DAL
 						this._TeamID = default(long);
 					}
 					this.SendPropertyChanged("Team");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_TeamMember", Storage="_Spec", ThisKey="SpecID", OtherKey="SpecID", IsForeignKey=true)]
+		public Spec Spec
+		{
+			get
+			{
+				return this._Spec.Entity;
+			}
+			set
+			{
+				Spec previousValue = this._Spec.Entity;
+				if (((previousValue != value) 
+							|| (this._Spec.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Spec.Entity = null;
+						previousValue.TeamMembers.Remove(this);
+					}
+					this._Spec.Entity = value;
+					if ((value != null))
+					{
+						value.TeamMembers.Add(this);
+						this._SpecID = value.SpecID;
+					}
+					else
+					{
+						this._SpecID = default(int);
+					}
+					this.SendPropertyChanged("Spec");
 				}
 			}
 		}
@@ -4300,6 +4069,306 @@ namespace Fotm.DAL
 		{
 			this.SendPropertyChanging();
 			entity.Realm = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Spec")]
+	public partial class Spec : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SpecID;
+		
+		private string _SpecName;
+		
+		private string _BlizzName;
+		
+		private System.DateTime _ModifiedDate;
+		
+		private string _ModifiedStatus;
+		
+		private long _ModifiedUserID;
+		
+		private EntitySet<Character> _Characters;
+		
+		private EntitySet<TeamMember> _TeamMembers;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSpecIDChanging(int value);
+    partial void OnSpecIDChanged();
+    partial void OnSpecNameChanging(string value);
+    partial void OnSpecNameChanged();
+    partial void OnBlizzNameChanging(string value);
+    partial void OnBlizzNameChanged();
+    partial void OnModifiedDateChanging(System.DateTime value);
+    partial void OnModifiedDateChanged();
+    partial void OnModifiedStatusChanging(string value);
+    partial void OnModifiedStatusChanged();
+    partial void OnModifiedUserIDChanging(long value);
+    partial void OnModifiedUserIDChanged();
+    #endregion
+		
+		public Spec()
+		{
+			this._Characters = new EntitySet<Character>(new Action<Character>(this.attach_Characters), new Action<Character>(this.detach_Characters));
+			this._TeamMembers = new EntitySet<TeamMember>(new Action<TeamMember>(this.attach_TeamMembers), new Action<TeamMember>(this.detach_TeamMembers));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int SpecID
+		{
+			get
+			{
+				return this._SpecID;
+			}
+			set
+			{
+				if ((this._SpecID != value))
+				{
+					this.OnSpecIDChanging(value);
+					this.SendPropertyChanging();
+					this._SpecID = value;
+					this.SendPropertyChanged("SpecID");
+					this.OnSpecIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string SpecName
+		{
+			get
+			{
+				return this._SpecName;
+			}
+			set
+			{
+				if ((this._SpecName != value))
+				{
+					this.OnSpecNameChanging(value);
+					this.SendPropertyChanging();
+					this._SpecName = value;
+					this.SendPropertyChanged("SpecName");
+					this.OnSpecNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BlizzName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string BlizzName
+		{
+			get
+			{
+				return this._BlizzName;
+			}
+			set
+			{
+				if ((this._BlizzName != value))
+				{
+					this.OnBlizzNameChanging(value);
+					this.SendPropertyChanging();
+					this._BlizzName = value;
+					this.SendPropertyChanged("BlizzName");
+					this.OnBlizzNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime2 NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this.OnModifiedDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedDate = value;
+					this.SendPropertyChanged("ModifiedDate");
+					this.OnModifiedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedStatus", DbType="NChar(10) NOT NULL", CanBeNull=false)]
+		public string ModifiedStatus
+		{
+			get
+			{
+				return this._ModifiedStatus;
+			}
+			set
+			{
+				if ((this._ModifiedStatus != value))
+				{
+					this.OnModifiedStatusChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedStatus = value;
+					this.SendPropertyChanged("ModifiedStatus");
+					this.OnModifiedStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedUserID", DbType="BigInt NOT NULL")]
+		public long ModifiedUserID
+		{
+			get
+			{
+				return this._ModifiedUserID;
+			}
+			set
+			{
+				if ((this._ModifiedUserID != value))
+				{
+					this.OnModifiedUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._ModifiedUserID = value;
+					this.SendPropertyChanged("ModifiedUserID");
+					this.OnModifiedUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_Character", Storage="_Characters", ThisKey="SpecID", OtherKey="SpecID")]
+		public EntitySet<Character> Characters
+		{
+			get
+			{
+				return this._Characters;
+			}
+			set
+			{
+				this._Characters.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Spec_TeamMember", Storage="_TeamMembers", ThisKey="SpecID", OtherKey="SpecID")]
+		public EntitySet<TeamMember> TeamMembers
+		{
+			get
+			{
+				return this._TeamMembers;
+			}
+			set
+			{
+				this._TeamMembers.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Characters(Character entity)
+		{
+			this.SendPropertyChanging();
+			entity.Spec = this;
+		}
+		
+		private void detach_Characters(Character entity)
+		{
+			this.SendPropertyChanging();
+			entity.Spec = null;
+		}
+		
+		private void attach_TeamMembers(TeamMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.Spec = this;
+		}
+		
+		private void detach_TeamMembers(TeamMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.Spec = null;
+		}
+	}
+	
+	public partial class SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult
+	{
+		
+		private long _TeamID;
+		
+		private string _Name;
+		
+		private string _SpecName;
+		
+		public SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TeamID", DbType="BigInt NOT NULL")]
+		public long TeamID
+		{
+			get
+			{
+				return this._TeamID;
+			}
+			set
+			{
+				if ((this._TeamID != value))
+				{
+					this._TeamID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this._Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecName", DbType="NVarChar(50)")]
+		public string SpecName
+		{
+			get
+			{
+				return this._SpecName;
+			}
+			set
+			{
+				if ((this._SpecName != value))
+				{
+					this._SpecName = value;
+				}
+			}
 		}
 	}
 }

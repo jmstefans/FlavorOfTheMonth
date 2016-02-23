@@ -70,7 +70,7 @@ namespace FlavorOfTheMonth.Models
         public HomeModel()
         {
             ClassModel = new ClassModel();
-            CurBracket = Bracket._2v2;
+            CurBracket = Bracket._3v3;
             CurRegion = Region.US;
             DataClassesDataContext context = new DataClassesDataContext();
             Character = new List<Character>();
