@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Fotm.DAL.Database.DataProvider;
-using Fotm.DAL.Models;
 using Fotm.DAL.Models.Base;
 using Fotm.DAL.Util;
 using WowDotNetAPI.Models;

@@ -14,6 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fotm.DAL", "Fotm.DAL\Fotm.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fotm.Server", "Fotm.Server\Fotm.Server.csproj", "{BA665210-AA36-4A23-AD4A-76B4952E48AE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E56F24A4-3790-43C5-A5EB-3EFC5A76D738}"
+	ProjectSection(SolutionItems) = preProject
+		Personal.config = Personal.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

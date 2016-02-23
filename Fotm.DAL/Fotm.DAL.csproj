@@ -89,6 +89,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Util\ConfigUtil.cs" />
     <Compile Include="Util\LoggingUtil.cs" />
   </ItemGroup>
   <ItemGroup>
