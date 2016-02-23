@@ -32,13 +32,13 @@ namespace Fotm.DAL.Util
 
         private static async void LogMessageAsync(string message)
         {
-            if (!Directory.Exists(LOG_DIR))
-                Directory.CreateDirectory(LOG_DIR);
+            //if (!Directory.Exists(LOG_DIR))
+            //    Directory.CreateDirectory(LOG_DIR);
 
-            using (var writer = new StreamWriter(_defaultErrorLogFilePath, true))
-            {
-                await writer.WriteLineAsync(message);
-            }
+            //using (var writer = new StreamWriter(_defaultErrorLogFilePath, true))
+            //{
+            //    await writer.WriteLineAsync(message);
+            //}
         }
     }
 }

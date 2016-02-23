@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Fotm.DAL.Models.Base;
-using Fotm.Server.Util;
+using Fotm.DAL.Util;
 using WowDotNetAPI;
 using WowDotNetAPI.Models;
 

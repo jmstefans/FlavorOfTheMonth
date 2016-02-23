@@ -167,7 +167,7 @@ namespace Fotm.DAL.Database
                                 }, trans);
 
                                 LoggingUtil.LogMessage(DateTime.Now, "Inserting team member, character ID: " +
-                                                          teamMember.CharacterID);
+                                                          teamMember.CharacterID, LoggingUtil.LogType.Notice);
                             }
                         }
 
