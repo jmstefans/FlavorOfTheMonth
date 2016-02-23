@@ -271,8 +271,8 @@ namespace Fotm.DAL.Database
         /// <param name="realmName">Name of realm to insert.</param>
         public void InsertNewRealm(string realmName)
         {
-            var query = $"insert into [Realm] (Name, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
-                        $"values (@Name, '{DateTime.Now}', 'I', 0);";
+            var query = $"insert into [Realm] (Name, RegionID, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+                        $"values (@Name, 1,'{DateTime.Now}', 'I', 0);";
             using (var conn = _dataProvider.GetDataProviderConnection())
             {
                 conn.Execute(query, new { Name = realmName });
@@ -285,7 +285,7 @@ namespace Fotm.DAL.Database
         /// <param name="blizzSpecName">Name of blizz spec to insert (e.g. MAGE_FROST)</param>
         public void InsertNewSpec(string blizzSpecName)
         {
-            var query = $"insert into [Spec] (Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
+            var query = $"insert into [Spec] (SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
                         $"values (@Name, @BlizzName, '{DateTime.Now}', 'I', 0);";
             using (var conn = _dataProvider.GetDataProviderConnection())
                 conn.Execute(query, new { Name = blizzSpecName, BlizzName = blizzSpecName });
@@ -347,7 +347,7 @@ namespace Fotm.DAL.Database
         /// <summary>
         /// Gets the DB spec object by name.
         /// </summary>
-        /// <param name="name">Name of the spec.</param>
+        /// <param name="name">BlizzName of the spec.</param>
         /// <returns>Spec if found otherwise null.</returns>
         public Spec GetSpecByName(string name)
         {

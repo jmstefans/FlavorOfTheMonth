@@ -71,7 +71,7 @@ namespace Fotm.Server.JobScheduling.Jobs
         #region Properties
 
         /// <summary>
-        /// Default trigger with an interval of 1 sec that repeats for ever.
+        /// Default trigger with an interval of 1 sec that repeats forever.
         /// </summary>
         public static ITrigger DefaultTrigger
         {
