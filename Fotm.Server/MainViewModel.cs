@@ -3,6 +3,7 @@ using Fotm.DAL.Database;
 using Fotm.DAL.Database.DataProvider;
 using Fotm.DAL.Models.Base;
 using Fotm.Server.JobScheduling;
+using Fotm.DAL.Util;
 
 namespace Fotm.Server
 {
@@ -11,8 +12,8 @@ namespace Fotm.Server
         #region Members
 
         // Connection info
-        private const string SERVER = ".";
-        private const string DB_NAME = "fotm";
+        private string SERVER = ConfigUtil.SQL_Server;
+        private string DB_NAME = "fotm";
 
         // Managers
         private readonly DbManager _dbManager = DbManager.Default;
