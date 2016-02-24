@@ -10,11 +10,11 @@
         </tr>
     </thead>
     <tbody class="rowAlternating">
-        @foreach(string team in Model.TeamModel.TeamList)
+        @foreach(CompPercentModel team in Model.TeamModel.Comps)
         {
             <tr>
-                <td>@team</td>
-                <td>@(Model.TeamModel.PercentageList.ElementAt(Model.TeamModel.TeamList.IndexOf(team)) + "%") </td>
+                <td>@team.strComp</td>
+                <td>@((int)(Model.TeamModel.Comps[Model.TeamModel.Comps.IndexOf(team)].Percentage * 100) + "%") </td>
             </tr>
         }
     </tbody>

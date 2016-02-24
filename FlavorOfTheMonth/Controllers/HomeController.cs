@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using FlavorOfTheMonth.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System;
 
 namespace FlavorOfTheMonth.Controllers
 {
@@ -16,12 +15,16 @@ namespace FlavorOfTheMonth.Controllers
         private HomeModel respModel = new HomeModel();
         private HomeRequestModel reqModel = new HomeRequestModel();
 
+        #region View Returners
+
         // Returns the Index view when called with GET /Home/Index
         public ActionResult Index()
         {
-            ViewBag.Message = "Flavor of the month lets you see which World of Warcraft team compositions are currently the most popular.";
-            // Get default data
-            respModel.TeamModel.TeamList = GetData();
+            ViewBag.Message = "Flavor of the month lets you see which World of Warcraft comp compositions are currently the most popular.";
+
+            SetCompStrings();
+            CalcCompPercentages();
+            SortCompsByPercentage();
 
             return View(respModel);
         }
@@ -29,7 +32,7 @@ namespace FlavorOfTheMonth.Controllers
         // Returns the About view when called with GET /Home/About
         public ActionResult About()
         {
-            ViewBag.Message = "We use team clustering algorithm to analyze the changes in ratings from the players on the leaderboards."
+            ViewBag.Message = "We use a clustering algorithm to analyze the changes in ratings from the players on the leaderboards."
                 + " Based on these differences we can guess who is playing with who and display the data to you.";
             ViewBag.Message += "Feel free to contact us at contactpandamic@gmail.com";
             return View();
@@ -60,6 +63,8 @@ namespace FlavorOfTheMonth.Controllers
             
             return PartialView(respModel);
         }
+
+        #endregion View Returners
 
         #region Helpers
 
@@ -142,7 +147,9 @@ namespace FlavorOfTheMonth.Controllers
             return s.Replace("\n", "").Replace("\\n", "").Trim();
         }
 
-        private List<string> GetData()
+        // Create string interpretations of teams (Assuming only 3v3, US for now)
+        // FORM OF: {TeamMember1Class}{TeamMember1Spec}{TeamMember2Class}{TeamMember2Spec}{TeamMember3Class}{TeamMember3Spec}
+        private void SetCompStrings()
         {
             var db = new DataClassesDataContext();
             var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular()
@@ -153,55 +160,64 @@ namespace FlavorOfTheMonth.Controllers
                                   d.SpecName
                               };
 
-            // Create string interpretations of teams (Assuming only 3v3, US for now)
-            // FORM OF: {TeamMember1Class}{TeamMember1Spec}{TeamMember2Class}{TeamMember2Spec}{TeamMember3Class}{TeamMember3Spec}
             int playerCounter = 0;
-            List<string> teamsList = new List<string>();
-            List<int> teamCompTotalsList = new List<int>();
             string str = "";
             foreach (var tm in teamMembers)
             {
+                CompPercentModel compModel = new CompPercentModel();
                 str += tm.Name + tm.SpecName;
 
+                // set a teamIndex if the current string matches a string already in the comps list
                 int teamIndex = -1;
-                foreach (var team in teamsList)
+                foreach (var comp in respModel.TeamModel.Comps)
                 {
-                    if (str == team) // team comp has already been added to the team so don't add again but go on to update percentages
-                        teamIndex = teamsList.IndexOf(team);
+                    if (str == comp.strComp) // if already in list 
+                        teamIndex = respModel.TeamModel.Comps.IndexOf(comp);
                 }
 
-                // If we have finished iterating through a team then add the team to the team list
-                // and update the percentage list.
+                // If we have finished iterating through a team then add the team to the comp. list
                 if (playerCounter % (int)GetBracketFromString() == 2)
                 {
                     if (teamIndex == -1) // if this is a new team comp., then add it to both lists (classes & percentages)
                     {
-                        teamsList.Add(str);
-                        teamCompTotalsList.Add(1);
+                        compModel.strComp = str;
+                        compModel.Total = 1;
+                        respModel.TeamModel.Comps.Add(compModel);
                     }
                     else
-                        teamCompTotalsList[teamIndex]++;
+                        respModel.TeamModel.Comps[teamIndex].Total++;
                     str = "";
                 }
                 playerCounter++;
             }
-            ConvertCounterListToPercentageList(teamCompTotalsList);
-            return teamsList;
         }
 
-        private void ConvertCounterListToPercentageList(List<int> teamCompCountList)
+        /// <summary>
+        /// Fill in the Percentage property of each team composition.
+        /// </summary>
+        private void CalcCompPercentages()
         {
             // compute sum
             int sum = 0;
-            foreach(var i in teamCompCountList)
+            foreach(var comp in respModel.TeamModel.Comps)
             {
-                sum += i;
+                sum += comp.Total;
             }
             // Replace number of times each unique class comp. appeared with it's percentage of the total team comps.
-            foreach(var i in teamCompCountList)
+            foreach(var comp in respModel.TeamModel.Comps)
             {
-                respModel.TeamModel.PercentageList.Add((float)i / sum);
+                comp.Percentage = (float)comp.Total / sum;
             }
+        }
+
+        /// <summary>
+        /// Sort the team compositions by their popularity percentage descending.
+        /// </summary>
+        private void SortCompsByPercentage()
+        {
+            List<CompPercentModel> sortedList = respModel.TeamModel.Comps.OrderBy(c => c.Percentage).ToList();
+            sortedList.Reverse();
+            respModel.TeamModel.Comps = sortedList;
         }
 
         #endregion Helpers
