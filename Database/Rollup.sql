@@ -794,106 +794,106 @@ PRINT 'Inserting Specs'
 
 SET IDENTITY_INSERT Spec ON
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (62, 'Arcane', 'MAGE_ARCANE', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (63, 'Fire', 'MAGE_FIRE', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (64, 'Frost', 'MAKE_FROST', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (65, 'Holy', 'PALADIN_HOLY', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (66, 'Protection', 'PALADIN_PROTECTION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (70, 'Retribution', 'PALADIN_RETRIBUTION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (71, 'Arms', 'WARRIOR_ARMS', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (72, 'Fury', 'WARRIOR_FURY', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (73, 'Protection', 'WARRIOR_PROTECTION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (102, 'Balance', 'DRUID_BALANCE', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (103, 'Feral', 'DRUID_FERAL', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (104, 'Guardian', 'DRUID_GUARDIAN', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (105, 'Restoration', 'DRUID_RESTOR', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (250, 'Blood', 'DK_BLOOD', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (251, 'Frost', 'DK_FROST', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (252, 'Unholy', 'DK_UNHOLY', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (253, 'Beast Mastery', 'HUNTER_BEASTMASTER', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (254, 'Marksmanship', 'HUNTER_MARKSMAN', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (255, 'Survival', 'HUNTER_SURVIVAL', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (256, 'Discipline', 'PRIEST_DISCIPLINE', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (257, 'Holy', 'PRIEST_HOLY', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (258, 'Shadow', 'PRIEST_SHADOW', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (259, 'Assassination', 'ROGUE_ASSASSINATION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (260, 'Combat', 'ROGUE_COMBAT', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (261, 'Subtlety', 'ROGUE_SUBTLETY', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (262, 'Elemental', 'SHAMAN_ELEMENTAL', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (263, 'Enhancement', 'SHAMAN_ENHANCEMENT', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (264, 'Restoration', 'SHAMAN_RESTORATION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (265, 'Affliction', 'WARLOCK_AFFLICTION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (266, 'Demonology', 'WARLOCK_DEMONOLOGY', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (267, 'Destruction', 'WARLOCK_DESTRUCTION', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (268, 'Brewmaster', 'MONK_BREWMASTER', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (269, 'Windwalker', 'MONK_WINDDANCER', SYSDATETIME(), 'I', 0)
 
-insert into Spec (SpecID, Name, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
+insert into Spec (SpecID, SpecName, BlizzName, ModifiedDate, ModifiedStatus, ModifiedUserID)
 	values (270, 'Mistweaver', 'MONK_MISTWEAVER', SYSDATETIME(), 'I', 0)
 
 SET IDENTITY_INSERT Spec OFF
