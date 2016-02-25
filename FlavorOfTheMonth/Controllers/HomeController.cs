@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FlavorOfTheMonth.Models;
 using Fotm.DAL;
-using System.Linq;
-using System.Web.Mvc;
-using FlavorOfTheMonth.Models;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using Fotm.DAL.Util;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 
 namespace FlavorOfTheMonth.Controllers
 {
@@ -49,7 +50,8 @@ namespace FlavorOfTheMonth.Controllers
                 BuildResponseModel();
 
                 SetCompStrings();
-                FilterByClass(respModel.CurCharacterList);
+                if (respModel.CurCharacterList.Count > 0)
+                    FilterByClass(respModel.CurCharacterList);
                 CalcCompPercentages();
                 SortCompsByPercentage();
 
@@ -260,6 +262,7 @@ namespace FlavorOfTheMonth.Controllers
         }
 
         /// <summary>
+        /// Remove all of the comps that don't contain the current filtered classes.
         /// Only filtering by one class at the moment. Also the percentages 
         /// will be of the subset of data and not the entire population.
         /// TODO Add a switch to flip between entire population and subset
@@ -267,11 +270,10 @@ namespace FlavorOfTheMonth.Controllers
         private void FilterByClass(List<string> classFilterList)
         {
             classFilterList.RemoveAll(x => x == "Select a class...");
-
-            foreach (var classFilter in classFilterList)
-            {
-                respModel.TeamModel.Comps.RemoveAll(x => !x.strComp.Contains(classFilter));
-            }
+            classFilterList = classFilterList.OrderBy(c => c).ToList();
+            // essentially class1 followed by any thing followed by class2 etc.
+            string pattern = classFilterList.Aggregate("", (current, classFilter) => current + (classFilter + ".*"));
+            respModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
         }
 
         #endregion Helpers
