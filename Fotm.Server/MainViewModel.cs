@@ -40,7 +40,6 @@ namespace Fotm.Server
 
         public void CleanUp()
         {
-            _dbManager.Dispose();
             _jobManager.Dispose();
         }
 

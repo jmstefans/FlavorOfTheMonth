@@ -43,9 +43,9 @@ namespace Fotm.Server.Analysis.Algorithms
                                          int maximumIterations,
                                          int teamSize)
         {
+            // init loop variables
             var currentIteration = 0;
             var maxIterations = membersToCluster.Count * maximumIterations;
-
             var changed = true;
             var success = true;
 

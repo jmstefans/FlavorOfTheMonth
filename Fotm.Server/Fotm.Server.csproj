@@ -133,7 +133,6 @@
     </ApplicationDefinition>
     <Compile Include="Analysis\Algorithms\Kmeans.cs" />
     <Compile Include="Analysis\Algorithms\LeaderboardKmeans.cs" />
-    <Compile Include="JobScheduling\Jobs\KmeansClusteringJob.cs" />
     <Compile Include="JobScheduling\Jobs\LeaderboardClusteringJob.cs" />
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
     <Compile Include="MainViewModel.cs" />
