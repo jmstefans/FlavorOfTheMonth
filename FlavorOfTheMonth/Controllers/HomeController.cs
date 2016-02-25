@@ -1,9 +1,11 @@
-﻿using Fotm.DAL;
+﻿using System;
+using Fotm.DAL;
 using System.Linq;
 using System.Web.Mvc;
 using FlavorOfTheMonth.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Fotm.DAL.Util;
 
 namespace FlavorOfTheMonth.Controllers
 {
@@ -41,33 +43,33 @@ namespace FlavorOfTheMonth.Controllers
         // Method to handle the POST /Home/RefreshData
         public PartialViewResult RefreshData(object paramObj)
         {
-            // Convert parameter to team string
-            string param = ((string[])paramObj).Length > 0 ? ((string[])paramObj).ElementAt(0) : null;
+            try
+            {
+                CreateRequestModel(paramObj);
+                BuildResponseModel();
 
-            param = GetTrimmedParam(param); // Remove extra \n and \\n chars and any whitespace
+                SetCompStrings();
+                FilterByClass(respModel.CurCharacterList);
+                CalcCompPercentages();
+                SortCompsByPercentage();
 
-            if (param != null)
-                reqModel = JsonConvert.DeserializeObject<HomeRequestModel>(param);
-
-            // Build response HomeModel for the views.
-            respModel.CurRegion = GetRegionFromString();
-            respModel.CurBracket = GetBracketFromString();
-
-            var stringList = reqModel.classes.OfType<string>();
-            stringList = stringList.Select(s => s.Trim());
-            respModel.CurCharacterList = new List<string>(stringList);
-
-            var stringList2 = reqModel.specs.OfType<string>();
-            stringList2 = stringList2.Select(s => s.Trim());
-            respModel.CurSelectedSpecList = new List<string>(stringList2);
-            
-            return PartialView(respModel);
+                return PartialView(respModel);
+            }
+            catch (Exception ex)
+            {
+                LoggingUtil.LogMessage(DateTime.Now, $"Message: {ex.Message}\nInnerException: {ex.InnerException}");
+                return PartialView(respModel);
+            }
         }
 
         #endregion View Returners
 
         #region Helpers
 
+        /// <summary>
+        /// Returns the region enum from the request model object's string value.
+        /// </summary>
+        /// <returns></returns>
         public HomeModel.Region GetRegionFromString()
         {
             HomeModel.Region result;
@@ -110,6 +112,10 @@ namespace FlavorOfTheMonth.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Returns the bracket enum from the request model object's string value.
+        /// </summary>
+        /// <returns></returns>
         public HomeModel.Bracket GetBracketFromString()
         {
             HomeModel.Bracket result;
@@ -142,6 +148,13 @@ namespace FlavorOfTheMonth.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Something is fudged with the AJAX request and we end up with extra return
+        /// characters and whitespace. I think it has something to do with calling 
+        /// JSON stringify on something that's already a string.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         private string GetTrimmedParam(string s)
         {
             return s.Replace("\n", "").Replace("\\n", "").Trim();
@@ -218,6 +231,47 @@ namespace FlavorOfTheMonth.Controllers
             List<CompPercentModel> sortedList = respModel.TeamModel.Comps.OrderBy(c => c.Percentage).ToList();
             sortedList.Reverse();
             respModel.TeamModel.Comps = sortedList;
+        }
+
+        private void CreateRequestModel(object paramObj)
+        {
+            // Convert parameter to team string
+            string param = ((string[])paramObj).Length > 0 ? ((string[])paramObj).ElementAt(0) : null;
+
+            param = GetTrimmedParam(param); // Remove extra \n and \\n chars and any whitespace
+
+            if (param != null)
+                reqModel = JsonConvert.DeserializeObject<HomeRequestModel>(param);
+        }
+
+        private void BuildResponseModel()
+        {
+            // Build response HomeModel for the views.
+            respModel.CurRegion = GetRegionFromString();
+            respModel.CurBracket = GetBracketFromString();
+
+            var stringList = reqModel.classes.OfType<string>();
+            stringList = stringList.Select(s => s.Trim());
+            respModel.CurCharacterList = new List<string>(stringList);
+
+            var stringList2 = reqModel.specs.OfType<string>();
+            stringList2 = stringList2.Select(s => s.Trim());
+            respModel.CurSelectedSpecList = new List<string>(stringList2);
+        }
+
+        /// <summary>
+        /// Only filtering by one class at the moment. Also the percentages 
+        /// will be of the subset of data and not the entire population.
+        /// TODO Add a switch to flip between entire population and subset
+        /// </summary>
+        private void FilterByClass(List<string> classFilterList)
+        {
+            classFilterList.RemoveAll(x => x == "Select a class...");
+
+            foreach (var classFilter in classFilterList)
+            {
+                respModel.TeamModel.Comps.RemoveAll(x => !x.strComp.Contains(classFilter));
+            }
         }
 
         #endregion Helpers

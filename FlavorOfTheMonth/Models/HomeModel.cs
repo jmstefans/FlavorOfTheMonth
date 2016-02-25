@@ -62,6 +62,9 @@ namespace FlavorOfTheMonth.Models
         /// </summary>
         public List<string> CurSelectedSpecList;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public TeamModel TeamModel;
 
         /// <summary>

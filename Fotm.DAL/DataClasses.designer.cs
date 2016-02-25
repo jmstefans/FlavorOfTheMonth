@@ -81,7 +81,7 @@ namespace Fotm.DAL
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
