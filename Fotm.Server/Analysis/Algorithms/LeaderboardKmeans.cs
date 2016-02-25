@@ -26,7 +26,9 @@ namespace Fotm.Server.Analysis.Algorithms
             var numberOfTeams = members.Count / teamSize;
             if (numberOfTeams * teamSize != members.Count)
             {
-                LoggingUtil.LogMessage(DateTime.Now, "The team size requested doesn't divide evenly with the number of team members provided", LoggingUtil.LogType.Warning);
+                LoggingUtil.LogMessage(DateTime.Now, 
+                                       "The team size requested doesn't divide evenly with the number of team members provided", 
+                                       LoggingUtil.LogType.Warning);
                 return null; // for now, don't cluster uneven number of teams
             }
 
