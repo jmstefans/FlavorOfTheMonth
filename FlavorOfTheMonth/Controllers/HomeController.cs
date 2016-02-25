@@ -52,6 +52,8 @@ namespace FlavorOfTheMonth.Controllers
                 SetCompStrings();
                 if (respModel.CurCharacterList.Count > 0)
                     FilterByClass(respModel.CurCharacterList);
+                if (respModel.CurSelectedSpecList.Count > 0)
+                    FilterBySpec(respModel.CurSelectedSpecList);
                 CalcCompPercentages();
                 SortCompsByPercentage();
 
@@ -263,8 +265,7 @@ namespace FlavorOfTheMonth.Controllers
 
         /// <summary>
         /// Remove all of the comps that don't contain the current filtered classes.
-        /// Only filtering by one class at the moment. Also the percentages 
-        /// will be of the subset of data and not the entire population.
+        /// Also the percentages will be of the subset of data and not the entire population.
         /// TODO Add a switch to flip between entire population and subset
         /// </summary>
         private void FilterByClass(List<string> classFilterList)
@@ -273,6 +274,20 @@ namespace FlavorOfTheMonth.Controllers
             classFilterList = classFilterList.OrderBy(c => c).ToList();
             // essentially class1 followed by any thing followed by class2 etc.
             string pattern = classFilterList.Aggregate("", (current, classFilter) => current + (classFilter + ".*"));
+            respModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
+        }
+
+        /// <summary>
+        /// Remove all of the comps that don't contain the current filtered specs.
+        /// Also the percentages will be of the subset of data and not the entire population.
+        /// TODO Add a switch to flip between entire population and subset
+        /// </summary>
+        private void FilterBySpec(List<string> specFilterList)
+        {
+            specFilterList.RemoveAll(x => x == "Select a spec...");
+            specFilterList = specFilterList.OrderBy(s => s).ToList();
+            // essentially spec1 followed by any thing followed by spec2 etc.
+            string pattern = specFilterList.Aggregate("", (current, specFilter) => current + (specFilter + ".*"));
             respModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
         }
 

@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody class="rowAlternating">
-        @foreach(CompPercentModel team in Model.TeamModel.Comps)
+        @foreach (CompPercentModel team in Model.TeamModel.Comps)
         {
             <tr>
                 <td>@team.strComp</td>
@@ -19,3 +19,8 @@
         }
     </tbody>
 </table>
+
+@if (Model.TeamModel.Comps.Count < 1)
+{
+    @: No results :(
+}
