@@ -1,4 +1,4 @@
-﻿namespace Fotm.DAL.Database.Util
+﻿namespace Fotm.DAL.Util
 {
     public class ConnectionStringBuilderUtil
     {

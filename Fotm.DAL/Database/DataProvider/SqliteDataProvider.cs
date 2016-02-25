@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
-using Fotm.DAL.Database.Util;
 using Fotm.DAL.Models.Base;
+using Fotm.DAL.Util;
 
 namespace Fotm.DAL.Database.DataProvider
 {
