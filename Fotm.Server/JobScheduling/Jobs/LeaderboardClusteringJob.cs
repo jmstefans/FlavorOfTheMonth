@@ -80,7 +80,7 @@ namespace Fotm.Server.JobScheduling.Jobs
                         .StartNow()
                         .WithSimpleSchedule(
                             s => s
-                                .WithInterval(TimeSpan.FromSeconds(1))
+                                .WithInterval(TimeSpan.FromMilliseconds(100))
                                 .RepeatForever())
                                 .Build();
                 return _defaultTrigger;
