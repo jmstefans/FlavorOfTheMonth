@@ -51,15 +51,10 @@
                                    LargeIcon="UI/Images/data_source.ico"
                                    Click="SetDataSource_OnClick"/>
                 </fluent:RibbonGroupBox>
-
-                <fluent:RibbonGroupBox Header="Temp">
-
-                </fluent:RibbonGroupBox>
-
             </fluent:RibbonTabItem>
 
             <!-- EDIT TAB -->
-            <fluent:RibbonTabItem Header="Tasks"
+            <!--<fluent:RibbonTabItem Header="Tasks"
                                   IsSeparatorVisible="True">
 
                 <fluent:RibbonGroupBox Header="Temp">
@@ -74,14 +69,14 @@
 
                 </fluent:RibbonGroupBox>
 
-            </fluent:RibbonTabItem>
+            </fluent:RibbonTabItem>-->
 
             <!-- FILE MENU -->
-            <fluent:Ribbon.Menu>
+            <!--<fluent:Ribbon.Menu>
                 <fluent:ApplicationMenu Header="File">
 
                 </fluent:ApplicationMenu>
-            </fluent:Ribbon.Menu>
+            </fluent:Ribbon.Menu>-->
 
         </fluent:Ribbon>
 
@@ -113,7 +108,7 @@
                     </xcad:LayoutAnchorablePaneGroup>
 
                     <!-- MAIN CONTENT/TAB CONTROL -->
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="3*"
+                    <!--<xcad:LayoutAnchorablePaneGroup DockWidth="3*"
                                                     IsMaximized="False">
                         <xcad:LayoutAnchorablePane >
 
@@ -123,16 +118,16 @@
                             </xcad:LayoutAnchorable>
 
                         </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>
+                    </xcad:LayoutAnchorablePaneGroup>-->
 
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="300"
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="2*"
                                                     IsMaximized="False">
                         <xcad:LayoutAnchorablePane x:Name="RightPaneGroup">
 
-                            <xcad:LayoutAnchorable ContentId="Database"
+                            <!--<xcad:LayoutAnchorable ContentId="Database"
                                                    Title="Database">
                                 <views:DatabaseView/>
-                            </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorable>-->
 
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutAnchorablePaneGroup>

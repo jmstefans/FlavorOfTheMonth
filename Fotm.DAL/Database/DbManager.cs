@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
 using Fotm.DAL.Database.DataProvider;
 using Fotm.DAL.Models.Base;
@@ -16,49 +13,24 @@ namespace Fotm.DAL.Database
     /// <summary>
     /// Persistent DB class for reading and writing to the database. 
     /// </summary>
-    public class DbManager : ManagerBase<DbManager>, IDisposable
+    public class DbManager : ManagerBase<DbManager>
     {
         #region Members
 
         private DataProviderBase _dataProvider;
-        private IDbConnection _dbConnection;
-
-        #endregion
-
-        #region Properties
-
-        private IDbConnection DbConnection
-        {
-            get
-            {
-                lock (_dbLock)
-                {
-                    if (_dbConnection == null)
-                        throw new ArgumentException("DB connection cannot be null.");
-
-                    if (_dbConnection.State != ConnectionState.Open)
-                        _dbConnection.Open();
-
-                    return _dbConnection;
-                }
-            }
-        }
-        private object _dbLock = new object();
 
         #endregion
 
         #region Data Provider / Connection
 
         /// <summary>
-        /// Sets the active data provider.
+        /// Sets the active data provider - call this first!
         /// </summary>
         /// <param name="dataProviderType">The type of data provider <see cref="DataProviderFactory.DataProviderType"/> being set.</param>
         /// <param name="connectionProperties"></param>
         public void SetDataProvider(DataProviderFactory.DataProviderType dataProviderType, params string[] connectionProperties)
         {
             _dataProvider = DataProviderFactory.GetDataProvider(dataProviderType, connectionProperties);
-            _dbConnection?.Dispose();
-            _dbConnection = _dataProvider.GetDataProviderConnection();
         }
 
         #endregion
@@ -81,54 +53,6 @@ namespace Fotm.DAL.Database
             "(@TeamID, @RatingChangeValue, @CurrentRating, @CharacterID, @SpecID, @RaceID, @FactionID, @GenderID, @ModifiedDate, @ModifiedStatus, @ModifiedUserID);";
 
         #endregion
-
-        /// <summary>
-        /// Asynchronously inserts an enumerable collection of DbEntityBase objects into DB. 
-        /// </summary>
-        /// <typeparam name="T">The DbEntity to insert <see cref="DbEntityBase"/></typeparam>
-        /// <param name="objects">DbEntityBase objects to insert into DB.</param>
-        public async void InsertObjectsAsync<T>(IEnumerable<T> objects) where T : DbEntityBase, new()
-        {
-            await Task.Run(() => InsertObjects(objects));
-        }
-
-        /// <summary>
-        /// Inserts an enumerable collection of DbEntityBase objects into DB. 
-        /// Note - This method uses reflection for the object properties.
-        ///        So if performance is an issue, consider a custom insert.
-        /// TODO: possible refactor - dapper should handle the property mapping, reflection may not be needed.
-        /// </summary>
-        /// <typeparam name="T">The DbEntity to insert <see cref="DbEntityBase"/></typeparam>
-        /// <param name="objects">DbEntityBase objects to insert into DB.</param>
-        public void InsertObjects<T>(IEnumerable<T> objects) where T : DbEntityBase, new()
-        {
-            var type = typeof(T);
-
-            using (var trans = DbConnection.BeginTransaction())
-            {
-                try
-                {
-                    var cols = GetColumnNames<T>();
-                    var colPar = GetColumnParameters(cols);
-
-                    foreach (var obj in objects)
-                    {
-                        var query =
-                       $"insert into [{type.Name}] ({string.Join(",", cols)}, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
-                       $"values ({string.Join(",", colPar)}, '{new SqlDateTime(DateTime.Now)}', 'I', 0);";
-
-                        DbConnection.Execute(query, obj, trans);
-                    }
-
-                    trans.Commit();
-                }
-                catch (Exception e)
-                {
-                    trans.Rollback();
-                    LoggingUtil.LogMessage(DateTime.Now, "SQL insert failed: " + e);
-                }
-            }
-        }
 
         /// <summary>
         /// Inserts each team and associates its team members.
@@ -440,15 +364,5 @@ namespace Fotm.DAL.Database
         }
 
         #endregion
-
-        #region IDisposable
-
-        public void Dispose()
-        {
-            _dbConnection?.Dispose();
-        }
-
-        #endregion
-
     }
 }

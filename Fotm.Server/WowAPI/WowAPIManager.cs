@@ -21,9 +21,12 @@ namespace Fotm.Server.WowAPI
 
         #region Leaderboards
 
+        /// <summary>
+        /// Gets the collection of pvp stats from API.
+        /// </summary>
         public IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
-            Locale locale = Locale.en_US,
-            Bracket bracket = Bracket._3v3)
+                                                 Locale locale = Locale.en_US,
+                                                 Bracket bracket = Bracket._3v3)
         {
             try
             {
@@ -38,6 +41,9 @@ namespace Fotm.Server.WowAPI
             }
         }
 
+        /// <summary>
+        /// Gets the character by name and realm w/ optional region and locale.
+        /// </summary>
         public Character GetCharacter(string name, string realmName,
                                       Region region = Region.US, Locale locale = Locale.en_US)
         {

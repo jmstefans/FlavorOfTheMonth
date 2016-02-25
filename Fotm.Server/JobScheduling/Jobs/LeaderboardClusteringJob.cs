@@ -9,6 +9,7 @@ using Fotm.Server.Analysis.Algorithms;
 using Fotm.Server.WowAPI;
 using Quartz;
 using WowDotNetAPI.Models;
+using Region = WowDotNetAPI.Region;
 
 namespace Fotm.Server.JobScheduling.Jobs
 {
@@ -20,7 +21,7 @@ namespace Fotm.Server.JobScheduling.Jobs
     public class LeaderboardClusteringJob
     : IJob
     {
-        #region Variables
+        #region Vars/Props
 
         // Used to define the baseline stats
         private static bool SetBaseLine
@@ -62,12 +63,8 @@ namespace Fotm.Server.JobScheduling.Jobs
         private DbManager _dbManager = DbManager.Default;
         private static object _dbLock = new object();
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
-        /// Default trigger with an interval of 1 sec that repeats forever.
+        /// Default trigger with an interval of 100 ms that repeats forever.
         /// </summary>
         public static ITrigger DefaultTrigger
         {
@@ -80,7 +77,7 @@ namespace Fotm.Server.JobScheduling.Jobs
                         .StartNow()
                         .WithSimpleSchedule(
                             s => s
-                                .WithInterval(TimeSpan.FromSeconds(1))
+                                .WithInterval(TimeSpan.FromMilliseconds(100))
                                 .RepeatForever())
                                 .Build();
                 return _defaultTrigger;
@@ -96,16 +93,20 @@ namespace Fotm.Server.JobScheduling.Jobs
         /// Gets the job arguments used by the RatingChangeJob execution. 
         /// Call this before running the job.
         /// </summary>
-        /// <param name="bracket">The bracket to query API for.</param>
+        /// <param name="bracket">The bracket to pull leadboard for.</param>
+        /// <param name="region">The region to pull leadboard for, defaults to US.</param>
         /// <returns>Dictionary populated with job keys and properties for execution.</returns>
-        public static Dictionary<string, object> GetRatingChangeJobArguments(Bracket bracket)
+        public static Dictionary<string, object> GetRatingChangeJobArguments(Bracket bracket, Region region = Region.US)
         {
-            return new Dictionary<string, object> { { BRACKET_KEY, bracket } };
+            return new Dictionary<string, object>
+            {
+                { BRACKET_KEY, bracket },
+                { REGION_KEY, region }
+            };
         }
+        // job args dictionary keys
         private const string BRACKET_KEY = "bracketKey";
-
-        private static object _statsLock = new object();
-        private static object _execLock = new object();
+        private const string REGION_KEY = "regionKey";
 
         /// <summary>
         /// Executes the sort, cluster, and db requests of WoW leaderboard API calls. 
@@ -113,44 +114,45 @@ namespace Fotm.Server.JobScheduling.Jobs
         /// </summary>
         /// <param name="context">Context passed in by Scheduler.</param>
         public void Execute(IJobExecutionContext context)
-        //public void Execute(Dictionary<string, Bracket> jobArgs)
         {
             LoggingUtil.LogMessage(DateTime.Now, "Executing LeadboardClusteringJob...", LoggingUtil.LogType.Notice);
+
+            var region = (Region)context.JobDetail.JobDataMap[REGION_KEY];
+            var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
 
             List<PvpStats> stats;
             lock (_statsLock)
             {
-                stats = WowAPIManager.Default.GetPvpStats().ToList();
+                stats = WowAPIManager.Default.GetPvpStats(region, bracket: bracket).ToList();
             }
 
             lock (_execLock)
             {
-                Execute(stats, context);
+                ExecuteCluster(stats, context);
             }
         }
+
+        private static object _statsLock = new object();
+        private static object _execLock = new object();
 
         #endregion
 
         #region Private Methods
 
-        private void Execute(List<PvpStats> stats, IJobExecutionContext context)
+        private void ExecuteCluster(List<PvpStats> stats, IJobExecutionContext context)
         {
             if (SetBaseLine) // only set baseline on initial execute
             {
-                // TODO: can this be moved to the constructor of this job?
                 _baseLineBag = new ConcurrentBag<PvpStats>(stats);
                 SetBaseLine = false;
                 return;
             }
-            //}
 
             var allyWinners = new List<TeamMember>();
             var allyLosers = new List<TeamMember>(); // faction = 0
             var hordeWinners = new List<TeamMember>();
             var hordeLosers = new List<TeamMember>(); // factionId = 1
 
-            //lock (_statsLock) // need to lock here for consistent base line stats
-            //{
             // sort by faction and into winners and losers
             foreach (var stat in stats)
             {
@@ -201,8 +203,6 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             // ensure that each group has enough players to fill at least 1 team
             var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
-            // TESTING
-            //var bracket = jobArgs[BRACKET_KEY];
             var teamSize = GetTeamSize(bracket);
 
             if (allyWinners.Count >= teamSize)
@@ -220,8 +220,6 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         private DAL.Character GetCharacter(PvpStats pvpStats)
         {
-            // TODO: still need to update the character on each pass
-
             // have to use the realm ID from the DB, not the pvp stats object
             DAL.Character character = null;
             var realm = DbManager.GetRealmByName(pvpStats.RealmName);
@@ -240,6 +238,8 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             if (character == null)
                 throw new ArgumentException(nameof(character)); // if happens, something failed at db layer
+            
+            // TODO: still need to update the character on each pass
 
             // need to update or insert the pvp stat on each pass
             var dbPvpStat = DbManager.GetPvpStatByCharacterId(character.CharacterID);

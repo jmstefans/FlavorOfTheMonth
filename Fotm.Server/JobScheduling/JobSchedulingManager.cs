@@ -4,6 +4,7 @@ using Fotm.DAL.Models.Base;
 using Fotm.Server.JobScheduling.Jobs;
 using Quartz;
 using Quartz.Impl;
+using WowDotNetAPI;
 using WowDotNetAPI.Models;
 
 namespace Fotm.Server.JobScheduling
@@ -66,25 +67,18 @@ namespace Fotm.Server.JobScheduling
         /// <param name="jobKey">The unique key for this job.</param>
         /// <param name="groupKey">The unique key for this group of jobs.</param>
         /// <param name="bracket">The bracket to pull.</param>
+        /// <param name="region">The region to pull leaderboard from.</param>
         /// <param name="trigger">The trigger for the job to execute. If null, default will be applied.</param>
         public void ScheduleRatingChangeJob(string jobKey = "ratingChangeJob",
                                             string groupKey = "ratingChangeGroup",
                                             Bracket bracket = Bracket._3v3,
+                                            Region region = Region.US,
                                             ITrigger trigger = null)
         {
             if (trigger == null)
                 trigger = LeaderboardClusteringJob.DefaultTrigger;
 
-            var jobArgs = LeaderboardClusteringJob.GetRatingChangeJobArguments(Bracket._3v3);
-
-            // TESTING
-            //var jobArgs = new Dictionary<string, Bracket> { { "bracketKey", Bracket._3v3 } };
-            //var job = new LeaderboardClusteringJob();
-            //while (true)
-            //{
-            //    job.Execute(jobArgs);
-            //}
-
+            var jobArgs = LeaderboardClusteringJob.GetRatingChangeJobArguments(bracket, region);
             ScheduleJob<LeaderboardClusteringJob>(trigger, jobKey, groupKey, jobArgs);
         }
 

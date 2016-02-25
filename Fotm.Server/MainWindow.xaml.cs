@@ -23,6 +23,9 @@ namespace Fotm.Server
 
             var vm = new MainViewModel();
             DataContext = vm;
+
+            OpenDebugView();
+
             Closing += (o, s) =>
             {
                 vm.CleanUp();
@@ -48,9 +51,16 @@ namespace Fotm.Server
         {
             if (RightPaneGroup.Children.Contains(_consoleLayout))
             {
+                if (!_consoleLayout.IsActive)
+                    _consoleLayout.IsActive = true;
                 return;
             }
 
+            OpenDebugView();
+        }
+
+        private void OpenDebugView()
+        {
             _consoleRedirectWriter.OnWrite += OnWrite;
 
             _consoleLayout.Closed += (o, s) => _consoleRedirectWriter.Release();
@@ -76,9 +86,9 @@ namespace Fotm.Server
 
         private void SetDataSource_OnClick(object sender, RoutedEventArgs e)
         {
-            
+
         }
-     
+
         #endregion
     }
 }
