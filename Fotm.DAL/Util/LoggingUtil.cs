@@ -25,8 +25,8 @@ namespace Fotm.DAL.Util
         /// <param name="writeToConsole">Set to true if the error should also be written to the console.</param>
         public static void LogMessage(DateTime currentDateTime, string errorMessage, LogType type = LogType.Error, bool writeToConsole = true)
         {
-
-            var error = $"{currentDateTime.ToLongTimeString()} -- {type.ToString().ToUpper()} -- {errorMessage}";
+            var logType = type.ToString().ToUpper();
+            var error = $"{currentDateTime.ToLongTimeString()}--{logType.PadRight(10, '-')}{errorMessage}";
             LogMessageAsync(error);
             Console.WriteLine(error);
         }

@@ -22,8 +22,8 @@ namespace Fotm.Server.WowAPI
         #region Leaderboards
 
         public IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
-            Locale locale = Locale.en_US,
-            Bracket bracket = Bracket._3v3)
+                                                 Locale locale = Locale.en_US,
+                                                 Bracket bracket = Bracket._3v3)
         {
             try
             {

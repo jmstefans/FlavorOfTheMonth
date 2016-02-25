@@ -26,15 +26,25 @@ namespace Fotm.Server.Analysis.Algorithms
             var numberOfTeams = members.Count / teamSize;
             if (numberOfTeams * teamSize != members.Count)
             {
-                LoggingUtil.LogMessage(DateTime.Now, 
-                                       "The team size requested doesn't divide evenly with the number of team members provided", 
+                LoggingUtil.LogMessage(DateTime.Now,
+                                       "The team size requested doesn't divide evenly with the number of team members provided",
                                        LoggingUtil.LogType.Warning);
                 return null; // for now, don't cluster uneven number of teams
             }
 
             var clusteredTeams = InitializeTeams(members, numberOfTeams, teamSize);
+            ClusterTeams(clusteredTeams, members, maximumIterations, teamSize);
+
+            return clusteredTeams;
+        }
+
+        private static void ClusterTeams(List<Team> clusteredTeams,
+                                         List<TeamMember> membersToCluster,
+                                         int maximumIterations,
+                                         int teamSize)
+        {
             var currentIteration = 0;
-            var maxIterations = members.Count * maximumIterations;
+            var maxIterations = membersToCluster.Count * maximumIterations;
 
             var changed = true;
             var success = true;
@@ -42,15 +52,34 @@ namespace Fotm.Server.Analysis.Algorithms
             while (changed && success && currentIteration < maxIterations)
             {
                 success = UpdateTeamMeans(clusteredTeams);
-                changed = UpdateClustering(clusteredTeams, members);
+                changed = UpdateClustering(clusteredTeams, membersToCluster);
 
                 currentIteration++;
             }
 
-            ResolveUnevenTeams(clusteredTeams, teamSize);
+            if (clusteredTeams.Any(team => team.TeamMembers.Count > teamSize))
+            {
+                // teams are uneven, resolve team sizes
+                ResolveUnevenTeams(clusteredTeams, teamSize);
 
-            return clusteredTeams;
+                lock (_lock)
+                {
+                    ++_currentResolveIteration;
+                    if (_currentResolveIteration >= 5) // arbitrary max
+                    {
+                        _currentResolveIteration = 0;
+                        return;
+                    }
+                }
+                
+                // cluster teams again after resolution
+                var members = clusteredTeams.SelectMany(t => t.TeamMembers).ToList();
+                ClusterTeams(clusteredTeams, members, maximumIterations, teamSize);
+            }
         }
+
+        private static object _lock = new object();
+        private static int _currentResolveIteration = 0;
 
         /// <summary>
         /// Initializes the list of teams by sequentially adding all of the members to a team.
@@ -96,8 +125,8 @@ namespace Fotm.Server.Analysis.Algorithms
             }
             catch (Exception e)
             {
-                LoggingUtil.LogMessage(DateTime.Now, 
-                                        $"Exception thrown attempting to update team means: {e.StackTrace}", 
+                LoggingUtil.LogMessage(DateTime.Now,
+                                        $"Exception thrown attempting to update team means: {e.StackTrace}",
                                         LoggingUtil.LogType.Warning);
                 return false;
             }
