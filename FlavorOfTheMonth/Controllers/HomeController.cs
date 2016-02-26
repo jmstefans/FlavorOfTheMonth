@@ -290,6 +290,8 @@ namespace FlavorOfTheMonth.Controllers
             m_RespModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
         }
 
+        // Based on the class at the same index as the spec., in their respective lists,
+        // we convert the pretty string to the unique spec string (Blood -> DK_BLOOD)
         private List<string> ConvertPrettySpecToBlizzSpec(List<string> specFilterList)
         {
             List<string> result = new List<string>();
@@ -297,7 +299,7 @@ namespace FlavorOfTheMonth.Controllers
             for (var i = 0; i < specFilterList.Count; i++)
             {
                 bool found = false;
-                switch (m_RespModel.CurCharacterList[i])
+                switch (m_RespModel.CurCharacterList[i]) // This line assumes same index for spec and class filters but spec could've shifted down the line.
                 {
                     case "Death Knight":
                     {
