@@ -50,7 +50,7 @@ namespace Fotm.Server
         private void Initialize()
         {
             _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, SERVER, DB_NAME);
-            _jobManager.ScheduleRatingChangeJob(bracket:Bracket._2v2);
+            _jobManager.ScheduleRatingChangeJob(bracket:Bracket._3v3);
         }
 
         #endregion

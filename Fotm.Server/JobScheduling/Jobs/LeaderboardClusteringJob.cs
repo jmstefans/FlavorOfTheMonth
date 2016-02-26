@@ -70,9 +70,10 @@ namespace Fotm.Server.JobScheduling.Jobs
         {
             get
             {
-                if (_defaultTrigger != null) return _defaultTrigger;
+                //if (_defaultTrigger != null) return _defaultTrigger;
 
-                _defaultTrigger =
+                //_defaultTrigger =
+                return
                     TriggerBuilder.Create()
                         .StartNow()
                         .WithSimpleSchedule(
@@ -80,10 +81,10 @@ namespace Fotm.Server.JobScheduling.Jobs
                                 .WithInterval(TimeSpan.FromMilliseconds(100))
                                 .RepeatForever())
                                 .Build();
-                return _defaultTrigger;
+                //return _defaultTrigger;
             }
         }
-        private static ITrigger _defaultTrigger;
+        //private static ITrigger _defaultTrigger;
 
         #endregion
 
