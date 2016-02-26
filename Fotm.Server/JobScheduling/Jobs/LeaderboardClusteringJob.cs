@@ -78,7 +78,7 @@ namespace Fotm.Server.JobScheduling.Jobs
                         .StartNow()
                         .WithSimpleSchedule(
                             s => s
-                                .WithInterval(TimeSpan.FromMilliseconds(100))
+                                .WithInterval(TimeSpan.FromSeconds(2))
                                 .RepeatForever())
                                 .Build();
                 //return _defaultTrigger;
@@ -129,7 +129,7 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             lock (_execLock)
             {
-                ExecuteCluster(stats, context);
+                ExecuteCluster(stats, context, region, bracket);
             }
         }
 
@@ -140,12 +140,55 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         #region Private Methods
 
-        private void ExecuteCluster(List<PvpStats> stats, IJobExecutionContext context)
+        private static ConcurrentDictionary<Tuple<Region, Bracket>, List<PvpStats>> _baselineStatsDictionary
+            = new ConcurrentDictionary<Tuple<Region, Bracket>, List<PvpStats>>();
+
+        private List<PvpStats> GetPvpStatsCache(Region region, Bracket bracket)
         {
-            if (SetBaseLine) // only set baseline on initial execute
+            var key = new Tuple<Region, Bracket>(region, bracket);
+
+            if (_baselineStatsDictionary.ContainsKey(key))
+                return _baselineStatsDictionary[key];
+
+            // key doesn't exist, add new pvp stats list
+            try
             {
-                _baseLineBag = new ConcurrentBag<PvpStats>(stats);
-                SetBaseLine = false;
+                if (!_baselineStatsDictionary.TryAdd(key, new List<PvpStats>()))
+                {
+                    LoggingUtil.LogMessage(DateTime.Now, $"Throwing new exception, unable to add {key} to stats cache.");
+                    throw new Exception($"unable to add { key } to stats cache.");
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                LoggingUtil.LogMessage(DateTime.Now, "Null argument exception caught: " + e);
+            }
+            catch (OverflowException ex)
+            {
+                LoggingUtil.LogMessage(DateTime.Now, "Overflow exception caught: " + ex);
+            }
+
+            return _baselineStatsDictionary[key];
+        }
+
+        private void SetPvpStatsCache(Tuple<Region, Bracket> key, List<PvpStats> stats)
+        {
+            if (!_baselineStatsDictionary.ContainsKey(key))
+                throw new ArgumentException("key does not exist in the cache dictionary!", nameof(key));
+
+            _baselineStatsDictionary[key].Clear();
+            _baselineStatsDictionary[key] = stats;
+        }
+
+        private void ExecuteCluster(List<PvpStats> stats, IJobExecutionContext context, Region region, Bracket bracket)
+        {
+            var key = new Tuple<Region, Bracket>(region, bracket);
+            var baselineStats = GetPvpStatsCache(region, bracket);
+            if (baselineStats.Count == 0) // only set baseline on initial execute
+            {
+                //_baseLineBag = new ConcurrentBag<PvpStats>(stats);
+                //SetBaseLine = false;
+                SetPvpStatsCache(key, stats);
                 return;
             }
 
@@ -157,8 +200,8 @@ namespace Fotm.Server.JobScheduling.Jobs
             // sort by faction and into winners and losers
             foreach (var stat in stats)
             {
-                var baseStat = _baseLineBag.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
-                                                                b.RealmSlug.Equals(stat.RealmSlug));
+                var baseStat = baselineStats.FirstOrDefault(b => b.Name.Equals(stat.Name) &&
+                                                                 b.RealmSlug.Equals(stat.RealmSlug));
                 if (baseStat == null)
                     continue; // player isn't in the baseline, nothing to compare against
 
@@ -200,10 +243,10 @@ namespace Fotm.Server.JobScheduling.Jobs
             }
 
             // current stats are baseline for next pass
-            _baseLineBag = new ConcurrentBag<PvpStats>(stats);
+            SetPvpStatsCache(key, stats);
+            //_baseLineBag = new ConcurrentBag<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
-            var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
             var teamSize = GetTeamSize(bracket);
 
             if (allyWinners.Count >= teamSize)
@@ -239,7 +282,7 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             if (character == null)
                 throw new ArgumentException(nameof(character)); // if happens, something failed at db layer
-            
+
             // TODO: still need to update the character on each pass
 
             // need to update or insert the pvp stat on each pass
