@@ -61,7 +61,7 @@ namespace FlavorOfTheMonth.Controllers
             }
             catch (Exception ex)
             {
-                LoggingUtil.LogMessage(DateTime.Now, $"Message: {ex.Message}\nInnerException: {ex.InnerException}");
+                LoggingUtil.LogMessage(DateTime.Now, $"Message: {ex.Message}\nInnerException: {ex.InnerException}", LoggingUtil.LogType.Error, true, false);
                 return PartialView(m_RespModel);
             }
         }
@@ -358,7 +358,7 @@ namespace FlavorOfTheMonth.Controllers
                 if (found)
                     result.Add(aBlizzSpec);
                 else
-                    LoggingUtil.LogMessage(DateTime.Now, $"Could not find a BlizzSpec for key {specFilterList[i]} in a class dictionary.");
+                    LoggingUtil.LogMessage(DateTime.Now, $"Could not find a BlizzSpec for key {specFilterList[i]} in a class dictionary.", LoggingUtil.LogType.Error, true, false);
             }
             return result;
         }

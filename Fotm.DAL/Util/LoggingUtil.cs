@@ -23,11 +23,14 @@ namespace Fotm.DAL.Util
         /// <param name="errorMessage">The error message to write.</param>
         /// <param name="type">The type of log message to write.</param>
         /// <param name="writeToConsole">Set to true if the error should also be written to the console.</param>
-        public static void LogMessage(DateTime currentDateTime, string errorMessage, LogType type = LogType.Error, bool writeToConsole = true)
+        public static void LogMessage(DateTime currentDateTime, string errorMessage, LogType type = LogType.Error, bool writeToConsole = true, bool isAsync = true)
         {
             var logType = type.ToString().ToUpper();
             var error = $"{currentDateTime.ToLongTimeString()}--{logType.PadRight(10, '-')}{errorMessage}";
-            LogMessageAsync(error);
+            if (isAsync)
+                LogMessageAsync(error);
+            else
+                LogMessage(error);
             Console.WriteLine(error);
         }
 
@@ -40,6 +43,17 @@ namespace Fotm.DAL.Util
             //{
             //    await writer.WriteLineAsync(message);
             //}
+        }
+
+        private static void LogMessage(string message)
+        {
+            if (!Directory.Exists(LOG_DIR))
+                Directory.CreateDirectory(LOG_DIR);
+
+            using (var writer = new StreamWriter(_defaultErrorLogFilePath, true))
+            {
+                writer.WriteLine(message);
+            }
         }
     }
 }

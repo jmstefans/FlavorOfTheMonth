@@ -1,9 +1,13 @@
 ﻿@model FlavorOfTheMonth.Models.HomeModel
 
+@* FILTERS *@
 <h3>Filters</h3>
+
 @for (var i = 0; i < (int)(Model.CurBracket); i++)
 {
     <div class="dropdown inlineBlock">
+        
+        @* Create Class dropdown *@
         <div class="hack">
             <button class="btn btn-default dropdown-toggle parameter filterMinWidth" type="button" id="@("ddClass" + i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 @if (Model.CurCharacterList.Count <= 0)
@@ -29,6 +33,8 @@
                 }
             </ul>
         </div>
+        
+        @* Create Spec dropdown *@
         <div>
             <div class="hack">
                 <button class="btn btn-default dropdown-toggle filterMinWidth" type="button" id="@("ddSpec" + i)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -38,7 +44,7 @@
                     }
                     else
                     {
-                        if (Model.CurSelectedSpecList.ElementAtOrDefault(i) == null)
+                        if (Model.CurSelectedSpecList.ElementAtOrDefault(i) == null) 
                         {
                             @Html.Raw("Select a spec...");
                         }
