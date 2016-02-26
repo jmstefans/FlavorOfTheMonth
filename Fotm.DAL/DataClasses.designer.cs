@@ -4317,7 +4317,7 @@ namespace Fotm.DAL
 		
 		private string _Name;
 		
-		private string _SpecName;
+		private string _BlizzName;
 		
 		public SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult()
 		{
@@ -4355,18 +4355,18 @@ namespace Fotm.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SpecName", DbType="NVarChar(50)")]
-		public string SpecName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BlizzName", DbType="NVarChar(50)")]
+		public string BlizzName
 		{
 			get
 			{
-				return this._SpecName;
+				return this._BlizzName;
 			}
 			set
 			{
-				if ((this._SpecName != value))
+				if ((this._BlizzName != value))
 				{
-					this._SpecName = value;
+					this._BlizzName = value;
 				}
 			}
 		}
