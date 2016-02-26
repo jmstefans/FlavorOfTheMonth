@@ -15,8 +15,8 @@ namespace FlavorOfTheMonth.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private HomeModel respModel = new HomeModel();
-        private HomeRequestModel reqModel = new HomeRequestModel();
+        private readonly HomeModel m_RespModel = new HomeModel();
+        private HomeRequestModel m_ReqModel = new HomeRequestModel();
 
         #region View Returners
 
@@ -29,7 +29,7 @@ namespace FlavorOfTheMonth.Controllers
             CalcCompPercentages();
             SortCompsByPercentage();
 
-            return View(respModel);
+            return View(m_RespModel);
         }
 
         // Returns the About view when called with GET /Home/About
@@ -50,19 +50,19 @@ namespace FlavorOfTheMonth.Controllers
                 BuildResponseModel();
 
                 SetCompStrings();
-                if (respModel.CurCharacterList.Count > 0)
-                    FilterByClass(respModel.CurCharacterList);
-                if (respModel.CurSelectedSpecList.Count > 0)
-                    FilterBySpec(respModel.CurSelectedSpecList);
+                if (m_RespModel.CurCharacterList.Count > 0)
+                    FilterByClass(m_RespModel.CurCharacterList);
+                if (m_RespModel.CurSelectedSpecList.Count > 0)
+                    FilterBySpec(m_RespModel.CurSelectedSpecList);
                 CalcCompPercentages();
                 SortCompsByPercentage();
 
-                return PartialView(respModel);
+                return PartialView(m_RespModel);
             }
             catch (Exception ex)
             {
                 LoggingUtil.LogMessage(DateTime.Now, $"Message: {ex.Message}\nInnerException: {ex.InnerException}");
-                return PartialView(respModel);
+                return PartialView(m_RespModel);
             }
         }
 
@@ -78,7 +78,7 @@ namespace FlavorOfTheMonth.Controllers
         {
             HomeModel.Region result;
 
-            switch (reqModel.region)
+            switch (m_ReqModel.region)
             {
                 case "EU":
                 {
@@ -105,7 +105,6 @@ namespace FlavorOfTheMonth.Controllers
                     result = HomeModel.Region.CN;
                     break;
                 }
-                case "US":
                 default:
                 {
                     result = HomeModel.Region.US;
@@ -124,7 +123,7 @@ namespace FlavorOfTheMonth.Controllers
         {
             HomeModel.Bracket result;
 
-            switch (reqModel.bracket)
+            switch (m_ReqModel.bracket)
             {
                 case "2v2":
                     {
@@ -141,7 +140,6 @@ namespace FlavorOfTheMonth.Controllers
                         result = HomeModel.Bracket._rbg;
                         break;
                     }
-                case "3v3":
                 default:
                     {
                         result = HomeModel.Bracket._3v3;
@@ -174,7 +172,7 @@ namespace FlavorOfTheMonth.Controllers
                               {
                                   d.TeamID,
                                   d.Name,
-                                  d.SpecName
+                                  d.BlizzName
                               };
 
             int playerCounter = 0;
@@ -182,14 +180,14 @@ namespace FlavorOfTheMonth.Controllers
             foreach (var tm in teamMembers)
             {
                 CompPercentModel compModel = new CompPercentModel();
-                str += tm.Name + tm.SpecName;
+                str += tm.Name + tm.BlizzName;
 
                 // set a teamIndex if the current string matches a string already in the comps list
                 int teamIndex = -1;
-                foreach (var comp in respModel.TeamModel.Comps)
+                foreach (var comp in m_RespModel.TeamModel.Comps)
                 {
                     if (str == comp.strComp) // if already in list 
-                        teamIndex = respModel.TeamModel.Comps.IndexOf(comp);
+                        teamIndex = m_RespModel.TeamModel.Comps.IndexOf(comp);
                 }
 
                 // If we have finished iterating through a team then add the team to the comp. list
@@ -199,10 +197,10 @@ namespace FlavorOfTheMonth.Controllers
                     {
                         compModel.strComp = str;
                         compModel.Total = 1;
-                        respModel.TeamModel.Comps.Add(compModel);
+                        m_RespModel.TeamModel.Comps.Add(compModel);
                     }
                     else
-                        respModel.TeamModel.Comps[teamIndex].Total++;
+                        m_RespModel.TeamModel.Comps[teamIndex].Total++;
                     str = "";
                 }
                 playerCounter++;
@@ -215,13 +213,10 @@ namespace FlavorOfTheMonth.Controllers
         private void CalcCompPercentages()
         {
             // compute sum
-            int sum = 0;
-            foreach(var comp in respModel.TeamModel.Comps)
-            {
-                sum += comp.Total;
-            }
+            int sum = m_RespModel.TeamModel.Comps.Sum(comp => comp.Total);
+
             // Replace number of times each unique class comp. appeared with it's percentage of the total team comps.
-            foreach(var comp in respModel.TeamModel.Comps)
+            foreach(var comp in m_RespModel.TeamModel.Comps)
             {
                 comp.Percentage = (float)comp.Total / sum;
             }
@@ -232,9 +227,9 @@ namespace FlavorOfTheMonth.Controllers
         /// </summary>
         private void SortCompsByPercentage()
         {
-            List<CompPercentModel> sortedList = respModel.TeamModel.Comps.OrderBy(c => c.Percentage).ToList();
+            List<CompPercentModel> sortedList = m_RespModel.TeamModel.Comps.OrderBy(c => c.Percentage).ToList();
             sortedList.Reverse();
-            respModel.TeamModel.Comps = sortedList;
+            m_RespModel.TeamModel.Comps = sortedList;
         }
 
         private void CreateRequestModel(object paramObj)
@@ -245,22 +240,22 @@ namespace FlavorOfTheMonth.Controllers
             param = GetTrimmedParam(param); // Remove extra \n and \\n chars and any whitespace
 
             if (param != null)
-                reqModel = JsonConvert.DeserializeObject<HomeRequestModel>(param);
+                m_ReqModel = JsonConvert.DeserializeObject<HomeRequestModel>(param);
         }
 
         private void BuildResponseModel()
         {
             // Build response HomeModel for the views.
-            respModel.CurRegion = GetRegionFromString();
-            respModel.CurBracket = GetBracketFromString();
+            m_RespModel.CurRegion = GetRegionFromString();
+            m_RespModel.CurBracket = GetBracketFromString();
 
-            var stringList = reqModel.classes.OfType<string>();
+            var stringList = m_ReqModel.classes.OfType<string>();
             stringList = stringList.Select(s => s.Trim());
-            respModel.CurCharacterList = new List<string>(stringList);
+            m_RespModel.CurCharacterList = new List<string>(stringList);
 
-            var stringList2 = reqModel.specs.OfType<string>();
+            var stringList2 = m_ReqModel.specs.OfType<string>();
             stringList2 = stringList2.Select(s => s.Trim());
-            respModel.CurSelectedSpecList = new List<string>(stringList2);
+            m_RespModel.CurSelectedSpecList = new List<string>(stringList2);
         }
 
         /// <summary>
@@ -274,7 +269,7 @@ namespace FlavorOfTheMonth.Controllers
             classFilterList = classFilterList.OrderBy(c => c).ToList();
             // essentially class1 followed by any thing followed by class2 etc.
             string pattern = classFilterList.Aggregate("", (current, classFilter) => current + (classFilter + ".*"));
-            respModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
+            m_RespModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
         }
 
         /// <summary>
@@ -286,9 +281,86 @@ namespace FlavorOfTheMonth.Controllers
         {
             specFilterList.RemoveAll(x => x == "Select a spec...");
             specFilterList = specFilterList.OrderBy(s => s).ToList();
+            
+            // convert the pretty spec strings in specFilterList to the BlizzNames
+            specFilterList = ConvertPrettySpecToBlizzSpec(specFilterList);
+
             // essentially spec1 followed by any thing followed by spec2 etc.
             string pattern = specFilterList.Aggregate("", (current, specFilter) => current + (specFilter + ".*"));
-            respModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
+            m_RespModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
+        }
+
+        private List<string> ConvertPrettySpecToBlizzSpec(List<string> specFilterList)
+        {
+            List<string> result = new List<string>();
+            string aBlizzSpec = "";
+            for (var i = 0; i < specFilterList.Count; i++)
+            {
+                bool found = false;
+                switch (m_RespModel.CurCharacterList[i])
+                {
+                    case "Death Knight":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicDK.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Druid":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicDruid.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Hunter":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicHunter.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Mage":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicMage.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Monk":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicMonk.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Paladin":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicPaladin.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Priest":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicPriest.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Rogue":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicRogue.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Shaman":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicShaman.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Warlock":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicWarlock.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                    case "Warrior":
+                    {
+                        found = m_RespModel.ClassModel.SpecDicWarrior.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        break;
+                    }
+                }
+                if (found)
+                    result.Add(aBlizzSpec);
+                else
+                    LoggingUtil.LogMessage(DateTime.Now, $"Could not find a BlizzSpec for key {specFilterList[i]} in a class dictionary.");
+            }
+            return result;
         }
 
         #endregion Helpers

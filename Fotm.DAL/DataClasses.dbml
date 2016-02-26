@@ -198,7 +198,7 @@
     <ElementType Name="SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult">
       <Column Name="TeamID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="SpecName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="BlizzName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
     </ElementType>
   </Function>
 </Database>
