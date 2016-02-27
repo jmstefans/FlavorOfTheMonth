@@ -1,0 +1,109 @@
+﻿<controls:MetroWindow 
+        x:Class="Fotm.Server.UI.Dialogs.SetDatasourceDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Fotm.Server.UI.Dialogs"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Title="Set Data Source" Height="200" Width="300"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        ShowMaxRestoreButton="False"
+        ShowMinButton="False"
+        ShowCloseButton="False"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        NonActiveGlowBrush="{StaticResource AccentColorBrush2}">
+
+    <Window.Resources>
+        <Style TargetType="Button" 
+                   x:Key="ButtonStyle" 
+                   BasedOn="{StaticResource SquareButtonStyle}">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   TextAlignment="Justify"
+                   Margin="5"
+                   FontSize="14">
+            Data source credentials will be saved to personal.config
+        </TextBlock>
+        
+        <TextBox Grid.Row="1"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 controls:TextBoxHelper.UseFloatingWatermark="True"
+                 controls:TextBoxHelper.Watermark="SQL Server Name"
+                 Margin="5"
+                 Text="{Binding Server}"
+                 />
+        <CheckBox Grid.Row="2"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Margin="5"
+                  Content="Using Windows authentication"
+                  IsChecked="True"
+                  IsEnabled="False"/>
+
+        <TextBox Grid.Row="3"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 controls:TextBoxHelper.UseFloatingWatermark="True"
+                 controls:TextBoxHelper.Watermark="Battle.net API Key"
+                 Margin="5"
+                 Text="{Binding ApiKey}"
+                 />
+
+        <Button Grid.Row="4"
+                Grid.Column="0"
+                Style="{StaticResource ButtonStyle}"
+                Margin="5"
+                Command="{Binding SetDataSourceCommand}"
+                Click="Close">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="../Images/check.ico"
+                       Height="35"/>
+                <TextBlock VerticalAlignment="Center"
+                           Text="Set"
+                           Margin="5,0,0,0"/>
+            </StackPanel>
+        </Button>
+
+        <Button Grid.Row="4"
+                Grid.Column="1"
+                Style="{StaticResource ButtonStyle}"
+                Margin="5"
+                Click="Close">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="../Images/delete.ico"
+                       Height="35"/>
+                <TextBlock VerticalAlignment="Center"
+                           Text="Cancel"
+                           Margin="5,0,0,0"/>
+            </StackPanel>
+        </Button>
+
+
+
+
+
+
+    </Grid>
+</controls:MetroWindow>

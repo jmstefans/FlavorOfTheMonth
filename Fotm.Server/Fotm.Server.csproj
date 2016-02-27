@@ -49,6 +49,9 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Dragablz">
+      <HintPath>..\..\multi-console\MultiConsoleApp\packages\Dragablz.0.0.3.155\lib\net45\Dragablz.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -136,6 +139,10 @@
     <Compile Include="JobScheduling\Jobs\LeaderboardClusteringJob.cs" />
     <Compile Include="JobScheduling\JobSchedulingManager.cs" />
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="UI\Dialogs\SetDatasourceDialog.xaml.cs">
+      <DependentUpon>SetDatasourceDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\RelayCommand.cs" />
     <Compile Include="UI\ViewModels\NewJobViewModel.cs" />
     <Compile Include="UI\Views\Jobs\ActiveJobsView.xaml.cs">
       <DependentUpon>ActiveJobsView.xaml</DependentUpon>
@@ -170,6 +177,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\Dialogs\SetDatasourceDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Views\Jobs\ActiveJobsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
