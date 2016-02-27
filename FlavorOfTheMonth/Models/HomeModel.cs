@@ -58,12 +58,13 @@ namespace FlavorOfTheMonth.Models
         public List<string> CurCharacterList;
 
         /// <summary>
-        /// A list to keep track of the currently selected specs in the filter dropdowns.
+        /// A list to keep track of the currently selected specs in the filter dropdowns
+        /// and their respective index in all of the filters.
         /// </summary>
-        public List<string> CurSelectedSpecList;
+        public Dictionary<int, string> CurSelectedSpecList;
 
         /// <summary>
-        /// 
+        /// Holds teams, comps, team members, the team's average rating and bracket.
         /// </summary>
         public TeamModel TeamModel;
 
@@ -78,7 +79,7 @@ namespace FlavorOfTheMonth.Models
             DataClassesDataContext context = new DataClassesDataContext();
             Character = new List<Character>();
             CurCharacterList = new List<string>();
-            CurSelectedSpecList = new List<string>();
+            CurSelectedSpecList = new Dictionary<int, string>();
             TeamModel = new TeamModel();
         }
     }
