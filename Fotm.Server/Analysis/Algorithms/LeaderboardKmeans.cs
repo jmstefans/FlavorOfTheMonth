@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Fotm.DAL;
 using Fotm.DAL.Util;
-using Fotm.Server.Util;
 
 namespace Fotm.Server.Analysis.Algorithms
 {
@@ -38,6 +37,9 @@ namespace Fotm.Server.Analysis.Algorithms
             return clusteredTeams;
         }
 
+        /// <summary>
+        /// Actually executes the clustering after initialize.
+        /// </summary>
         private static void ClusterTeams(List<Team> clusteredTeams,
                                          List<TeamMember> membersToCluster,
                                          int maximumIterations,
@@ -61,25 +63,8 @@ namespace Fotm.Server.Analysis.Algorithms
             {
                 // teams are uneven, resolve team sizes
                 ResolveUnevenTeams(clusteredTeams, teamSize);
-
-                lock (_lock)
-                {
-                    ++_currentResolveIteration;
-                    if (_currentResolveIteration >= 5) // arbitrary max
-                    {
-                        _currentResolveIteration = 0;
-                        return;
-                    }
-                }
-                
-                // cluster teams again after resolution
-                var members = clusteredTeams.SelectMany(t => t.TeamMembers).ToList();
-                ClusterTeams(clusteredTeams, members, maximumIterations, teamSize);
             }
         }
-
-        private static object _lock = new object();
-        private static int _currentResolveIteration = 0;
 
         /// <summary>
         /// Initializes the list of teams by sequentially adding all of the members to a team.
@@ -88,7 +73,7 @@ namespace Fotm.Server.Analysis.Algorithms
         {
             var teams = new List<Team>();
 
-            /* Initializing each cluster */
+            // initializing each cluster 
             for (var i = 0; i < numberOfTeams; i++)
             {
                 var team = new Team();
@@ -274,7 +259,7 @@ namespace Fotm.Server.Analysis.Algorithms
                 var closestDistance = double.MaxValue;
                 Team closestTeam = null;
 
-                foreach (var team in teams.Where(t => t.TeamMembers.Count < teamSize))
+                foreach (var team in teams.Where(t => t.TeamMembers.Count < teamSize)) // only want teams with count < team size
                 {
                     var distance = GetTeamMemberDistanceToTeam(team, teamMember);
                     if (distance < closestDistance)

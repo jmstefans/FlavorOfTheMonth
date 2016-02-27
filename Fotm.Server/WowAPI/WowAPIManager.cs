@@ -49,8 +49,8 @@ namespace Fotm.Server.WowAPI
         {
             try
             {
-                var explorer = new WowExplorer(region, locale, API_KEY);
-                return explorer.GetCharacter(realmName, name);
+                return new WowExplorer(region, locale, API_KEY)
+                                      .GetCharacter(realmName, name);
             }
             catch (WebException ex)
             {

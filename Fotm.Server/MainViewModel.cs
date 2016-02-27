@@ -34,11 +34,6 @@ namespace Fotm.Server
 
         #region Public Methods
 
-        public void InitializeCommandBindings(Window window)
-        {
-
-        }
-
         public void CleanUp()
         {
             _jobManager.Dispose();

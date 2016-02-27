@@ -18,34 +18,9 @@ namespace Fotm.Server.JobScheduling.Jobs
     /// sort and cluster into teams, 
     /// and insert successful teams into the database.
     /// </summary>
-    public class LeaderboardClusteringJob
-    : IJob
+    public class LeaderboardClusteringJob : IJob
     {
         #region Vars/Props
-
-        // Used to define the baseline stats
-        private static bool SetBaseLine
-        {
-            get
-            {
-                bool result;
-                lock (_baseLock)
-                {
-                    result = _setBaseLine;
-                }
-                return result;
-            }
-            set
-            {
-                lock (_baseLock)
-                {
-                    _setBaseLine = value;
-                }
-            }
-        }
-        private static bool _setBaseLine = true;
-        private static object _baseLock = new object();
-        private static ConcurrentBag<PvpStats> _baseLineBag = new ConcurrentBag<PvpStats>();
 
         // Database manager
         private DbManager DbManager
@@ -70,9 +45,6 @@ namespace Fotm.Server.JobScheduling.Jobs
         {
             get
             {
-                //if (_defaultTrigger != null) return _defaultTrigger;
-
-                //_defaultTrigger =
                 return
                     TriggerBuilder.Create()
                         .StartNow()
@@ -81,10 +53,8 @@ namespace Fotm.Server.JobScheduling.Jobs
                                 .WithInterval(TimeSpan.FromSeconds(2))
                                 .RepeatForever())
                                 .Build();
-                //return _defaultTrigger;
             }
         }
-        //private static ITrigger _defaultTrigger;
 
         #endregion
 
@@ -129,10 +99,10 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             lock (_execLock)
             {
-                ExecuteCluster(stats, context, region, bracket);
+                ExecuteCluster(stats, region, bracket);
             }
         }
-
+        // api/cluster locks
         private static object _statsLock = new object();
         private static object _execLock = new object();
 
@@ -140,9 +110,13 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         #region Private Methods
 
+        // cache for the baseline stats of a region and bracket
         private static ConcurrentDictionary<Tuple<Region, Bracket>, List<PvpStats>> _baselineStatsDictionary
-            = new ConcurrentDictionary<Tuple<Region, Bracket>, List<PvpStats>>();
+                 = new ConcurrentDictionary<Tuple<Region, Bracket>, List<PvpStats>>();
 
+        /// <summary>
+        /// Gets the cached baseline PvpStats list from the dictionary.
+        /// </summary>
         private List<PvpStats> GetPvpStatsCache(Region region, Bracket bracket)
         {
             var key = new Tuple<Region, Bracket>(region, bracket);
@@ -171,6 +145,9 @@ namespace Fotm.Server.JobScheduling.Jobs
             return _baselineStatsDictionary[key];
         }
 
+        /// <summary>
+        /// Clears out the existing pvp stats cache and sets to given list.
+        /// </summary>
         private void SetPvpStatsCache(Tuple<Region, Bracket> key, List<PvpStats> stats)
         {
             if (!_baselineStatsDictionary.ContainsKey(key))
@@ -180,14 +157,22 @@ namespace Fotm.Server.JobScheduling.Jobs
             _baselineStatsDictionary[key] = stats;
         }
 
-        private void ExecuteCluster(List<PvpStats> stats, IJobExecutionContext context, Region region, Bracket bracket)
+        /// <summary>
+        /// Executes the team clustering and db insert of this job:
+        /// - Checks and resets the baseline stats 
+        /// - Sorts pvp stats into team members by faction and winners/losers
+        /// - Clusters the team members into team based off rating change and current rating
+        /// - Inserts successful clusters into database
+        /// </summary>
+        /// <param name="stats">The current stats pull to cluster.</param>
+        /// <param name="region">The region for this pull.</param>
+        /// <param name="bracket">The arena bracket for this pull.</param>
+        private void ExecuteCluster(List<PvpStats> stats, Region region, Bracket bracket)
         {
             var key = new Tuple<Region, Bracket>(region, bracket);
             var baselineStats = GetPvpStatsCache(region, bracket);
-            if (baselineStats.Count == 0) // only set baseline on initial execute
+            if (baselineStats.Count == 0)  // first pass, no baseline yet
             {
-                //_baseLineBag = new ConcurrentBag<PvpStats>(stats);
-                //SetBaseLine = false;
                 SetPvpStatsCache(key, stats);
                 return;
             }
@@ -209,7 +194,7 @@ namespace Fotm.Server.JobScheduling.Jobs
                 if (ratingChange == 0) continue; // no rating change, ignore
 
                 var character = GetCharacter(stat);
-                var teamMember = new TeamMember
+                var teamMember = new TeamMember // create db model
                 {
                     RatingChangeValue = ratingChange,
                     CurrentRating = stat.Rating,
@@ -244,7 +229,6 @@ namespace Fotm.Server.JobScheduling.Jobs
 
             // current stats are baseline for next pass
             SetPvpStatsCache(key, stats);
-            //_baseLineBag = new ConcurrentBag<PvpStats>(stats);
 
             // ensure that each group has enough players to fill at least 1 team
             var teamSize = GetTeamSize(bracket);
@@ -274,8 +258,10 @@ namespace Fotm.Server.JobScheduling.Jobs
             {
                 // no matching character, insert into db
                 DbManager.InsertCharacter(pvpStats);
+
                 // realm id will have been resolved after character insert
                 realm = DbManager.GetRealmByName(pvpStats.RealmName);
+
                 // refetch after insert
                 character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
             }
@@ -297,7 +283,7 @@ namespace Fotm.Server.JobScheduling.Jobs
 
         private void ClusterAndInsertDb(List<TeamMember> membersToCluster, int teamSize, Bracket bracket)
         {
-            LoggingUtil.LogMessage(DateTime.Now, "Executing team cluster...", LoggingUtil.LogType.Notice);
+            LoggingUtil.LogMessage(DateTime.Now, $"Executing team cluster on {bracket}...", LoggingUtil.LogType.Notice);
 
             var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
             if (teams == null) return;
