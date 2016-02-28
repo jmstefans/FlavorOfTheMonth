@@ -162,12 +162,12 @@ namespace FlavorOfTheMonth.Controllers
             return s.Replace("\n", "").Replace("\\n", "").Trim();
         }
 
-        // Create string interpretations of teams (Assuming only 3v3, US for now)
+        // Create string interpretations of teams (Assuming only US for now)
         // FORM OF: {TeamMember1Class}{TeamMember1Spec}{TeamMember2Class}{TeamMember2Spec}{TeamMember3Class}{TeamMember3Spec}
         private void SetCompStrings()
         {
             var db = new DataClassesDataContext();
-            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular()
+            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular(m_RespModel.CurBracket.ToString())
                               select new
                               {
                                   d.TeamID,
@@ -191,7 +191,7 @@ namespace FlavorOfTheMonth.Controllers
                 }
 
                 // If we have finished iterating through a team then add the team to the comp. list
-                if (playerCounter % (int)GetBracketFromString() == 2)
+                if (playerCounter % (int)GetBracketFromString() == (int)m_RespModel.CurBracket - 1)
                 {
                     if (teamIndex == -1) // if this is a new team comp., then add it to both lists (classes & percentages)
                     {
