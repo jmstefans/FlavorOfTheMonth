@@ -945,13 +945,12 @@ PRINT 'Creating Stored Procedures'
 USE [fotm]
 GO
 
-/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 2/25/2016 5:50:16 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 2/28/2016 12:50:47 PM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 -- =============================================
 -- Author:		<John Stefanski>
@@ -962,22 +961,22 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular] 
 	-- Add the parameters for the stored procedure here
-
+	@Bracket nvarchar(50) = '_3v3'
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT t.TeamID, cl.Name, s.BlizzName
+	SELECT t.TeamID, cl.Name, s.BlizzName, t.Bracket, t.ModifiedDate
 		FROM fotm.dbo.Team t
 		LEFT OUTER JOIN fotm.dbo.TeamMember tm on t.TeamID = tm.TeamID
 		LEFT OUTER JOIN fotm.dbo.[Character] c on tm.CharacterID = c.CharacterID
 		LEFT OUTER JOIN fotm.dbo.Class cl on c.ClassID = cl.ClassID
 		LEFT OUTER JOIN fotm.dbo.Spec s on c.SpecID = s.SpecID
 		WHERE tm.ModifiedDate >= DATEADD(DAY, -30, SYSDATETIME())
+			AND t.Bracket = @Bracket
 		ORDER BY t.TeamID, cl.Name, s.BlizzName
 END
-
-
 GO
+
