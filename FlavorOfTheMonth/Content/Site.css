@@ -614,6 +614,65 @@ tr.pager td {
 }
 
 
+/* class and specialization images
+----------------------------------------------------------*/
+.DeathKnight {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -250px 0;
+}
+.Druid {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -83px 0;
+}
+.Hunter {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -111px 0;
+}
+.Mage {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -27px 0;
+}
+.Monk {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -278px 0;
+}
+.Paladin {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -222px 0;
+}
+.Priest {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -167px 0;
+}
+.Rogue {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -55px 0;
+}
+.Shaman {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -139px 0;
+}
+.Warlock {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -194px 0;
+}
+.Warrior {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) 1px 0;
+}
+
+
 /********************
 *   Mobile Styles   *
 ********************/

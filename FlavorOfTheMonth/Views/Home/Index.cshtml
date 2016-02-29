@@ -69,6 +69,8 @@
 <script>
     $(document).ready(function () {
 
+        ConvertStringsToImages();
+        
         // Example AJAX functionality
         $('#btnAjax').click(function () {
             $.ajax({
@@ -88,6 +90,76 @@
 
     });
 
+    // Convert strings in teams table into images
+    function ConvertStringsToImages() {
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Death Knight';
+        var replaceWith = '<div class=\"DeathKnight\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Druid';
+        var replaceWith = '<div class=\"Druid\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Hunter';
+        var replaceWith = '<div class=\"Hunter\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Mage';
+        var replaceWith = '<div class=\"Mage\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Monk';
+        var replaceWith = '<div class=\"Monk\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Paladin';
+        var replaceWith = '<div class=\"Paladin\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Priest';
+        var replaceWith = '<div class=\"Priest\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Rogue';
+        var replaceWith = '<div class=\"Rogue\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Shaman';
+        var replaceWith = '<div class=\"Shaman\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Warlock';
+        var replaceWith = '<div class=\"Warlock\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Warrior';
+        var replaceWith = '<div class=\"Warrior\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replace(replaceTo, replaceWith));
+        });
+    }
+
     // Refreshes the data on the screen after a filter, bracket, or
     // was changed.
     function refresh() {
@@ -95,6 +167,9 @@
         var test = JSON.stringify(buildJsonRequestObj());
         $.post('/Home/RefreshData', { paramObj: test }, function (result) {
             $('#sfilter').html(result);
+        })
+        .success(function () {
+            ConvertStringsToImages();
         });
     }
 
