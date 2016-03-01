@@ -162,12 +162,12 @@ namespace FlavorOfTheMonth.Controllers
             return s.Replace("\n", "").Replace("\\n", "").Trim();
         }
 
-        // Create string interpretations of teams (Assuming only 3v3, US for now)
+        // Create string interpretations of teams (Assuming only US for now)
         // FORM OF: {TeamMember1Class}{TeamMember1Spec}{TeamMember2Class}{TeamMember2Spec}{TeamMember3Class}{TeamMember3Spec}
         private void SetCompStrings()
         {
             var db = new DataClassesDataContext();
-            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular()
+            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular(m_RespModel.CurBracket.ToString(), (int)m_RespModel.CurRegion)
                               select new
                               {
                                   d.TeamID,
@@ -191,7 +191,7 @@ namespace FlavorOfTheMonth.Controllers
                 }
 
                 // If we have finished iterating through a team then add the team to the comp. list
-                if (playerCounter % (int)GetBracketFromString() == 2)
+                if (playerCounter % (int)GetBracketFromString() == (int)m_RespModel.CurBracket - 1)
                 {
                     if (teamIndex == -1) // if this is a new team comp., then add it to both lists (classes & percentages)
                     {
@@ -249,13 +249,16 @@ namespace FlavorOfTheMonth.Controllers
             m_RespModel.CurRegion = GetRegionFromString();
             m_RespModel.CurBracket = GetBracketFromString();
 
-            var stringList = m_ReqModel.classes.OfType<string>();
-            stringList = stringList.Select(s => s.Trim());
-            m_RespModel.CurCharacterList = new List<string>(stringList);
+            var characterList = m_ReqModel.classes.OfType<string>();
+            characterList = characterList.Select(s => s.Trim());
+            m_RespModel.CurCharacterList = new List<string>(characterList);
 
-            var stringList2 = m_ReqModel.specs.OfType<string>();
-            stringList2 = stringList2.Select(s => s.Trim());
-            m_RespModel.CurSelectedSpecList = new List<string>(stringList2);
+            var specList = m_ReqModel.specs.OfType<string>();
+            specList = specList.Select(s => s.Trim());
+            for (var i = 0; i < specList.Count(); i++)
+            {
+                m_RespModel.CurSelectedSpecList.Add(i, specList.ElementAt(i));
+            }
         }
 
         /// <summary>
@@ -277,90 +280,94 @@ namespace FlavorOfTheMonth.Controllers
         /// Also the percentages will be of the subset of data and not the entire population.
         /// TODO Add a switch to flip between entire population and subset
         /// </summary>
-        private void FilterBySpec(List<string> specFilterList)
+        private void FilterBySpec(Dictionary<int, string> specFilterList)
         {
-            specFilterList.RemoveAll(x => x == "Select a spec...");
-            specFilterList = specFilterList.OrderBy(s => s).ToList();
+            var newSpecFilterList = specFilterList.Where(x => x.Value != "Select a spec...");
+            newSpecFilterList = newSpecFilterList.OrderBy(s => s.Value);
             
-            // convert the pretty spec strings in specFilterList to the BlizzNames
-            specFilterList = ConvertPrettySpecToBlizzSpec(specFilterList);
+            // convert the pretty spec strings in newSpecFilterList to the BlizzNames
+            specFilterList = ConvertPrettySpecToBlizzSpec(newSpecFilterList.ToDictionary(x => x.Key, x => x.Value));
 
             // essentially spec1 followed by any thing followed by spec2 etc.
-            string pattern = specFilterList.Aggregate("", (current, specFilter) => current + (specFilter + ".*"));
+            string pattern = specFilterList.Aggregate("", (current, specFilter) => current + (specFilter.Value + ".*"));
             m_RespModel.TeamModel.Comps.RemoveAll(x => !Regex.IsMatch(x.strComp, pattern));
         }
 
         // Based on the class at the same index as the spec., in their respective lists,
         // we convert the pretty string to the unique spec string (Blood -> DK_BLOOD)
-        private List<string> ConvertPrettySpecToBlizzSpec(List<string> specFilterList)
+        private Dictionary<int, string> ConvertPrettySpecToBlizzSpec(Dictionary<int, string> specFilterList)
         {
-            List<string> result = new List<string>();
+            Dictionary<int, string> result = new Dictionary<int, string>();
             string aBlizzSpec = "";
-            for (var i = 0; i < specFilterList.Count; i++)
+            for (var i = 0; i < specFilterList.Count; i++) // For all the specs in the dictionary paramter (doesn't include "Select a spec..." anymore)
             {
                 bool found = false;
-                switch (m_RespModel.CurCharacterList[i]) // This line assumes same index for spec and class filters but spec could've shifted down the line.
+                // Get the class at that current spec's index. E.g. If the first filter had a class selected but no spec selected and the second filter
+                // specified class and spec, we will only have one spec in the specFilterList. So we need to look at the second class by using the index
+                // in the dictionary.
+                switch (m_RespModel.CurCharacterList[specFilterList.ElementAt(i).Key]) // This line assumes same index for spec and class filters but spec could've shifted down the line.
                 {
                     case "Death Knight":
                     {
-                        found = m_RespModel.ClassModel.SpecDicDK.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicDK.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Druid":
                     {
-                        found = m_RespModel.ClassModel.SpecDicDruid.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicDruid.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Hunter":
                     {
-                        found = m_RespModel.ClassModel.SpecDicHunter.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicHunter.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Mage":
                     {
-                        found = m_RespModel.ClassModel.SpecDicMage.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicMage.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Monk":
                     {
-                        found = m_RespModel.ClassModel.SpecDicMonk.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicMonk.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Paladin":
                     {
-                        found = m_RespModel.ClassModel.SpecDicPaladin.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicPaladin.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Priest":
                     {
-                        found = m_RespModel.ClassModel.SpecDicPriest.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicPriest.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Rogue":
                     {
-                        found = m_RespModel.ClassModel.SpecDicRogue.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicRogue.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Shaman":
                     {
-                        found = m_RespModel.ClassModel.SpecDicShaman.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicShaman.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Warlock":
                     {
-                        found = m_RespModel.ClassModel.SpecDicWarlock.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicWarlock.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                     case "Warrior":
                     {
-                        found = m_RespModel.ClassModel.SpecDicWarrior.TryGetValue(specFilterList[i], out aBlizzSpec);
+                        found = m_RespModel.ClassModel.SpecDicWarrior.TryGetValue(specFilterList.ElementAt(i).Value, out aBlizzSpec);
                         break;
                     }
                 }
                 if (found)
-                    result.Add(aBlizzSpec);
+                    // Add the new, blizz spec name and the index of it's place amongst all the filters to the return dictionary.
+                    result.Add(specFilterList.ElementAt(i).Key, aBlizzSpec);
                 else
-                    LoggingUtil.LogMessage(DateTime.Now, $"Could not find a BlizzSpec for key {specFilterList[i]} in a class dictionary.", LoggingUtil.LogType.Error, true, false);
+                    LoggingUtil.LogMessage(DateTime.Now, $"Could not find a BlizzSpec for key {specFilterList.ElementAt(i).Value} in a class dictionary.", LoggingUtil.LogType.Error, true, false);
             }
             return result;
         }

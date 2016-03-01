@@ -614,6 +614,240 @@ tr.pager td {
 }
 
 
+/* class images
+----------------------------------------------------------*/
+.DeathKnight {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -250px 0;
+}
+.Druid {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -83px 0;
+}
+.Hunter {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -111px 0;
+}
+.Mage {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -27px 0;
+}
+.Monk {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -278px 0;
+}
+.Paladin {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -222px 0;
+}
+.Priest {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -167px 0;
+}
+.Rogue {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -55px 0;
+}
+.Shaman {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -139px 0;
+}
+.Warlock {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -194px 0;
+}
+.Warrior {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) 1px 0;
+}
+
+
+/* specialization images
+----------------------------------------------------------*/
+.Arms {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) 1px -35px;
+}
+.Fury {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) 1px -63px;
+}
+.WarriorProtection {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -111px -91px;
+}
+.Arcane {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -27px -35px;
+}
+.Fire {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -27px -63px;
+}
+.MageFrost {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -27px -91px;
+}
+.Assassination {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -55px -35px;
+}
+.Combat {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -55px -63px;
+}
+.Subtlety {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -55px -91px;
+}
+.Balance {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -83px -35px;
+}
+.Feral {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -83px -63px;
+}
+.DruidRestoration {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -83px -91px;
+}
+.Guardian {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -83px -121px;
+}
+.BeastMastery {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -111px -35px;
+}
+.Marksmanship {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -111px -63px;
+}
+.Survival {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -111px -91px;
+}
+.Elemental {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -139px -35px;
+}
+/* The enhancement icon needs to be updated. */
+.Enhancement {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -139px -63px;
+}
+.ShamanRestoration {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -139px -91px;
+}
+.Discipline {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -167px -35px;
+}
+.PriestHoly {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -167px -63px;
+}
+.Shadow {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -167px -91px;
+}
+.Affliction {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -194px -35px;
+}
+.Demonology {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -194px -63px;
+}
+.Destruction {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -194px -91px;
+}
+.PaladinHoly {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -222px -35px;
+}
+.PaladinProtection {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -222px -63px;
+}
+.Retribution {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -222px -91px;
+}
+.Blood {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -250px -35px;
+}
+.DK_Frost {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -250px -63px;
+}
+.Unholy {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -250px -91px;
+}
+.Brewmaster {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -278px -35px;
+}
+.Mistweaver {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -278px -63px;
+}
+.Windwalker {
+    width: 30px;
+    height: 30px;
+    background: url(../Images/Icons/ClassAndSpecIcons.jpg) -278px -91px;
+}
+
+
 /********************
 *   Mobile Styles   *
 ********************/

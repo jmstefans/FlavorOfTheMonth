@@ -69,6 +69,8 @@
 <script>
     $(document).ready(function () {
 
+        ConvertStringsToImages();
+        
         // Example AJAX functionality
         $('#btnAjax').click(function () {
             $.ajax({
@@ -88,6 +90,284 @@
 
     });
 
+    // Convert strings in teams table into images
+    function ConvertStringsToImages() {
+
+        // Classes
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Death Knight';
+        var replaceWith = '<div class=\"DeathKnight\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Druid';
+        var replaceWith = '<div class=\"Druid\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Hunter';
+        var replaceWith = '<div class=\"Hunter\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Mage';
+        var replaceWith = '<div class=\"Mage\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Monk';
+        var replaceWith = '<div class=\"Monk\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Paladin';
+        var replaceWith = '<div class=\"Paladin\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Priest';
+        var replaceWith = '<div class=\"Priest\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Rogue';
+        var replaceWith = '<div class=\"Rogue\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Shaman';
+        var replaceWith = '<div class=\"Shaman\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Warlock';
+        var replaceWith = '<div class=\"Warlock\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'Warrior';
+        var replaceWith = '<div class=\"Warrior\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+
+        // Specializations
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DK_BLOOD';
+        var replaceWith = '<div class=\"Blood\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DK_FROST';
+        var replaceWith = '<div class=\"DK_Frost\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DK_UNHOLY';
+        var replaceWith = '<div class=\"Unholy\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DRUID_BALANCE';
+        var replaceWith = '<div class=\"Balance\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DRUID_FERAL';
+        var replaceWith = '<div class=\"Feral\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DRUID_GUARDIAN';
+        var replaceWith = '<div class=\"Guardian\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'DRUID_RESTOR';
+        var replaceWith = '<div class=\"DruidRestoration\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'HUNTER_BEASTMASTER';
+        var replaceWith = '<div class=\"BeastMastery\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'HUNTER_MARKSMANSHIP';
+        var replaceWith = '<div class=\"Marksmanship\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'HUNTER_SURVIVAL';
+        var replaceWith = '<div class=\"Survival\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'MAKE_FROST';
+        var replaceWith = '<div class=\"MageFrost\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'MAGE_FIRE';
+        var replaceWith = '<div class=\"Fire\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'MAGE_ARCANE';
+        var replaceWith = '<div class=\"Arcane\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'MONK_BREWMASTER';
+        var replaceWith = '<div class=\"Brewmaster\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'MONK_MISTWEAVER';
+        var replaceWith = '<div class=\"Mistweaver\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'MONK_WINDDANCER';
+        var replaceWith = '<div class=\"Windwalker\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'PALADIN_HOLY';
+        var replaceWith = '<div class=\"PaladinHoly\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'PALADIN_PROTECTION';
+        var replaceWith = '<div class=\"PaladinProtection\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'PALADIN_RETRIBUTION';
+        var replaceWith = '<div class=\"Retribution\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'PRIEST_DISCIPLINE';
+        var replaceWith = '<div class=\"Discipline\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'PRIEST_HOLY';
+        var replaceWith = '<div class=\"PriestHoly\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'PRIEST_SHADOW';
+        var replaceWith = '<div class=\"Shadow\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'ROGUE_ASSASSINATION';
+        var replaceWith = '<div class=\"Assassination\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'ROGUE_COMBAT';
+        var replaceWith = '<div class=\"Combat\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'ROGUE_SUBTLETY';
+        var replaceWith = '<div class=\"Subtlety\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'SHAMAN_ELEMENTAL';
+        var replaceWith = '<div class=\"Elemental\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'SHAMAN_ENHANCEMENT';
+        var replaceWith = '<div class=\"Enhancement\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'SHAMAN_RESTORATION';
+        var replaceWith = '<div class=\"ShamanRestoration\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'WARLOCK_AFFLICTION';
+        var replaceWith = '<div class=\"Affliction\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'WARLOCK_DEMONOLOGY';
+        var replaceWith = '<div class=\"Demonology\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'WARLOCK_DESTRUCTION';
+        var replaceWith = '<div class=\"Destruction\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'WARRIOR_ARMS';
+        var replaceWith = '<div class=\"Arms\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'WARRIOR_FURY';
+        var replaceWith = '<div class=\"Fury\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+        var obj0 = $('#tb_TeamsBody');
+        var replaceTo = 'WARRIOR_PROTECTION';
+        var replaceWith = '<div class=\"WarriorProtection\" style=\"width:30px;height:30px;display:inline-block\"></div>';
+        obj0.find('td').each(function () {
+            $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
+        });
+    }
+
     // Refreshes the data on the screen after a filter, bracket, or
     // was changed.
     function refresh() {
@@ -95,6 +375,9 @@
         var test = JSON.stringify(buildJsonRequestObj());
         $.post('/Home/RefreshData', { paramObj: test }, function (result) {
             $('#sfilter').html(result);
+        })
+        .success(function () {
+            ConvertStringsToImages();
         });
     }
 
@@ -132,5 +415,10 @@
         var id = '#ddSpec' + index;
         $(id).text('Select a spec...');
     }
+
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
 
     </script>

@@ -44,13 +44,14 @@
                     }
                     else
                     {
-                        if (Model.CurSelectedSpecList.ElementAtOrDefault(i) == null) 
+                        // if there's not a spec in CurSelectedSpecList with a key(index) equal to i (the current filter index) then use "Select a spec..."
+                        if (!Model.CurSelectedSpecList.ContainsKey(i))
                         {
                             @Html.Raw("Select a spec...");
                         }
-                        else
+                        else // otherwise use that spec
                         {
-                            @Model.CurSelectedSpecList.ElementAtOrDefault(i);
+                            @Model.CurSelectedSpecList.ElementAtOrDefault(i).Value;
                         }
                     }
                     <span class="caret"></span>
