@@ -1,9 +1,12 @@
 ﻿
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
+using Fotm.Server.UI.Dialogs;
 using Fotm.Server.UI.Views;
 using Fotm.Server.Util;
+using MahApps.Metro.Controls;
 using Xceed.Wpf.AvalonDock.Layout;
 
 namespace Fotm.Server
@@ -13,6 +16,8 @@ namespace Fotm.Server
     /// </summary>
     public partial class MainWindow
     {
+        private MainViewModel _mainVm;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -21,14 +26,12 @@ namespace Fotm.Server
             Common.Logging.LogManager.Adapter =
                 new Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter { Level = Common.Logging.LogLevel.Info };
 
-            var vm = new MainViewModel();
-            DataContext = vm;
-
-            OpenDebugView(); 
+            _mainVm = new MainViewModel();
+            DataContext = _mainVm;
 
             Closing += (o, s) =>
             {
-                vm.CleanUp();
+                _mainVm.CleanUp();
                 _consoleRedirectWriter?.Release();
             };
         }
@@ -49,25 +52,47 @@ namespace Fotm.Server
         /// </summary>
         private void DebugOpen_OnClick(object sender, RoutedEventArgs e)
         {
-            OpenDebugView();
+            //OpenDebugView();
+            OpenDebug();
         }
 
-        private void OpenDebugView()
+        //private void OpenDebugView()
+        //{
+        //    if (RightPaneGroup.Children.Contains(_consoleLayout))
+        //    {
+        //        if (!_consoleLayout.IsActive)
+        //            _consoleLayout.IsActive = true;
+        //        return;
+        //    }
+
+        //    _consoleRedirectWriter.OnWrite += OnWrite;
+
+        //    _consoleLayout.Closed += (o, s) => _consoleRedirectWriter.Release();
+        //    _consoleLayout.Content = _consoleView;
+
+        //    RightPaneGroup.InsertChildAt(0, _consoleLayout);
+        //    _consoleLayout.IsActive = true;
+        //}
+
+        private void OpenDebug()
         {
-            if (RightPaneGroup.Children.Contains(_consoleLayout))
+            var tab = TabzMain.FindChild<TabItem>(nameof(_consoleView));
+            if (tab != null)
             {
-                if (!_consoleLayout.IsActive)
-                    _consoleLayout.IsActive = true;
+                tab.IsSelected = true;
                 return;
             }
 
             _consoleRedirectWriter.OnWrite += OnWrite;
 
-            _consoleLayout.Closed += (o, s) => _consoleRedirectWriter.Release();
-            _consoleLayout.Content = _consoleView;
-
-            RightPaneGroup.InsertChildAt(0, _consoleLayout);
-            _consoleLayout.IsActive = true;
+            tab = new TabItem
+            {
+                Content = _consoleView,
+                Name = nameof(_consoleView),
+                Header = "Debug Output",
+                IsSelected = true
+            };
+            TabzMain.AddToSource(tab);
         }
 
         private void OnWrite(string s)
@@ -86,7 +111,8 @@ namespace Fotm.Server
 
         private void SetDataSource_OnClick(object sender, RoutedEventArgs e)
         {
-
+            var dlg = new SetDatasourceDialog { DataContext = _mainVm };
+            dlg.ShowDialog();
         }
 
         #endregion
