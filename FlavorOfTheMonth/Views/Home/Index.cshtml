@@ -70,25 +70,63 @@
     $(document).ready(function () {
 
         ConvertStringsToImages();
-        
-        // Example AJAX functionality
-        $('#btnAjax').click(function () {
-            $.ajax({
-                url: '/Home/GetCharacters',
-                contentType: 'application/html; charset=utf-8',
-                type: 'GET',
-                dataType: 'html'
-
-            })
-            .success(function (result) {
-                $('#characters').html(result);
-            })
-            .error(function (xhr, status) {
-                alert(status);
-            })
-        });
 
     });
+
+    // Refreshes the data on the screen after a filter, bracket, or
+    // was changed.
+    function refresh() {
+        // Ajax to get new server data if any button was pressed.
+        var test = JSON.stringify(buildJsonRequestObj());
+        $.post('/Home/RefreshData', { paramObj: test }, function (result) {
+            $('#sfilter').html(result);
+        })
+        .success(function () {
+            ConvertStringsToImages();
+        });
+    }
+
+    // Builds a JSON object which is essentially a snapshot of all the 
+    // current filter, bracket, and region choices.
+    function buildJsonRequestObj() {
+        var jsonData = {};
+        var region = $('input[name=regions]:checked').val();
+        var bracket = $('input[name=brackets]:checked').val();
+        var classes = [];
+        $.each($('[id^="ddClass"]'), function (i) {
+            classes[i] = $(this).html().replace('<span class="caret"></span>', '');
+        });
+        var specs = [];
+        $.each($('[id^="ddSpec"]'), function (i) {
+            specs[i] = $(this).html().replace('<span class="caret"></span>', '');
+        });
+        jsonData.region = region;
+        jsonData.bracket = bracket;
+        jsonData.classes = classes;
+        jsonData.specs = specs;
+        return jsonData;
+    }
+
+    // Change dropdown text to fake functionality of a select element
+    function updateDropdownText(e) {
+        if (!e)
+            e = window.event;
+        var selText = $(e).text();
+        $(e).parents('.hack').find('button[data-toggle="dropdown"]').html(selText + ' <span class="caret"></span>');
+    }
+
+    // Update the spec button text to be "Select a spec..." when the corresponding class filter is clicked
+    function updateSpecButtonText(index) {
+        var id = '#ddSpec' + index;
+        $(id).text('Select a spec...');
+    }
+
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
+
 
     // Convert strings in teams table into images
     function ConvertStringsToImages() {
@@ -367,58 +405,5 @@
             $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
         });
     }
-
-    // Refreshes the data on the screen after a filter, bracket, or
-    // was changed.
-    function refresh() {
-        // Ajax to get new server data if any button was pressed.
-        var test = JSON.stringify(buildJsonRequestObj());
-        $.post('/Home/RefreshData', { paramObj: test }, function (result) {
-            $('#sfilter').html(result);
-        })
-        .success(function () {
-            ConvertStringsToImages();
-        });
-    }
-
-    // Builds a JSON object which is essentially a snapshot of all the 
-    // current filter, bracket, and region choices.
-    function buildJsonRequestObj() {
-        var jsonData = {};
-        var region = $('input[name=regions]:checked').val();
-        var bracket = $('input[name=brackets]:checked').val();
-        var classes = [];
-        $.each($('[id^="ddClass"]'), function (i) {
-            classes[i] = $(this).html().replace('<span class="caret"></span>', '');
-        });
-        var specs = [];
-        $.each($('[id^="ddSpec"]'), function (i) {
-            specs[i] = $(this).html().replace('<span class="caret"></span>', '');
-        });
-        jsonData.region = region;
-        jsonData.bracket = bracket;
-        jsonData.classes = classes;
-        jsonData.specs = specs;
-        return jsonData;
-    }
-
-    // Change dropdown text to fake functionality of a select element
-    function updateDropdownText(e) {
-        if (!e)
-            e = window.event;
-        var selText = $(e).text();
-        $(e).parents('.hack').find('button[data-toggle="dropdown"]').html(selText + ' <span class="caret"></span>');
-    }
-
-    // Update the spec button text to be "Select a spec..." when the corresponding class filter is clicked
-    function updateSpecButtonText(index) {
-        var id = '#ddSpec' + index;
-        $(id).text('Select a spec...');
-    }
-
-    String.prototype.replaceAll = function (search, replacement) {
-        var target = this;
-        return target.replace(new RegExp(search, 'g'), replacement);
-    };
 
     </script>
