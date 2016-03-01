@@ -1,7 +1,7 @@
 USE [fotm]
 GO
 
-/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 2/27/2016 7:40:17 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 2/29/2016 11:21:29 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -16,8 +16,8 @@ GO
 -- Then return that list sorted by most popular.>
 -- =============================================
 CREATE PROCEDURE [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular] 
-	-- Add the parameters for the stored procedure here
-	@Bracket nvarchar(50) = '_3v3'
+	@Bracket nvarchar(50) = '_3v3',  -- Default 3v3
+	@RegionID int = 0				 -- Default US
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -30,8 +30,10 @@ BEGIN
 		LEFT OUTER JOIN fotm.dbo.[Character] c on tm.CharacterID = c.CharacterID
 		LEFT OUTER JOIN fotm.dbo.Class cl on c.ClassID = cl.ClassID
 		LEFT OUTER JOIN fotm.dbo.Spec s on c.SpecID = s.SpecID
+		LEFT OUTER JOIN fotm.dbo.Realm r on c.RealmID = r.RealmID
 		WHERE tm.ModifiedDate >= DATEADD(DAY, -30, SYSDATETIME())
 			AND t.Bracket = @Bracket
+			AND r.RegionID = @RegionID
 		ORDER BY t.TeamID, cl.Name, s.BlizzName
 END
 GO
