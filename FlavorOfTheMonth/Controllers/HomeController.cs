@@ -176,14 +176,26 @@ namespace FlavorOfTheMonth.Controllers
                               };
 
             int playerCounter = 0;
+            int prevTeamMembersTeamId = 0;
             string str = "";
+            int teamIndex = -1;
             foreach (var tm in teamMembers)
             {
-                CompPercentModel compModel = new CompPercentModel();
+                // Avoiding the situation where the sql query returns a number of teammembers
+                // that is not evenly divisible by the number of people on each team. The odd 
+                // man/men/woman/women out can only be at the beginning of the result set I think.
+                // TODO Probably best to fix stored proc. to only return full teams.
+                if (prevTeamMembersTeamId == 0 || prevTeamMembersTeamId != tm.TeamID)
+                {
+                    str = "";
+                    playerCounter = 0;
+                }
+                prevTeamMembersTeamId = (int)tm.TeamID;
+
                 str += tm.Name + tm.BlizzName;
 
                 // set a teamIndex if the current string matches a string already in the comps list
-                int teamIndex = -1;
+                teamIndex = -1;
                 foreach (var comp in m_RespModel.TeamModel.Comps)
                 {
                     if (str == comp.strComp) // if already in list 
@@ -195,9 +207,7 @@ namespace FlavorOfTheMonth.Controllers
                 {
                     if (teamIndex == -1) // if this is a new team comp., then add it to both lists (classes & percentages)
                     {
-                        compModel.strComp = str;
-                        compModel.Total = 1;
-                        m_RespModel.TeamModel.Comps.Add(compModel);
+                        m_RespModel.TeamModel.Comps.Add(new CompPercentModel() { strComp = str, Total = 1 });
                     }
                     else
                         m_RespModel.TeamModel.Comps[teamIndex].Total++;
