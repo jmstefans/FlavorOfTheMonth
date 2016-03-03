@@ -609,6 +609,14 @@ td {
     border: 0 none;
 }
 
+#dataTable th {
+    padding: 10px;
+}
+
+#tb_TeamsBody td:last-child{
+    text-align: center;
+}
+
 tr.pager td {
     padding: 0 0.25em 0 0;
 }
