@@ -493,6 +493,10 @@ textarea {
         margin-right: 4px;
     }
 
+#sFactionFilters {
+    margin: 10px 0px 20px 0px;
+}
+
 /* info and errors */
 .message-info {
     border: 1px solid;
@@ -1022,4 +1026,8 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+}
+body.wait *, body.wait
+{
+    cursor: progress !important;
 }

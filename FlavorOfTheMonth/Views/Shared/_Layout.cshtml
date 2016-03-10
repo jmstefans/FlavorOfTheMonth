@@ -14,11 +14,11 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left logo">
-                    @*<p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>*@
+                    @* LEAVE FOR NOW <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>*@
                     <img src="/Images/fotmLogoDrawing.jpg" class="img-responsive" alt="FOTM">
                 </div>
                 <div class="float-right">
-                    @*
+                    @* LEAVE FOR NOW
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
@@ -27,7 +27,7 @@
                         <ul id="menu">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
                             <li>@Html.ActionLink("About/Contact", "About", "Home")</li>
-                            @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                            @* LEAVE FOR NOW <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                         </ul>
                     </nav>
                 </div>
@@ -70,6 +70,15 @@
             
             ga('create', 'UA-74033539-1', 'auto');
             ga('send', 'pageview');
+        </script>
+        <script>
+            // Change cursor during ajax calls
+            $(document).ajaxStart(function () {
+                $('body').addClass('wait');
+
+            }).ajaxComplete(function () {
+                $('body').removeClass('wait');
+            });
         </script>
     </body>
 </html>

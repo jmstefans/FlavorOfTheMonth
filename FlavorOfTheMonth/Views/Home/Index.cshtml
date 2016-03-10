@@ -60,6 +60,24 @@
     </div>
 </section>
 
+@* FILTERS *@
+<h3>Filters</h3>
+
+@* Create faction buttons *@
+<section id="sFactionFilters">
+    <div class="btn-group" role="group" aria-label="hdrFaction" data-toggle="buttons">
+        <label class="btn btn-primary active" onclick="javascript: document.getElementById('iAllFactions').checked = true; refresh()">
+            <input type="radio" name="factions" id="iAllFactions" autocomplete="off" value="-1" checked>All
+        </label>
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iAlliance').checked = true; refresh()">
+            <input type="radio" name="factions" id="iAlliance" autocomplete="off" value="0">Alliance
+        </label>
+        <label class="btn btn-primary" onclick="javascript: document.getElementById('iHorde').checked = true; refresh()">
+            <input type="radio" name="factions" id="iHorde" autocomplete="off" value="1">Horde
+        </label>
+    </div>
+</section>
+
 @*Filters*@
 <section id="sfilter">
     @Html.Partial("RefreshData")
@@ -72,11 +90,18 @@
         $('[data-toggle="tooltip"]').tooltip(); // Needs to run after image divs are created
     });
 
+    // Necessary for replacing all of the strings with images.
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
     // Refreshes the data on the screen after a filter, bracket, or
     // was changed.
     function refresh() {
         // Ajax to get new server data if any button was pressed.
         var test = JSON.stringify(buildJsonRequestObj());
+
         $.post('/Home/RefreshData', { paramObj: test }, function (result) {
             $('#sfilter').html(result);
         })
@@ -91,6 +116,7 @@
         var jsonData = {};
         var region = $('input[name=regions]:checked').val();
         var bracket = $('input[name=brackets]:checked').val();
+        var faction = $('input[name=factions]:checked').val();
         var classes = [];
         $.each($('[id^="ddClass"]'), function (i) {
             classes[i] = $(this).html().replace('<span class="caret"></span>', '');
@@ -101,6 +127,7 @@
         });
         jsonData.region = region;
         jsonData.bracket = bracket;
+        jsonData.faction = faction;
         jsonData.classes = classes;
         jsonData.specs = specs;
         return jsonData;
@@ -119,13 +146,6 @@
         var id = '#ddSpec' + index;
         $(id).text('Select a spec...');
     }
-
-    String.prototype.replaceAll = function (search, replacement) {
-        var target = this;
-        return target.replace(new RegExp(search, 'g'), replacement);
-    };
-
-
 
     // Convert strings in teams table into images
     function ConvertStringsToImages() {
@@ -248,7 +268,7 @@
             $(this).html($(this).html().replaceAll(replaceTo, replaceWith));
         });
         var obj0 = $('#tb_TeamsBody');
-        var replaceTo = 'HUNTER_MARKSMANSHIP';
+        var replaceTo = 'HUNTER_MARKSMAN';
         var replaceWith = '<div class=\"Marksmanship\" style=\"width:30px;height:30px;display:inline-block\" data-toggle=\"tooltip\" title=\"' + replaceTo + '\"></div>';
         obj0.find('td').each(function () {
             $(this).html($(this).html().replaceAll(replaceTo, replaceWith));

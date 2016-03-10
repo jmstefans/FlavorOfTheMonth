@@ -48,9 +48,14 @@ namespace FlavorOfTheMonth.Models
         }
 
         /// <summary>
-        /// Ajax test purposes only.
+        /// Enum for all WoW factions for use with filtering.
         /// </summary>
-        public List<Character> Character;
+        public enum Faction
+        {
+            Any = -1,
+            Alliance = 0,
+            Horde = 1
+        }
 
         /// <summary>
         /// A list to keep track of the currently selected classes in the filter dropdowns.
@@ -62,6 +67,11 @@ namespace FlavorOfTheMonth.Models
         /// and their respective index in all of the filters.
         /// </summary>
         public Dictionary<int, string> CurSelectedSpecList;
+
+        /// <summary>
+        /// An enum to represent the current faction filter (-1 if no filter).
+        /// </summary>
+        public Faction CurFaction;
 
         /// <summary>
         /// Holds teams, comps, team members, the team's average rating and bracket.
@@ -77,9 +87,9 @@ namespace FlavorOfTheMonth.Models
             CurBracket = Bracket._3v3;
             CurRegion = Region.US;
             DataClassesDataContext context = new DataClassesDataContext();
-            Character = new List<Character>();
             CurCharacterList = new List<string>();
             CurSelectedSpecList = new Dictionary<int, string>();
+            CurFaction = Faction.Any;
             TeamModel = new TeamModel();
         }
     }
