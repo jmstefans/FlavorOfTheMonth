@@ -23,7 +23,7 @@ namespace FlavorOfTheMonth.Controllers
         // Returns the Index view when called with GET /Home/Index
         public ActionResult Index()
         {
-            ViewBag.Message = "Flavor of the month lets you see which World of Warcraft comp compositions are currently the most popular.";
+            ViewBag.Message = "Flavor of the month lets you see which World of Warcraft arena team compositions are currently the most popular among the leaderboard.";
 
             SetCompStrings();
             CalcCompPercentages();
