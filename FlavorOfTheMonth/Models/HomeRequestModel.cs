@@ -10,6 +10,7 @@ namespace FlavorOfTheMonth.Models
     {
         public string region { get; set; }
         public string bracket { get; set; }
+        public string faction { get; set; }
         public List<object> classes { get; set; }
         public List<object> specs { get; set; }
     }

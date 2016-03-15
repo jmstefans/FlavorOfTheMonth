@@ -54,6 +54,8 @@ namespace FlavorOfTheMonth.Controllers
                     FilterByClass(m_RespModel.CurCharacterList);
                 if (m_RespModel.CurSelectedSpecList.Count > 0)
                     FilterBySpec(m_RespModel.CurSelectedSpecList);
+                if (m_RespModel.CurFaction >= 0)
+                    FilterByFaction(m_RespModel.CurFaction);
                 CalcCompPercentages();
                 SortCompsByPercentage();
 
@@ -151,6 +153,35 @@ namespace FlavorOfTheMonth.Controllers
         }
 
         /// <summary>
+        /// Returns the faction enum from the request model object's string value.
+        /// </summary>
+        /// <returns></returns>
+        public HomeModel.Faction GetFactionFromString()
+        {
+            HomeModel.Faction result;
+            switch (m_ReqModel.faction)
+            {
+                case "0":
+                    {
+                        result = HomeModel.Faction.Alliance;
+                        break;
+                    }
+                case "1":
+                    {
+                        result = HomeModel.Faction.Horde;
+                        break;
+                    }
+                case "-1":
+                default:
+                    {
+                        result = HomeModel.Faction.Any;
+                        break;
+                    }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Something is fudged with the AJAX request and we end up with extra return
         /// characters and whitespace. I think it has something to do with calling 
         /// JSON stringify on something that's already a string.
@@ -167,12 +198,13 @@ namespace FlavorOfTheMonth.Controllers
         private void SetCompStrings()
         {
             var db = new DataClassesDataContext();
-            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular(m_RespModel.CurBracket.ToString(), (int)m_RespModel.CurRegion)
+            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular(m_RespModel.CurBracket.ToString(), (int)m_RespModel.CurRegion, (int)m_RespModel.CurFaction)
                               select new
                               {
                                   d.TeamID,
                                   d.Name,
-                                  d.BlizzName
+                                  d.BlizzName,
+                                  d.FactionID
                               };
 
             int playerCounter = 0;
@@ -192,7 +224,7 @@ namespace FlavorOfTheMonth.Controllers
                 }
                 prevTeamMembersTeamId = (int)tm.TeamID;
 
-                str += tm.Name + tm.BlizzName;
+                str += tm.Name + tm.BlizzName; // + BitToFaction(tm.FactionID);  Can maybe tack this onto the end for an icon
 
                 // set a teamIndex if the current string matches a string already in the comps list
                 teamIndex = -1;
@@ -214,6 +246,24 @@ namespace FlavorOfTheMonth.Controllers
                     str = "";
                 }
                 playerCounter++;
+            }
+        }
+
+        /// <summary>
+        /// Converts a bool? to a Faction.
+        /// </summary>
+        /// <param name="factionID"></param>
+        /// <returns></returns>
+        private HomeModel.Faction BitToFaction(bool? factionID)
+        {
+            switch (factionID)
+            {
+                case false:
+                    return HomeModel.Faction.Alliance;
+                case true:
+                    return HomeModel.Faction.Horde;
+                default:
+                    return HomeModel.Faction.Any;
             }
         }
 
@@ -242,6 +292,10 @@ namespace FlavorOfTheMonth.Controllers
             m_RespModel.TeamModel.Comps = sortedList;
         }
 
+        /// <summary>
+        /// Create a C# object from the passed in json data.
+        /// </summary>
+        /// <param name="paramObj"></param>
         private void CreateRequestModel(object paramObj)
         {
             // Convert parameter to team string
@@ -253,11 +307,12 @@ namespace FlavorOfTheMonth.Controllers
                 m_ReqModel = JsonConvert.DeserializeObject<HomeRequestModel>(param);
         }
 
+        // Build the response's HomeModel for the views.
         private void BuildResponseModel()
         {
-            // Build response HomeModel for the views.
             m_RespModel.CurRegion = GetRegionFromString();
             m_RespModel.CurBracket = GetBracketFromString();
+            m_RespModel.CurFaction = GetFactionFromString();
 
             var characterList = m_ReqModel.classes.OfType<string>();
             characterList = characterList.Select(s => s.Trim());
@@ -380,6 +435,18 @@ namespace FlavorOfTheMonth.Controllers
                     LoggingUtil.LogMessage(DateTime.Now, $"Could not find a BlizzSpec for key {specFilterList.ElementAt(i).Value} in a class dictionary.", LoggingUtil.LogType.Error, true, false);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Filter the current list of comps. in the response (HomeModel) by the user's faction choice.
+        /// </summary>
+        /// <param name="curFaction"></param>
+        private void FilterByFaction(HomeModel.Faction curFaction)
+        {
+            foreach (var comp in m_RespModel.TeamModel.Comps)
+            {
+                m_RespModel.TeamModel.Comps = m_RespModel.TeamModel.Comps.Where(c => !c.strComp.Contains(Convert.ToString((int)curFaction))).ToList();
+            }
         }
 
         #endregion Helpers

@@ -81,7 +81,7 @@ namespace Fotm.DAL
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -239,9 +239,9 @@ namespace Fotm.DAL
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular")]
-		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID)
+		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="FactionID", DbType="Int")] System.Nullable<int> factionID)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), bracket, regionID);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), bracket, regionID, factionID);
 			return ((ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult>)(result.ReturnValue));
 		}
 	}
@@ -4323,6 +4323,8 @@ namespace Fotm.DAL
 		
 		private System.DateTime _ModifiedDate;
 		
+		private System.Nullable<bool> _FactionID;
+		
 		public SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult()
 		{
 		}
@@ -4403,6 +4405,22 @@ namespace Fotm.DAL
 				if ((this._ModifiedDate != value))
 				{
 					this._ModifiedDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FactionID", DbType="Bit")]
+		public System.Nullable<bool> FactionID
+		{
+			get
+			{
+				return this._FactionID;
+			}
+			set
+			{
+				if ((this._FactionID != value))
+				{
+					this._FactionID = value;
 				}
 			}
 		}

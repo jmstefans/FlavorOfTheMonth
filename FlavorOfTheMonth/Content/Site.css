@@ -13,6 +13,11 @@ body {
     padding: 0;
 }
 
+body.wait *, body.wait
+{
+    cursor: progress !important;
+}
+
 a {
     color: #333;
     outline: none;
@@ -122,6 +127,7 @@ footer {
     background-color: #2F2F2F;
     font-size: .8em;
     height: 100px;
+    padding: 10px;
 }
 
 .logo {
@@ -147,6 +153,12 @@ footer {
 
 .rowAlternating tr:nth-child(odd){
   background-color: #3A3A3A;
+}
+
+hgroup.title h1.pageTitle {
+    display: block;
+    margin-bottom: 7.5%;
+    text-align: center;
 }
 
 /* site title
@@ -492,6 +504,10 @@ textarea {
         padding: 4px;
         margin-right: 4px;
     }
+
+#sFactionFilters {
+    margin: 10px 0px 20px 0px;
+}
 
 /* info and errors */
 .message-info {

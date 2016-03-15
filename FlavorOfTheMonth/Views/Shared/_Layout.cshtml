@@ -14,11 +14,11 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left logo">
-                    @*<p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>*@
+                    @* LEAVE FOR NOW <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>*@
                     <img src="/Images/fotmLogoDrawing.jpg" class="img-responsive" alt="FOTM">
                 </div>
                 <div class="float-right">
-                    @*
+                    @* LEAVE FOR NOW
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
@@ -27,7 +27,7 @@
                         <ul id="menu">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
                             <li>@Html.ActionLink("About/Contact", "About", "Home")</li>
-                            @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                            @* LEAVE FOR NOW <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                         </ul>
                     </nav>
                 </div>
@@ -47,12 +47,6 @@
                 </div>
             </div>
             <iframe 
-                allowtransparency="true" 
-                scrolling="no"  
-                src="https://w.soundcloud.com/icon/?url=http%3A%2F%2Fsoundcloud.com%2Ftreefingers&color=orange_white&size=32" 
-                style="width: 32px; height: 32px;">
-            </iframe>
-            <iframe 
                 height="450" 
                 scrolling="no" 
                 src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/2639763&amp;color=00aabb&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"
@@ -70,6 +64,15 @@
             
             ga('create', 'UA-74033539-1', 'auto');
             ga('send', 'pageview');
+        </script>
+        <script>
+            // Change cursor during ajax calls
+            $(document).ajaxStart(function () {
+                $('body').addClass('wait');
+
+            }).ajaxComplete(function () {
+                $('body').removeClass('wait');
+            });
         </script>
     </body>
 </html>
