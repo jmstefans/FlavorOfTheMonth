@@ -15,6 +15,7 @@ namespace FlavorOfTheMonth.Controllers
     /// </summary>
     public class HomeController : Controller
     {
+        private const int MAX_NUM_COMPS_TO_RETURN = 10;
         private readonly HomeModel m_RespModel = new HomeModel();
         private HomeRequestModel m_ReqModel = new HomeRequestModel();
 
@@ -58,6 +59,9 @@ namespace FlavorOfTheMonth.Controllers
                     FilterByFaction(m_RespModel.CurFaction);
                 CalcCompPercentages();
                 SortCompsByPercentage();
+                GetTopNComps(MAX_NUM_COMPS_TO_RETURN);
+                // redo the percentages so they reflect the current comps. after trimming down
+                CalcCompPercentages();
 
                 return PartialView(m_RespModel);
             }
@@ -447,6 +451,15 @@ namespace FlavorOfTheMonth.Controllers
             {
                 m_RespModel.TeamModel.Comps = m_RespModel.TeamModel.Comps.Where(c => !c.strComp.Contains(Convert.ToString((int)curFaction))).ToList();
             }
+        }
+
+        /// <summary>
+        /// Trims the current comp. list down to n total compositions.
+        /// </summary>
+        /// <param name="n"></param>
+        private void GetTopNComps(int n)
+        {
+            m_RespModel.TeamModel.Comps = m_RespModel.TeamModel.Comps.GetRange(0, n);
         }
 
         #endregion Helpers
