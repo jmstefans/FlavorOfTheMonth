@@ -79,7 +79,7 @@ namespace Fotm.Server.Analysis.Algorithms
                 var team = new Team();
                 for (var j = 0; j < teamSize; j++)
                 {
-                    team.TeamMembers.Add(members[i * teamSize + j]);
+                    team.TeamMembers.Add(members[i * teamSize + j]); 
                 }
                 teams.Add(team);
             }
@@ -98,7 +98,7 @@ namespace Fotm.Server.Analysis.Algorithms
                 {
                     var memberCount = team.TeamMembers.Count;
                     if (memberCount <= 0)
-                        continue; // avoid divide by zero- todo: originally was returning false here, test if necessary
+                        continue; // avoid divide by zero
 
                     var sumRatingChange = team.TeamMembers.Sum(m => m.RatingChangeValue);
                     team.MeanRatingChange = (double)sumRatingChange / memberCount;

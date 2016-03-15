@@ -109,13 +109,14 @@ namespace Fotm.DAL.Database
         /// Converts an API PvpStats object to the DB Character model and inserts into DB.
         /// </summary>
         /// <param name="pvpStats">The PvpStats object retrieved from the DB.</param>
-        public void InsertCharacter(PvpStats pvpStats)
+        /// <param name="region"></param>
+        public void InsertCharacter(PvpStats pvpStats, WowDotNetAPI.Region region)
         {
-            var realm = GetRealmByName(pvpStats.RealmName);
+            var realm = GetRealmByName(pvpStats.RealmName, region);
             if (realm == null)
             {
-                InsertNewRealm(pvpStats.RealmName);
-                realm = GetRealmByName(pvpStats.RealmName);
+                InsertNewRealm(pvpStats.RealmName, region);
+                realm = GetRealmByName(pvpStats.RealmName, region);
             }
 
             var spec = GetSpecByName(pvpStats.Spec);
@@ -192,13 +193,14 @@ namespace Fotm.DAL.Database
         /// Inserts new realm into the DB.
         /// </summary>
         /// <param name="realmName">Name of realm to insert.</param>
-        public void InsertNewRealm(string realmName)
+        /// <param name="region"></param>
+        public void InsertNewRealm(string realmName, WowDotNetAPI.Region region)
         {
             var query = $"insert into [Realm] (Name, RegionID, ModifiedDate, ModifiedStatus, ModifiedUserID) " +
-                        $"values (@Name, 1,'{DateTime.Now}', 'I', 0);";
+                        $"values (@Name, @Region,'{DateTime.Now}', 'I', 0);";
             using (var conn = _dataProvider.GetDataProviderConnection())
             {
-                conn.Execute(query, new { Name = realmName });
+                conn.Execute(query, new { Name = realmName, Region = region });
             }
         }
 
@@ -247,12 +249,13 @@ namespace Fotm.DAL.Database
         /// Gets the DB Realm object by name.
         /// </summary>
         /// <param name="name">Name of the realm.</param>
+        /// <param name="region"></param>
         /// <returns>Realm if found otherwise null.</returns>
-        public Realm GetRealmByName(string name)
+        public Realm GetRealmByName(string name, WowDotNetAPI.Region region)
         {
-            var query = "select * from Realm where Name = @Name;";
+            var query = "select * from Realm where Name = @Name and RegionID = @RegionID;";
             using (var conn = _dataProvider.GetDataProviderConnection())
-                return conn.Query<Realm>(query, new { Name = name }).FirstOrDefault();
+                return conn.Query<Realm>(query, new { Name = name, RegionID = region }).FirstOrDefault();
         }
 
         /// <summary>

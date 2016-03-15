@@ -15,7 +15,7 @@ namespace Fotm.Server.WowAPI
     {
         #region API KEY
 
-        private string API_KEY = ConfigUtil.API_Key;
+        private readonly string _apiKey = ConfigUtil.API_Key;
 
         #endregion
 
@@ -30,11 +30,11 @@ namespace Fotm.Server.WowAPI
         {
             try
             {
-                var explorer = new WowExplorer(region, locale, API_KEY);
+                var explorer = new WowExplorer(region, locale, _apiKey);
                 var leaders = explorer.GetLeaderBoards(bracket);
                 return leaders.PvpStats;
             }
-            catch (WebException ex)
+            catch (WebException ex) // note - this won't hit, WoWAPI lib is suppressing exceptions, may want to change
             {
                 LoggingUtil.LogMessage(DateTime.Now, $"WebException caught at API manager request: {ex}");
                 throw;
@@ -49,7 +49,7 @@ namespace Fotm.Server.WowAPI
         {
             try
             {
-                return new WowExplorer(region, locale, API_KEY)
+                return new WowExplorer(region, locale, _apiKey)
                                       .GetCharacter(realmName, name);
             }
             catch (WebException ex)

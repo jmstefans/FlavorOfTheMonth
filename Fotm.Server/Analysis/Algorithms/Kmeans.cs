@@ -7,6 +7,7 @@ namespace Fotm.Server.Analysis.Algorithms
 {
     /// <summary>
     /// Class for computing K clusters from N nodes using the K-means algorithm
+    /// NOTE -- used now as a referenced, replaced with <see cref="LeaderboardKmeans"/>
     /// </summary>
     public class Kmeans
     {

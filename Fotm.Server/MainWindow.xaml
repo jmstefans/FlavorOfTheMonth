@@ -3,20 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Fotm.Server"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-        xmlns:fluent="urn:fluent-ribbon"
-        xmlns:views="clr-namespace:Fotm.Server.UI.Views"
-        xmlns:jobs="clr-namespace:Fotm.Server.UI.Views.Jobs"
-        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         mc:Ignorable="d"
         Title="FOTM SERVER APP" 
-        TitleCaps="False"
         TitlebarHeight="30"
         Height="350" 
         Width="525"
-        fluent:RibbonProperties.TitleBarHeight="0"
         GlowBrush="{DynamicResource AccentColorBrush}"
         NonActiveGlowBrush="{StaticResource AccentColorBrush2}"
         WindowStartupLocation="CenterScreen">
@@ -34,67 +26,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- MAIN RIBBON -->
-        <!--<fluent:Ribbon x:Name="MainRibbon" 
-                       Grid.Row="0"
-                       Margin="0,2,0,0"
-                       AutomaticStateManagement="True"
-                       IsQuickAccessToolBarVisible="False">
-
-            -->
-        <!-- DATA TAB -->
-        <!--
-            <fluent:RibbonTabItem Header="Data"
-                                  IsSeparatorVisible="True">
-
-                <fluent:RibbonGroupBox Header="Debug">
-                    <fluent:Button Header="Open Output"
-                                   Icon="UI/Images/debug.ico"
-                                   LargeIcon="UI/Images/debug.ico"
-                                   Click="DebugOpen_OnClick"/>
-                </fluent:RibbonGroupBox>
-
-                <fluent:RibbonGroupBox Header="Database">
-                    <fluent:Button Header="Set Data Source"
-                                   Icon="UI/Images/data_source.ico"
-                                   LargeIcon="UI/Images/data_source.ico"
-                                   Click="SetDataSource_OnClick"/>
-                    <fluent:Button Header="Test Connection"
-                                   Icon="UI/Images/run.ico"
-                                   LargeIcon="UI/Images/run.ico"/>
-                </fluent:RibbonGroupBox>
-            </fluent:RibbonTabItem>
-
-            -->
-        <!-- EDIT TAB -->
-        <!--<fluent:RibbonTabItem Header="Tasks"
-                                  IsSeparatorVisible="True">
-
-                <fluent:RibbonGroupBox Header="Temp">
-
-                </fluent:RibbonGroupBox>
-               
-                <fluent:RibbonGroupBox Header="Temp">
-
-                </fluent:RibbonGroupBox>
-
-                <fluent:RibbonGroupBox Header="Temp">
-
-                </fluent:RibbonGroupBox>
-
-            </fluent:RibbonTabItem>-->
-
-        <!-- FILE MENU -->
-        <!--<fluent:Ribbon.Menu>
-                <fluent:ApplicationMenu Header="File">
-
-                </fluent:ApplicationMenu>
-            </fluent:Ribbon.Menu>-->
-        <!--
-
-        </fluent:Ribbon>-->
-
-        <WrapPanel Grid.Row="0"
+        <!--<WrapPanel Grid.Row="0"
                    Orientation="Horizontal"
                    Margin="5,5,5,0">
             <Button Style="{StaticResource ButtonStyle}"
@@ -110,21 +42,8 @@
                 </StackPanel>
             </Button>
             <Button Style="{StaticResource ButtonStyle}"
-                    Margin="5,0,0,0"
-                    ToolTip="Open Debug"
-                    Click="DebugOpen_OnClick">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="UI/Images/debug.ico"
-                           Height="25"/>
-                    <TextBlock 
-                           Margin="5,0,0,0"
-                           VerticalAlignment="Center"
-                           Text="Debug"/>
-                </StackPanel>
-            </Button>
-            <Button Style="{StaticResource ButtonStyle}"
-                    Margin="5,0,0,0"
-                    ToolTip="Test Connection"
+                    Margin="0,0,0,0"
+                    ToolTip="Start Leaderboard Jobs"
                     Command="{Binding StartJobsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="UI/Images/run.ico"
@@ -135,89 +54,11 @@
                            Text="Start"/>
                 </StackPanel>
             </Button>
-        </WrapPanel>
+        </WrapPanel>-->
 
-        <dragablz:TabablzControl Grid.Row="1"
-                                 Margin="5"
-                                 Style="{StaticResource MahAppsTabablzControlStyle}"
-                                 x:Name="TabzMain"
-                                 ShowDefaultCloseButton="True">
-            <dragablz:TabablzControl.InterTabController >
-                <dragablz:InterTabController x:Name="TabController"/>
-            </dragablz:TabablzControl.InterTabController>
-        </dragablz:TabablzControl>
-
-        <!-- AVALON DOCKING MANAGER -->
-        <!--<xcad:DockingManager Grid.Row="1"
-                             FontSize="14"
-                             AllowMixedOrientation="True"
-                             x:Name="DockingManager">
-
-            <xcad:DockingManager.Theme>
-                <xcad:MetroTheme/>
-            </xcad:DockingManager.Theme>
-
-            <xcad:LayoutRoot>
-
-                <xcad:LayoutPanel Orientation="Horizontal" >
-
-                    -->
-        <!-- TOOL WINDOW -->
-        <!--
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="300"
-                                                    IsMaximized="False">
-                        <xcad:LayoutAnchorablePane >
-                            
-                            <xcad:LayoutAnchorable ContentId="Job Scheduler"
-                                                   Title="Job Scheduler">
-                                <jobs:JobsView/>
-                            </xcad:LayoutAnchorable>
-                            
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>
-
-                    -->
-        <!-- MAIN CONTENT/TAB CONTROL -->
-        <!--<xcad:LayoutAnchorablePaneGroup DockWidth="3*"
-                                                    IsMaximized="False">
-                        <xcad:LayoutAnchorablePane >
-
-                            <xcad:LayoutAnchorable ContentId="Analysis"
-                                                   Title="Analysis">
-                                <views:AnalysisView/>
-                            </xcad:LayoutAnchorable>
-
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>-->
-        <!--
-
-                    <xcad:LayoutAnchorablePaneGroup DockWidth="2*"
-                                                    IsMaximized="False">
-                        <xcad:LayoutAnchorablePane x:Name="RightPaneGroup">
-
-                            -->
-        <!--<xcad:LayoutAnchorable ContentId="Database"
-                                                   Title="Database">
-                                <views:DatabaseView/>
-                            </xcad:LayoutAnchorable>-->
-        <!--
-
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutAnchorablePaneGroup>
-
-                </xcad:LayoutPanel>
-
-            </xcad:LayoutRoot>
-
-        </xcad:DockingManager>-->
-
-        <!-- STATUS BAR -->
-        <StatusBar Grid.Row="2"
-                   FontSize="14"
-                   Style="{StaticResource MetroStatusBar}"
-                   Height="30">
-        </StatusBar>
-
+        <GroupBox Grid.Row="1"
+                 Header="Debug"
+                 x:Name="DebugTab"/>
     </Grid>
 </controls:MetroWindow>
 

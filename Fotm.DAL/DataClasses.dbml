@@ -195,10 +195,14 @@
     </Type>
   </Table>
   <Function Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular" Method="SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular">
+    <Parameter Name="Bracket" Parameter="bracket" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="RegionID" Parameter="regionID" Type="System.Int32" DbType="Int" />
     <ElementType Name="SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult">
       <Column Name="TeamID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="BlizzName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Bracket" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
 </Database>

@@ -82,6 +82,18 @@ namespace Fotm.Server.JobScheduling
             ScheduleJob<LeaderboardClusteringJob>(trigger, jobKey, groupKey, jobArgs);
         }
 
+        /// <summary>
+        /// Used for debugging purposes only.
+        /// </summary>
+        public void ScheduleRatingChangeJobDebugging()
+        {
+            var test = new LeaderboardClusteringJob();
+            while (true)
+            {
+                test.ExecuteDebugging();
+            }
+        }
+
         #endregion
 
         #region IDisposable

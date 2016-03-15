@@ -239,9 +239,9 @@ namespace Fotm.DAL
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular")]
-		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular()
+		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), bracket, regionID);
 			return ((ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult>)(result.ReturnValue));
 		}
 	}
@@ -4319,6 +4319,10 @@ namespace Fotm.DAL
 		
 		private string _BlizzName;
 		
+		private string _Bracket;
+		
+		private System.DateTime _ModifiedDate;
+		
 		public SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult()
 		{
 		}
@@ -4367,6 +4371,38 @@ namespace Fotm.DAL
 				if ((this._BlizzName != value))
 				{
 					this._BlizzName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Bracket", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Bracket
+		{
+			get
+			{
+				return this._Bracket;
+			}
+			set
+			{
+				if ((this._Bracket != value))
+				{
+					this._Bracket = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModifiedDate", DbType="DateTime2 NOT NULL")]
+		public System.DateTime ModifiedDate
+		{
+			get
+			{
+				return this._ModifiedDate;
+			}
+			set
+			{
+				if ((this._ModifiedDate != value))
+				{
+					this._ModifiedDate = value;
 				}
 			}
 		}
