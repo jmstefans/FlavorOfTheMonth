@@ -1,11 +1,10 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
 using Fotm.DAL.Database;
 using Fotm.DAL.Database.DataProvider;
 using Fotm.DAL.Models.Base;
 using Fotm.Server.JobScheduling;
 using Fotm.DAL.Util;
 using Fotm.Server.UI;
-using WowDotNetAPI;
 using WowDotNetAPI.Models;
 
 namespace Fotm.Server
@@ -13,6 +12,8 @@ namespace Fotm.Server
     public class MainViewModel : ObservableObjectBase
     {
         #region Vars/Props
+
+        private const string DB_NAME = "fotm";
 
         public string Server
         {
@@ -107,16 +108,29 @@ namespace Fotm.Server
 
         private void Initialize()
         {
-            if (CanSetDataSource())
-            {
-                _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, Server, ApiKey);
-            }
+            //if (CanSetDataSource())
+            //{
+            //    _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, Server, DB_NAME);
+            //}
+
+            // Starting jobs on initializiation for now
+            if (!IsValidConfig()) return; // TODO: err out here
+
+            _dbManager.SetDataProvider(DataProviderFactory.DataProviderType.Sql, ConfigUtil.SQL_Server, DB_NAME);
+            StartJobs();
+            //StartJobsDebugAsync();
         }
 
         private bool CanSetDataSource()
         {
             return !string.IsNullOrEmpty(_apiKey) &&
                    !string.IsNullOrEmpty(_server);
+        }
+
+        private bool IsValidConfig()
+        {
+            return !string.IsNullOrEmpty(ConfigUtil.API_Key) &&
+                   !string.IsNullOrEmpty(ConfigUtil.SQL_Server);
         }
 
         private void SetDataSource()
@@ -136,6 +150,11 @@ namespace Fotm.Server
             _jobManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, jobKey: "ratingChangeJob1");
             _jobManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, jobKey: "ratingChangeJob2");
             _jobManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, jobKey: "ratingChangeJob3");
+        }
+
+        private async void StartJobsDebugAsync()
+        {
+            await Task.Run(() => _jobManager.ScheduleRatingChangeJobDebugging());
         }
 
         #endregion

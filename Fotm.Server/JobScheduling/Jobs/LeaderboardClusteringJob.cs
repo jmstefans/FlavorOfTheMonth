@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Fotm.DAL;
 using Fotm.DAL.Database;
@@ -88,7 +89,7 @@ namespace Fotm.Server.JobScheduling.Jobs
         {
             LoggingUtil.LogMessage(DateTime.Now, "Executing LeadboardClusteringJob...", LoggingUtil.LogType.Notice);
 
-            var region = (Region)context.JobDetail.JobDataMap[REGION_KEY];
+            var region = (Region)context.JobDetail.JobDataMap[REGION_KEY]; // TODO: casting to region/bracket each execution, could be expensive...
             var bracket = (Bracket)context.JobDetail.JobDataMap[BRACKET_KEY];
 
             List<PvpStats> stats;
@@ -105,6 +106,24 @@ namespace Fotm.Server.JobScheduling.Jobs
         // api/cluster locks
         private static object _statsLock = new object();
         private static object _execLock = new object();
+
+        /// <summary>
+        /// Execute for debugging purposes only - intended for single threaded operation.
+        /// </summary>
+        public void ExecuteDebugging()
+        {
+            LoggingUtil.LogMessage(DateTime.Now, "Executing debugging version of LeaderboardClustertingJob...", LoggingUtil.LogType.Notice);
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var stats = WowAPIManager.Default.GetPvpStats().ToList();
+
+            sw.Stop();
+            LoggingUtil.LogMessage(DateTime.Now, $"This is how long the fucking API call took: {sw.ElapsedMilliseconds} ms", LoggingUtil.LogType.Notice);
+
+            ExecuteCluster(stats, Region.US, Bracket._3v3);
+        }
 
         #endregion
 
@@ -154,7 +173,7 @@ namespace Fotm.Server.JobScheduling.Jobs
                 throw new ArgumentException("key does not exist in the cache dictionary!", nameof(key));
 
             _baselineStatsDictionary[key].Clear();
-            _baselineStatsDictionary[key] = stats;
+            _baselineStatsDictionary[key] = new List<PvpStats>(stats);
         }
 
         /// <summary>
@@ -190,10 +209,13 @@ namespace Fotm.Server.JobScheduling.Jobs
                 if (baseStat == null)
                     continue; // player isn't in the baseline, nothing to compare against
 
-                var ratingChange = stat.Rating - baseStat.Rating;
-                if (ratingChange == 0) continue; // no rating change, ignore
+                if (stat.Rating == baseStat.Rating)
+                    continue; // no change
 
-                var character = GetCharacter(stat);
+                var ratingChange = stat.Rating - baseStat.Rating;
+                //if (ratingChange == 0) continue; // no rating change, ignore
+
+                var character = GetCharacter(stat, region);
                 var teamMember = new TeamMember // create db model
                 {
                     RatingChangeValue = ratingChange,
@@ -246,21 +268,21 @@ namespace Fotm.Server.JobScheduling.Jobs
                 ClusterAndInsertDb(hordeLosers, teamSize, bracket);
         }
 
-        private DAL.Character GetCharacter(PvpStats pvpStats)
+        private DAL.Character GetCharacter(PvpStats pvpStats, Region region)
         {
             // have to use the realm ID from the DB, not the pvp stats object
             DAL.Character character = null;
-            var realm = DbManager.GetRealmByName(pvpStats.RealmName);
+            var realm = DbManager.GetRealmByName(pvpStats.RealmName, region);
             if (realm != null)
                 character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);
 
             if (character == null)
             {
                 // no matching character, insert into db
-                DbManager.InsertCharacter(pvpStats);
+                DbManager.InsertCharacter(pvpStats, region);
 
                 // realm id will have been resolved after character insert
-                realm = DbManager.GetRealmByName(pvpStats.RealmName);
+                realm = DbManager.GetRealmByName(pvpStats.RealmName, region);
 
                 // refetch after insert
                 character = DbManager.GetCharacter(pvpStats.Name, realm.RealmID);

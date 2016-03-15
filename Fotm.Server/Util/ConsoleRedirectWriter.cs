@@ -5,18 +5,18 @@ namespace Fotm.Server.Util
 {
     public class ConsoleRedirectWriter : RedirectWriter
     {
-        TextWriter consoleTextWriter; //keeps Visual Studio console in scope.
+        readonly TextWriter _consoleTextWriter; // keeps Visual Studio console in scope
 
         public ConsoleRedirectWriter()
         {
-            consoleTextWriter = Console.Out;
-            this.OnWrite += delegate (string text) { consoleTextWriter.Write(text); };
+            _consoleTextWriter = Console.Out;
+            OnWrite += delegate (string text) { _consoleTextWriter.Write(text); };
             Console.SetOut(this);
         }
 
         public void Release()
         {
-            Console.SetOut(consoleTextWriter);
+            Console.SetOut(_consoleTextWriter);
         }
     }
 }
