@@ -29,6 +29,9 @@ namespace FlavorOfTheMonth.Controllers
             SetCompStrings();
             CalcCompPercentages();
             SortCompsByPercentage();
+            GetTopNComps(MAX_NUM_COMPS_TO_RETURN);
+            // redo the percentages so they reflect the current comps. after trimming down
+            CalcCompPercentages();
 
             return View(m_RespModel);
         }

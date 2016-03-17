@@ -15,73 +15,95 @@
         </div>
     </section>
 }
+<div class="container myContainer">
+    <div class="row">
+        <div class="col-md-5">
+            @*Regions*@
+            <section>
+                <h3 id="hdrRegion">Regions</h3>
+                <div class="btn-group" role="group" aria-label="hdrRegion" data-toggle="buttons">
+                    <label class="btn btn-primary active" onclick="javascript: document.getElementById('iUS').checked = true; refresh()">
+                        <input type="radio" name="regions" id="iUS" autocomplete="off" value="US" checked>US
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iEU').checked = true; refresh()">
+                        <input type="radio" name="regions" id="iEU" autocomplete="off" value="EU">EU
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iKR').checked = true; refresh()">
+                        <input type="radio" name="regions" id="iKR" autocomplete="off" value="KR">KR
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iTW').checked = true; refresh()">
+                        <input type="radio" name="regions" id="iTW" autocomplete="off" value="TW">TW
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iCN').checked = true; refresh()">
+                        <input type="radio" name="regions" id="iCN" autocomplete="off" value="CN">CN
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iSEA').checked = true; refresh()">
+                        <input type="radio" name="regions" id="iSEA" autocomplete="off" value="SEA">SEA
+                    </label>
+                </div>
+            </section>
+        </div>
 
-@*Regions*@
-<section>
-    <h3 id="hdrRegion">Regions</h3>
-    <div class="btn-group" role="group" aria-label="hdrRegion" data-toggle="buttons">
-        <label class="btn btn-primary active" onclick="javascript: document.getElementById('iUS').checked = true; refresh()">
-            <input type="radio" name="regions" id="iUS" autocomplete="off" value="US" checked>US
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iEU').checked = true; refresh()">
-            <input type="radio" name="regions" id="iEU" autocomplete="off" value="EU">EU
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iKR').checked = true; refresh()">
-            <input type="radio" name="regions" id="iKR" autocomplete="off" value="KR">KR
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iTW').checked = true; refresh()">
-            <input type="radio" name="regions" id="iTW" autocomplete="off" value="TW">TW
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iCN').checked = true; refresh()">
-            <input type="radio" name="regions" id="iCN" autocomplete="off" value="CN">CN
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iSEA').checked = true; refresh()">
-            <input type="radio" name="regions" id="iSEA" autocomplete="off" value="SEA">SEA
-        </label>
+        <div class="col-md-4">
+            @*Brackets*@
+            <section>
+                <h3 id="hdrBracket">Brackets</h3>
+                <div class="btn-group" role="group" aria-label="hdrBracket" data-toggle="buttons">
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('i2v2').checked = true; refresh()">
+                        <input type="radio" name="brackets" id="i2v2" autocomplete="off" value="2v2">2v2
+                    </label>
+                    <label class="btn btn-primary active" onclick="javascript: document.getElementById('i3v3').checked = true; refresh()">
+                        <input type="radio" name="brackets" id="i3v3" autocomplete="off" value="3v3" checked="">3v3
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('i5v5').checked = true; refresh()">
+                        <input type="radio" name="brackets" id="i5v5" autocomplete="off" value="5v5">5v5
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iRBG').checked = true; refresh()">
+                        <input type="radio" name="brackets" id="iRBG" autocomplete="off" value="rbg">RBG
+                    </label>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-3">
+            @* Factions *@
+            <section id="sFactionFilters">
+                <h3>Factions</h3>
+                <div class="btn-group" role="group" aria-label="hdrFaction" data-toggle="buttons">
+                    <label class="btn btn-primary active" onclick="javascript: document.getElementById('iAllFactions').checked = true; refresh()">
+                        <input type="radio" name="factions" id="iAllFactions" autocomplete="off" value="-1" checked>All
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iAlliance').checked = true; refresh()">
+                        <input type="radio" name="factions" id="iAlliance" autocomplete="off" value="0">Alliance
+                    </label>
+                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iHorde').checked = true; refresh()">
+                        <input type="radio" name="factions" id="iHorde" autocomplete="off" value="1">Horde
+                    </label>
+                </div>
+            </section>
+        </div>
     </div>
-</section>
 
-@*Brackets*@
-<section>
-    <h3 id="hdrBracket">Brackets</h3>
-    <div class="btn-group" role="group" aria-label="hdrBracket" data-toggle="buttons">
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('i2v2').checked = true; refresh()">
-            <input type="radio" name="brackets" id="i2v2" autocomplete="off" value="2v2">2v2
-        </label>
-        <label class="btn btn-primary active" onclick="javascript: document.getElementById('i3v3').checked = true; refresh()">
-            <input type="radio" name="brackets" id="i3v3" autocomplete="off" value="3v3" checked="">3v3
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('i5v5').checked = true; refresh()">
-            <input type="radio" name="brackets" id="i5v5" autocomplete="off" value="5v5">5v5
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iRBG').checked = true; refresh()">
-            <input type="radio" name="brackets" id="iRBG" autocomplete="off" value="rbg">RBG
-        </label>
+    @*Filters*@
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h3>Classes and Specializations Filters</h3>
+        </div>
+        <div class="col-md-3"></div>
     </div>
-</section>
-
-@* FILTERS *@
-<h3>Filters</h3>
-
-@* Create faction buttons *@
-<section id="sFactionFilters">
-    <div class="btn-group" role="group" aria-label="hdrFaction" data-toggle="buttons">
-        <label class="btn btn-primary active" onclick="javascript: document.getElementById('iAllFactions').checked = true; refresh()">
-            <input type="radio" name="factions" id="iAllFactions" autocomplete="off" value="-1" checked>All
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iAlliance').checked = true; refresh()">
-            <input type="radio" name="factions" id="iAlliance" autocomplete="off" value="0">Alliance
-        </label>
-        <label class="btn btn-primary" onclick="javascript: document.getElementById('iHorde').checked = true; refresh()">
-            <input type="radio" name="factions" id="iHorde" autocomplete="off" value="1">Horde
-        </label>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <section id="sfilter">
+                @Html.Partial("RefreshData")
+            </section>
+        </div>
+        <div class="col-md-3"></div>
     </div>
-</section>
 
-@*Filters*@
-<section id="sfilter">
-    @Html.Partial("RefreshData")
-</section>
+</div>
+
 
 @*Scripts*@
 <script>
@@ -110,7 +132,7 @@
         });
     }
 
-    // Builds a JSON object which is essentially a snapshot of all the 
+    // Builds a JSON object which is essentially a snapshot of all the
     // current filter, bracket, and region choices.
     function buildJsonRequestObj() {
         var jsonData = {};
@@ -425,4 +447,4 @@
         });
     }
 
-    </script>
+</script>

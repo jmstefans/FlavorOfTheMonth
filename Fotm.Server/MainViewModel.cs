@@ -150,6 +150,9 @@ namespace Fotm.Server
             _jobManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, jobKey: "ratingChangeJob1");
             _jobManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, jobKey: "ratingChangeJob2");
             _jobManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, jobKey: "ratingChangeJob3");
+            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob4");
+            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob5");
+            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob6");
         }
 
         private async void StartJobsDebugAsync()
