@@ -10,7 +10,8 @@
             </hgroup>
             <p>
                 To learn more about flavor of the month and how you can help visit the
-                @Html.ActionLink("About page", "About", "Home").
+                @Html.ActionLink("About page", "About", "Home"). *Please note that we 
+                are still fine-tuning the algorithms, so some results may be incorrect.
             </p>
         </div>
     </section>
@@ -28,7 +29,7 @@
                     <label class="btn btn-primary" onclick="javascript: document.getElementById('iEU').checked = true; refresh()">
                         <input type="radio" name="regions" id="iEU" autocomplete="off" value="EU">EU
                     </label>
-                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iKR').checked = true; refresh()">
+                    @*<label class="btn btn-primary" onclick="javascript: document.getElementById('iKR').checked = true; refresh()">
                         <input type="radio" name="regions" id="iKR" autocomplete="off" value="KR">KR
                     </label>
                     <label class="btn btn-primary" onclick="javascript: document.getElementById('iTW').checked = true; refresh()">
@@ -39,7 +40,7 @@
                     </label>
                     <label class="btn btn-primary" onclick="javascript: document.getElementById('iSEA').checked = true; refresh()">
                         <input type="radio" name="regions" id="iSEA" autocomplete="off" value="SEA">SEA
-                    </label>
+                    </label>*@
                 </div>
             </section>
         </div>
@@ -58,9 +59,9 @@
                     <label class="btn btn-primary" onclick="javascript: document.getElementById('i5v5').checked = true; refresh()">
                         <input type="radio" name="brackets" id="i5v5" autocomplete="off" value="5v5">5v5
                     </label>
-                    <label class="btn btn-primary" onclick="javascript: document.getElementById('iRBG').checked = true; refresh()">
+                    @*<label class="btn btn-primary" onclick="javascript: document.getElementById('iRBG').checked = true; refresh()">
                         <input type="radio" name="brackets" id="iRBG" autocomplete="off" value="rbg">RBG
-                    </label>
+                    </label>*@
                 </div>
             </section>
         </div>
@@ -86,20 +87,20 @@
 
     @*Filters*@
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-            <h3>Classes and Specializations Filters</h3>
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h3 style="text-align: center">Classes and Specializations Filters</h3>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
     </div>
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-1"></div>
+        <div class="col-md-10" style="text-align: center">
             <section id="sfilter">
                 @Html.Partial("RefreshData")
             </section>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-1"></div>
     </div>
 
 </div>

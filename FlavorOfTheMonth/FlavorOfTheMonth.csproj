@@ -259,6 +259,7 @@
     <Content Include="Global.asax" />
     <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\FOTM Logo Full beta.png" />
     <Content Include="Images\FOTM Logo Full.png" />
     <Content Include="Images\fotmLogoDrawing.jpg" />
     <Content Include="Images\Icons\ClassAndSpecIcons.jpg" />
