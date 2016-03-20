@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>@ViewBag.Title</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <link href="~/Images/Icons/FOTM Logo face no-border.png" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
@@ -15,7 +15,7 @@
             <div class="content-wrapper">
                 <div class="float-left logo">
                     @* LEAVE FOR NOW <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>*@
-                    <img src="/Images/fotmLogoDrawing.jpg" class="img-responsive" alt="FOTM">
+                    <img src="/Images/FOTM Logo Full.png" class="img-responsive" alt="FOTM">
                 </div>
                 <div class="float-right">
                     @* LEAVE FOR NOW
@@ -40,18 +40,16 @@
             </section>
         </div>
         <footer>
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="overflow: hidden">
                 <div class="float-left">
                     <p>&copy; @DateTime.Now.Year - Flavor of the Month</p>
                     <p>Created by Pandamic Software</p>
                 </div>
+                <iframe height="450"
+                        scrolling="no"
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/2639763&amp;color=00aabb&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"
+                        style="min-width: 300px; width: 25%; height: auto; float: right"></iframe>
             </div>
-            <iframe 
-                height="450" 
-                scrolling="no" 
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/2639763&amp;color=00aabb&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"
-                style="min-width: 300px; width: 25%; height: auto;">
-            </iframe>
         </footer>
 
         @RenderSection("scripts", required: false)
