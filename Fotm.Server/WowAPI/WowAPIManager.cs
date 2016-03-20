@@ -11,11 +11,11 @@ namespace Fotm.Server.WowAPI
     /// <summary>
     /// Class for retrieving data from the WoW REST API. 
     /// </summary>
-    public class WowAPIManager 
+    public class WowAPIManager : ManagerBase<WowAPIManager>
     {
         #region API KEY
 
-        private static readonly string _apiKey = ConfigUtil.API_Key;
+        private readonly string _apiKey = ConfigUtil.API_Key;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace Fotm.Server.WowAPI
         /// <summary>
         /// Gets the collection of pvp stats from API.
         /// </summary>
-        public static IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
+        public IEnumerable<PvpStats> GetPvpStats(Region region = Region.US,
                                                  Locale locale = Locale.en_US,
                                                  Bracket bracket = Bracket._3v3)
         {
@@ -44,7 +44,7 @@ namespace Fotm.Server.WowAPI
         /// <summary>
         /// Gets the character by name and realm w/ optional region and locale.
         /// </summary>
-        public static Character GetCharacter(string name, string realmName,
+        public Character GetCharacter(string name, string realmName,
                                       Region region = Region.US, Locale locale = Locale.en_US)
         {
             try

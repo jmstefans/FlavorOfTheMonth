@@ -15,11 +15,11 @@ namespace Fotm.Server.JobScheduling
     /// exchange information back and forth needed to complete a job.
     /// But access to IJobs is only handled through the JobSchedulingManager.
     /// </summary>
-    public class JobSchedulingManager
+    public class JobSchedulingManager : ManagerBase<JobSchedulingManager>, IDisposable
     {
         #region Properties
 
-        private static IScheduler Scheduler
+        private IScheduler Scheduler
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Fotm.Server.JobScheduling
                 return _scheduler;
             }
         }
-        private static IScheduler _scheduler;
+        private IScheduler _scheduler;
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace Fotm.Server.JobScheduling
         /// <param name="key">The job key.</param>
         /// <param name="group">The job group key.</param>
         /// <param name="jobArguments">Arguments (if any) needed for the job.</param>
-        public static void ScheduleJob<T>(ITrigger trigger, string key, string group,
+        public void ScheduleJob<T>(ITrigger trigger, string key, string group,
                                    IDictionary<string, object> jobArguments = null) where T : IJob
         {
             var jobDetail = JobBuilder.Create<T>()
@@ -69,7 +69,7 @@ namespace Fotm.Server.JobScheduling
         /// <param name="bracket">The bracket to pull.</param>
         /// <param name="region">The region to pull leaderboard from.</param>
         /// <param name="trigger">The trigger for the job to execute. If null, default will be applied.</param>
-        public static void ScheduleRatingChangeJob(string jobKey = "ratingChangeJob",
+        public void ScheduleRatingChangeJob(string jobKey = "ratingChangeJob",
                                             string groupKey = "ratingChangeGroup",
                                             Bracket bracket = Bracket._3v3,
                                             Region region = Region.US,
@@ -85,7 +85,7 @@ namespace Fotm.Server.JobScheduling
         /// <summary>
         /// Used for debugging purposes only.
         /// </summary>
-        public static void ScheduleRatingChangeJobDebugging()
+        public void ScheduleRatingChangeJobDebugging()
         {
             var test = new LeaderboardClusteringJob();
             while (true)
@@ -94,7 +94,11 @@ namespace Fotm.Server.JobScheduling
             }
         }
 
-        public static void Cleanup()
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
         {
             if (_scheduler == null) return;
 

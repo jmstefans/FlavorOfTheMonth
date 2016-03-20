@@ -95,7 +95,7 @@ namespace Fotm.Server.JobScheduling.Jobs
             List<PvpStats> stats;
             lock (_statsLock)
             {
-                stats = WowAPIManager.GetPvpStats(region, bracket: bracket).ToList();
+                stats = WowAPIManager.Default.GetPvpStats(region, bracket: bracket).ToList();
             }
 
             lock (_execLock)
@@ -117,7 +117,7 @@ namespace Fotm.Server.JobScheduling.Jobs
             var sw = new Stopwatch();
             sw.Start();
 
-            var stats = WowAPIManager.GetPvpStats().ToList();
+            var stats = WowAPIManager.Default.GetPvpStats().ToList();
 
             sw.Stop();
             LoggingUtil.LogMessage(DateTime.Now, $"This is how long the fucking API call took: {sw.ElapsedMilliseconds} ms", LoggingUtil.LogType.Notice);
