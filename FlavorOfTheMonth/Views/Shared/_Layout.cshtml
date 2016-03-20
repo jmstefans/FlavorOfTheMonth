@@ -26,7 +26,7 @@
                     <nav>
                         <ul id="menu">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About/Contact", "About", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
                             @* LEAVE FOR NOW <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                         </ul>
                     </nav>
@@ -40,7 +40,43 @@
             </section>
         </div>
         <footer>
-            <div class="content-wrapper" style="overflow: hidden">
+            <div class="container">
+                <div class="col-md-3">
+                    <div class="float-left">
+                        <p>&copy; @DateTime.Now.Year - Flavor of the Month</p>
+                        <p>Created by Pandamic Software</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @*<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <!-- FotmAd1 -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-8855040405252432"
+                         data-ad-slot="4634903100"
+                         data-ad-format="auto"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>*@
+
+                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <!-- FotmAD_336x280 -->
+                    <ins class="adsbygoogle"
+                         style="display:inline-block;width:336px;height:280px"
+                         data-ad-client="ca-pub-8855040405252432"
+                         data-ad-slot="1402235104"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                <div class="col-md-6">
+                    <iframe height="450"
+                            scrolling="no"
+                            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/2639763&amp;color=00aabb&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"
+                            style="min-width: 400px; width: 45%; height: auto; float: right"></iframe>
+                </div>
+            </div>
+            @*<div class="content-wrapper" style="overflow: hidden">
                 <div class="float-left">
                     <p>&copy; @DateTime.Now.Year - Flavor of the Month</p>
                     <p>Created by Pandamic Software</p>
@@ -48,8 +84,8 @@
                 <iframe height="450"
                         scrolling="no"
                         src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/2639763&amp;color=00aabb&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"
-                        style="min-width: 300px; width: 25%; height: auto; float: right"></iframe>
-            </div>
+                        style="min-width: 300px; width: 45%; height: auto; float: right"></iframe>
+            </div>*@
         </footer>
 
         @RenderSection("scripts", required: false)
