@@ -81,7 +81,7 @@ namespace Fotm.DAL
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -239,9 +239,9 @@ namespace Fotm.DAL
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular")]
-		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="FactionID", DbType="Int")] System.Nullable<int> factionID)
+		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), bracket, regionID, factionID);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), bracket, regionID);
 			return ((ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult>)(result.ReturnValue));
 		}
 	}

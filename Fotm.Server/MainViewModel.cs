@@ -56,7 +56,6 @@ namespace Fotm.Server
 
         // Managers
         private readonly DbManager _dbManager = DbManager.Default;
-        private JobSchedulingManager _jobManager = JobSchedulingManager.Default;
 
         // Commands
         public RelayCommand SetDataSourceCommand
@@ -99,7 +98,7 @@ namespace Fotm.Server
 
         public void CleanUp()
         {
-            _jobManager.Dispose();
+            JobSchedulingManager.Cleanup();
         }
 
         #endregion
@@ -147,17 +146,17 @@ namespace Fotm.Server
 
         private void StartJobs()
         {
-            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, jobKey: "ratingChangeJob1");
-            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, jobKey: "ratingChangeJob2");
-            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, jobKey: "ratingChangeJob3");
-            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob4");
-            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob5");
-            _jobManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob6");
+            JobSchedulingManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, jobKey: "ratingChangeJob1");
+            JobSchedulingManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, jobKey: "ratingChangeJob2");
+            JobSchedulingManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, jobKey: "ratingChangeJob3");
+            JobSchedulingManager.ScheduleRatingChangeJob(bracket: Bracket._2v2, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob4");
+            JobSchedulingManager.ScheduleRatingChangeJob(bracket: Bracket._3v3, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob5");
+            JobSchedulingManager.ScheduleRatingChangeJob(bracket: Bracket._5v5, region: WowDotNetAPI.Region.EU, jobKey: "ratingChangeJob6");
         }
 
         private async void StartJobsDebugAsync()
         {
-            await Task.Run(() => _jobManager.ScheduleRatingChangeJobDebugging());
+            await Task.Run(() => JobSchedulingManager.ScheduleRatingChangeJobDebugging());
         }
 
         #endregion

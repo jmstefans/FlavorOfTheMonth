@@ -11,6 +11,11 @@ namespace Fotm.Server.Analysis.Algorithms
     /// </summary>
     public class LeaderboardKmeans
     {
+        /* TODO: Refactor multiple iterations of lists
+                 - for searching, sort the collection and use a binary search to find target
+                 - not needed yet but this would be a point worth improving if the datasets get very large
+                 - NOTE: there is a BinarySearch for Lists already */
+
         /// <summary>
         /// Clusters the members into teams of provided team size.
         /// </summary>

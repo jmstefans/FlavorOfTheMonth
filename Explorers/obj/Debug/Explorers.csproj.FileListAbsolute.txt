@@ -16,3 +16,7 @@ C:\Repositories\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.dll
 C:\Repositories\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.pdb
 C:\Repositories\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.dll
 C:\Repositories\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.pdb
+C:\Users\andre\Documents\GitHub\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.dll
+C:\Users\andre\Documents\GitHub\FlavorOfTheMonth\Explorers\bin\Debug\WowDotNetAPI.pdb
+C:\Users\andre\Documents\GitHub\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.dll
+C:\Users\andre\Documents\GitHub\FlavorOfTheMonth\Explorers\obj\Debug\WowDotNetAPI.pdb
