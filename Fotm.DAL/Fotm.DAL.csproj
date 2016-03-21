@@ -73,6 +73,9 @@
     <Compile Include="Database\DataProvider\SqlDataProvider.cs" />
     <Compile Include="Database\DataProvider\SqliteDataProvider.cs" />
     <Compile Include="Database\DbManager.cs" />
+    <Compile Include="DataClasses.cs">
+      <DependentUpon>DataClasses.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Util\ConnectionStringBuilderUtil.cs" />
     <Compile Include="DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
