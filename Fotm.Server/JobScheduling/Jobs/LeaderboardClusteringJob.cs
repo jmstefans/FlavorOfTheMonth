@@ -291,8 +291,6 @@ namespace Fotm.Server.JobScheduling.Jobs
             if (character == null)
                 throw new ArgumentException(nameof(character)); // if happens, something failed at db layer
 
-            // TODO: still need to update the character on each pass
-
             // need to update or insert the pvp stat on each pass
             var dbPvpStat = DbManager.GetPvpStatByCharacterId(character.CharacterID);
             if (dbPvpStat == null)
@@ -308,7 +306,7 @@ namespace Fotm.Server.JobScheduling.Jobs
             LoggingUtil.LogMessage(DateTime.Now, $"Executing team cluster on {bracket}...", LoggingUtil.LogType.Notice);
 
             var teams = LeaderboardKmeans.ClusterTeams(membersToCluster, teamSize);
-            if (teams == null) return;
+            if (teams == null) return; // cluster failed, most likely uneven team members / team size
 
             foreach (var team in teams)
             {
