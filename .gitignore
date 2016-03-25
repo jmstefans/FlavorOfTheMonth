@@ -1,6 +1,6 @@
 *.suo
 *.nupkg
-*.csproj.user
+*.user
 **/bin
 **/obj
 FotmServerApp/Database/FotmTestDb.db
