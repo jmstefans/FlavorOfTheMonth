@@ -23,10 +23,11 @@ namespace Fotm.DAL.Database.DataProvider
 
         public override string GetFormattedConnectionString(params string[] connectionProperties)
         {
-            if (connectionProperties.Length != 2)
-                throw new ArgumentException("Connection string requires server name and database name");
+            return "Server=tcp:fotmdb.database.windows.net,1433;Database=fotm;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            //if (connectionProperties.Length != 2)
+            //    throw new ArgumentException("Connection string requires server name and database name");
 
-            return ConnectionStringBuilderUtil.CreateSqlServerConnectionString(connectionProperties[0], connectionProperties[1]);
+            //return ConnectionStringBuilderUtil.CreateSqlServerConnectionString(connectionProperties[0], connectionProperties[1]);
         }
     }
 }
