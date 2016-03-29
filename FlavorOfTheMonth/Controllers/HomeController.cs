@@ -25,7 +25,6 @@ namespace FlavorOfTheMonth.Controllers
         public ActionResult Index()
         {
             ViewBag.Message = "Flavor of the month lets you see which World of Warcraft arena team compositions are currently the most popular among the leaderboard.";
-            DataClassesDataContext db = new DataClassesDataContext();
 
             SetCompStrings();
             CalcCompPercentages();
@@ -463,7 +462,7 @@ namespace FlavorOfTheMonth.Controllers
         /// <param name="n"></param>
         private void GetTopNComps(int n)
         {
-            m_RespModel.TeamModel.Comps = m_RespModel.TeamModel.Comps.GetRange(0, n);
+            m_RespModel.TeamModel.Comps = m_RespModel.TeamModel.Comps.GetRange(0, Math.Min(n, m_RespModel.TeamModel.Comps.Count));
         }
 
         #endregion Helpers
