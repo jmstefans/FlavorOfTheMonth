@@ -26,9 +26,9 @@ namespace Fotm.DAL.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=tcp:fotmdb.database.windows.net,1433;Database=fotm;User ID=pandamic@fotmdb" +
-            ";Password=VObl15isdB7F511qdGQZ;Encrypt=True;TrustServerCertificate=False;Connect" +
-            "ion Timeout=30;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:fotmdb.database.windows.net,1433;Initial Catalog=fotm;Persist Sec" +
+            "urity Info=True;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Connect Ti" +
+            "meout=30;Encrypt=True;TrustServerCertificate=False")]
         public string fotmConnectionString {
             get {
                 return ((string)(this["fotmConnectionString"]));
@@ -44,6 +44,28 @@ namespace Fotm.DAL.Properties {
         public string fotmConnectionString1 {
             get {
                 return ((string)(this["fotmConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True")]
+        public string fotmConnectionString2 {
+            get {
+                return ((string)(this["fotmConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:fotmdb.database.windows.net,1433;Initial Catalog=fotmdev;Persist " +
+            "Security Info=True;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Connect" +
+            " Timeout=30;Encrypt=True;TrustServerCertificate=False")]
+        public string fotmdevConnectionString {
+            get {
+                return ((string)(this["fotmdevConnectionString"]));
             }
         }
     }

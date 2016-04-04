@@ -831,7 +831,7 @@ PRINT 'Creating Stored Procedures'
 USE [fotm]
 GO
 
-/****** Object:  StoredProcedure [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular]    Script Date: 3/9/2016 8:14:25 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetAllTeamsByBracketRegionFaction]    Script Date: 4/2/2016 12:42:12 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -846,7 +846,7 @@ GO
 -- past month and group them by class composition.
 -- Then return that list sorted by most popular.>
 -- =============================================
-CREATE PROCEDURE [dbo].[SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular] 
+CREATE PROCEDURE [dbo].[GetAllTeamsByBracketRegionFaction] 
 	@Bracket nvarchar(50) = '_3v3',  -- Default 3v3
 	@RegionID int = 0,				 -- Default US
 	@FactionID int = -1				 -- Default Any faction
@@ -860,12 +860,12 @@ BEGIN
 	begin
 		Print 'Faction is any'
 		SELECT t.TeamID, cl.Name, s.BlizzName, t.Bracket, t.ModifiedDate, tm.FactionID
-				FROM fotm.dbo.Team t
-				LEFT OUTER JOIN fotm.dbo.TeamMember tm on t.TeamID = tm.TeamID
-				LEFT OUTER JOIN fotm.dbo.[Character] c on tm.CharacterID = c.CharacterID
-				LEFT OUTER JOIN fotm.dbo.Class cl on c.ClassID = cl.ClassID
-				LEFT OUTER JOIN fotm.dbo.Spec s on c.SpecID = s.SpecID
-				LEFT OUTER JOIN fotm.dbo.Realm r on c.RealmID = r.RealmID
+				FROM dbo.Team t
+				LEFT OUTER JOIN dbo.TeamMember tm on t.TeamID = tm.TeamID
+				LEFT OUTER JOIN dbo.[Character] c on tm.CharacterID = c.CharacterID
+				LEFT OUTER JOIN dbo.Class cl on c.ClassID = cl.ClassID
+				LEFT OUTER JOIN dbo.Spec s on c.SpecID = s.SpecID
+				LEFT OUTER JOIN dbo.Realm r on c.RealmID = r.RealmID
 				WHERE tm.ModifiedDate >= DATEADD(DAY, -30, SYSDATETIME())
 					AND t.Bracket = @Bracket
 					AND r.RegionID = @RegionID
@@ -875,12 +875,12 @@ BEGIN
 	begin
 		Print 'Faction is 0'
 		SELECT t.TeamID, cl.Name, s.BlizzName, t.Bracket, t.ModifiedDate
-				FROM fotm.dbo.Team t
-				LEFT OUTER JOIN fotm.dbo.TeamMember tm on t.TeamID = tm.TeamID
-				LEFT OUTER JOIN fotm.dbo.[Character] c on tm.CharacterID = c.CharacterID
-				LEFT OUTER JOIN fotm.dbo.Class cl on c.ClassID = cl.ClassID
-				LEFT OUTER JOIN fotm.dbo.Spec s on c.SpecID = s.SpecID
-				LEFT OUTER JOIN fotm.dbo.Realm r on c.RealmID = r.RealmID
+				FROM dbo.Team t
+				LEFT OUTER JOIN dbo.TeamMember tm on t.TeamID = tm.TeamID
+				LEFT OUTER JOIN dbo.[Character] c on tm.CharacterID = c.CharacterID
+				LEFT OUTER JOIN dbo.Class cl on c.ClassID = cl.ClassID
+				LEFT OUTER JOIN dbo.Spec s on c.SpecID = s.SpecID
+				LEFT OUTER JOIN dbo.Realm r on c.RealmID = r.RealmID
 				WHERE tm.ModifiedDate >= DATEADD(DAY, -30, SYSDATETIME())
 					AND t.Bracket = @Bracket
 					AND r.RegionID = @RegionID
@@ -891,12 +891,12 @@ BEGIN
 	begin
 		Print 'Faction is 1'
 		SELECT t.TeamID, cl.Name, s.BlizzName, t.Bracket, t.ModifiedDate
-				FROM fotm.dbo.Team t
-				LEFT OUTER JOIN fotm.dbo.TeamMember tm on t.TeamID = tm.TeamID
-				LEFT OUTER JOIN fotm.dbo.[Character] c on tm.CharacterID = c.CharacterID
-				LEFT OUTER JOIN fotm.dbo.Class cl on c.ClassID = cl.ClassID
-				LEFT OUTER JOIN fotm.dbo.Spec s on c.SpecID = s.SpecID
-				LEFT OUTER JOIN fotm.dbo.Realm r on c.RealmID = r.RealmID
+				FROM dbo.Team t
+				LEFT OUTER JOIN dbo.TeamMember tm on t.TeamID = tm.TeamID
+				LEFT OUTER JOIN dbo.[Character] c on tm.CharacterID = c.CharacterID
+				LEFT OUTER JOIN dbo.Class cl on c.ClassID = cl.ClassID
+				LEFT OUTER JOIN dbo.Spec s on c.SpecID = s.SpecID
+				LEFT OUTER JOIN dbo.Realm r on c.RealmID = r.RealmID
 				WHERE tm.ModifiedDate >= DATEADD(DAY, -30, SYSDATETIME())
 					AND t.Bracket = @Bracket
 					AND r.RegionID = @RegionID

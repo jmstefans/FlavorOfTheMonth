@@ -5,10 +5,10 @@
     <Setting Name="fotmConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Server=tcp:fotmdb.database.windows.net,1433;Database=fotm;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=tcp:fotmdb.database.windows.net,1433;Initial Catalog=fotm;Persist Security Info=True;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Server=tcp:fotmdb.database.windows.net,1433;Database=fotm;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;</Value>
+      <Value Profile="(Default)">Data Source=tcp:fotmdb.database.windows.net,1433;Initial Catalog=fotm;Persist Security Info=True;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False</Value>
     </Setting>
     <Setting Name="fotmConnectionString1" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
@@ -17,6 +17,22 @@
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Server=tcp:fotmdb.database.windows.net,1433;Database=fotm;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;</Value>
+    </Setting>
+    <Setting Name="fotmConnectionString2" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=.\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=.\SQLEXPRESS;Initial Catalog=fotm;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="fotmdevConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=tcp:fotmdb.database.windows.net,1433;Initial Catalog=fotmdev;Persist Security Info=True;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=tcp:fotmdb.database.windows.net,1433;Initial Catalog=fotmdev;Persist Security Info=True;User ID=pandamic@fotmdb;Password=VObl15isdB7F511qdGQZ;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

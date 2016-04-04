@@ -205,7 +205,7 @@ namespace FlavorOfTheMonth.Controllers
         private void SetCompStrings()
         {
             var db = new DataClassesDataContext();
-            var teamMembers = from d in db.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular(m_RespModel.CurBracket.ToString(), (int)m_RespModel.CurRegion, (int)m_RespModel.CurFaction)
+            var teamMembers = from d in db.GetAllTeamsByBracketRegionFaction(m_RespModel.CurBracket.ToString(), (int)m_RespModel.CurRegion, (int)m_RespModel.CurFaction)
                               select new
                               {
                                   d.TeamID,

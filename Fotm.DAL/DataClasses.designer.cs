@@ -81,7 +81,7 @@ namespace Fotm.DAL
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString1, mappingSource)
+				base(global::Fotm.DAL.Properties.Settings.Default.fotmConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -238,11 +238,11 @@ namespace Fotm.DAL
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular")]
-		public ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult> SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopular([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="FactionID", DbType="Int")] System.Nullable<int> factionID)
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetAllTeamsByBracketRegionFaction")]
+		public ISingleResult<GetAllTeamsByBracketRegionFactionResult> GetAllTeamsByBracketRegionFaction([global::System.Data.Linq.Mapping.ParameterAttribute(Name="Bracket", DbType="NVarChar(50)")] string bracket, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="RegionID", DbType="Int")] System.Nullable<int> regionID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="FactionID", DbType="Int")] System.Nullable<int> factionID)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), bracket, regionID, factionID);
-			return ((ISingleResult<SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult>)(result.ReturnValue));
+			return ((ISingleResult<GetAllTeamsByBracketRegionFactionResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -4310,7 +4310,7 @@ namespace Fotm.DAL
 		}
 	}
 	
-	public partial class SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult
+	public partial class GetAllTeamsByBracketRegionFactionResult
 	{
 		
 		private long _TeamID;
@@ -4325,7 +4325,7 @@ namespace Fotm.DAL
 		
 		private System.Nullable<bool> _FactionID;
 		
-		public SP_GetAllTeamsByClassCompositionThenOrderThemByMostPopularResult()
+		public GetAllTeamsByBracketRegionFactionResult()
 		{
 		}
 		
