@@ -86,7 +86,6 @@ namespace FlavorOfTheMonth.Models
             ClassModel = new ClassModel();
             CurBracket = Bracket._3v3;
             CurRegion = Region.US;
-            DataClassesDataContext context = new DataClassesDataContext();
             CurCharacterList = new List<string>();
             CurSelectedSpecList = new Dictionary<int, string>();
             CurFaction = Faction.Any;
